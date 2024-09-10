@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainConfig:
     MovementConfig:
-      Speed: 5
+      MoveSpeed: 7
+      RotationSpeed: 300

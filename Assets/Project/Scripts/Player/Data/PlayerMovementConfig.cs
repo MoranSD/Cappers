@@ -3,6 +3,7 @@
     [System.Serializable]
     public class PlayerMovementConfig
     {
-        public float Speed;
+        public float MoveSpeed;
+        public float RotationSpeed;
     }
 }

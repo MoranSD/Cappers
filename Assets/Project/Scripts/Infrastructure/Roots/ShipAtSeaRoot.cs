@@ -20,13 +20,13 @@ namespace Infrastructure
 
         private void Awake()
         {
-            ServiceLocator.Register(gameCamera);
+            ServiceLocator.Register<IGameCamera>(gameCamera);
 
             var input = ServiceLocator.Get<IInput>();
 
             tickManager = ServiceLocator.Get<TickManager>();
 
-            player = new PlayerController(playerConfigSO.MainConfig, playerView, input);
+            player = new PlayerController(playerConfigSO.MainConfig, playerView, input, gameCamera);
             player.Initialize();
             tickManager.Add(player);
         }

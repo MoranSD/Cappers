@@ -1,6 +1,4 @@
-﻿using CameraSystem;
-using Infrastructure;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Player.Movement
 {
@@ -8,23 +6,19 @@ namespace Player.Movement
     {
         [SerializeField] private CharacterController characterController;
 
-        private GameCamera gameCamera;
-
-        private void Start()
+        public void Move(Vector3 direction, float speed)
         {
-            gameCamera = ServiceLocator.Get<GameCamera>();
-        }
-
-        public void Move(Vector2 input, float speed)
-        {
-            var moveDirection = gameCamera.transform.forward * input.y + gameCamera.transform.right * input.x;
-            moveDirection.y = 0;
-            moveDirection.Normalize();
-            moveDirection *= speed;
-
+            direction *= speed;
             var gravityForce = Physics.gravity * Time.deltaTime;
 
-            characterController.Move(moveDirection + gravityForce);
+            characterController.Move(direction + gravityForce);
+        }
+
+        public void Turn(Vector3 direction, float speed)
+        {
+            var lookRotation = Quaternion.LookRotation(direction);
+            var targetRotation = Quaternion.RotateTowards(transform.rotation, lookRotation, speed);
+            transform.rotation = targetRotation;
         }
     }
 }

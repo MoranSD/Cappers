@@ -4,6 +4,7 @@ namespace Player.Movement
 {
     public interface IPlayerMovementView
     {
-        void Move(Vector2 input, float speed);
+        void Move(Vector3 direction, float speed);
+        void Turn(Vector3 direction, float speed);
     }
 }
