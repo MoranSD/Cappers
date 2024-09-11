@@ -1,11 +1,8 @@
 ﻿using Infrastructure.SceneLoad;
-using Infrastructure.TickManagement;
-using Infrastructure.GameInput;
-using Infrastructure.Map;
-using UnityEngine;
 using World.Variants;
 using World;
 using Infrastructure.Root;
+using Gameplay.Game;
 
 namespace Infrastructure.States
 {
@@ -13,26 +10,30 @@ namespace Infrastructure.States
     {
         private readonly GameStateMachine stateMachine;
         private readonly Game game;
-        private readonly WorldMapService worldMap;
+        private readonly GameData gameData;
 
-        public LoadProgressState(GameStateMachine stateMachine, Game game, WorldMapService worldMap)
+        public LoadProgressState(GameStateMachine stateMachine, Game game, GameData gameData)
         {
             this.stateMachine = stateMachine;
             this.game = game;
-            this.worldMap = worldMap;
+            this.gameData = gameData;
         }
 
         public void Enter()
         {
-            var port1Location = new PortLocation("Port 1", Vector2.zero);
-            var port2Location = new PortLocation("Port 2", Vector2.one);
-            var gameWorld = new GameWorld(new Location[]
-            {
-                port1Location,
-                port2Location
-            });
-            game.SetWorld(gameWorld);
-            worldMap.AddLocation(port1Location);
+            var port1Location = new PortLocation(0, "Port 1");
+            var port2Location = new PortLocation(1, "Port 2");
+            var gameWorld = new GameWorld(
+                0, 
+                new Location[]
+                {
+                    port1Location,
+                    port2Location
+                }
+            );
+
+            gameData.SetWorld(gameWorld);
+            gameData.OpenLocation(port1Location.Id);
 
             stateMachine.Enter<LoadLevelState, SceneType>(SceneType.ShipAtSea);
         }

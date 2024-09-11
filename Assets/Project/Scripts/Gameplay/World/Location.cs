@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using World.Data;
+﻿using World.Data;
 
 namespace World
 {
@@ -7,13 +6,13 @@ namespace World
     {
         public abstract LocationType Type { get; }
 
+        public readonly int Id;
         public readonly string Name;
-        public readonly Vector2 Position;
 
-        public Location(string name, Vector2 position)
+        public Location(int id, string name)
         {
+            Id = id;
             Name = name;
-            Position = position;
         }
     }
 }

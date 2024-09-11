@@ -1,8 +1,12 @@
 ﻿using Infrastructure.Root;
 using Infrastructure.TickManagement;
 using Infrastructure.GameInput;
-using Infrastructure.Map;
 using Infrastructure.Composition;
+using Infrastructure.Panels;
+using Infrastructure.Travel;
+using Infrastructure.SceneLoad;
+using Infrastructure.DataProviding;
+using Gameplay.Game;
 
 namespace Infrastructure.States
 {
@@ -31,9 +35,15 @@ namespace Infrastructure.States
 
             ServiceLocator.Remove<Game>();
             ServiceLocator.Remove<IInput>();
+            ServiceLocator.Remove<ISceneLoader>();
+            ServiceLocator.Remove<ICompositionController>();
+            ServiceLocator.Remove<IAssetProvider>();
             ServiceLocator.Remove<TickManager>();
+            ServiceLocator.Remove<PanelsManager>();
+            ServiceLocator.Remove<TravelSystem>();
+            ServiceLocator.Remove<GameData>();
 
-            ServiceLocator.Remove<WorldMapService>();
+            ServiceLocator.Clear();
         }
     }
 }

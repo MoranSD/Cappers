@@ -1,12 +1,11 @@
-﻿namespace Infrastructure.Root
-{
-    using Infrastructure.Composition;
-    using Infrastructure.Curtain;
-    using Infrastructure.SceneLoad;
-    using Infrastructure.TickManagement;
-    using States;
-    using World;
+﻿using Infrastructure.Curtain;
+using Infrastructure.Routine;
+using Infrastructure.TickManagement;
+using Infrastructure.States;
+using World;
 
+namespace Infrastructure.Root
+{
     public class Game
     {
         public GameWorld GameWorld { get; private set; }
@@ -15,9 +14,9 @@
         private bool isGameStarted;
         private TickManager tickManager;
 
-        public Game(ILoadingCurtain loadingCurtain, ISceneLoader sceneLoader, ICompositionController compositionController)
+        public Game(ILoadingCurtain loadingCurtain, ICoroutineRunner coroutineRunner)
         {
-            stateMachine = new GameStateMachine(this, sceneLoader, loadingCurtain, compositionController);
+            stateMachine = new GameStateMachine(this, loadingCurtain, coroutineRunner);
         }
 
         public void Start()

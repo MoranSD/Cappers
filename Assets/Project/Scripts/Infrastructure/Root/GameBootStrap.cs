@@ -1,4 +1,3 @@
-using Infrastructure.Composition;
 using Infrastructure.Curtain;
 using Infrastructure.Routine;
 using UnityEngine;
@@ -16,9 +15,7 @@ namespace Infrastructure.Root
             DontDestroyOnLoad(this);
 
             var curtain = Instantiate(loadingCurtain, transform);
-            var sceneLoader = new SceneLoad.SceneLoader(this);
-            var compositionController = new CompositionController();
-            Game = new Game(curtain, sceneLoader, compositionController);
+            Game = new Game(curtain, this);
             Game.Start();
         }
 
@@ -27,7 +24,7 @@ namespace Infrastructure.Root
             Game.Update(Time.deltaTime);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             Game.Stop();
         }

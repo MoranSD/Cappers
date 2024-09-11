@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using World.Data;
+﻿using World.Data;
 
 namespace World.Variants
 {
@@ -7,7 +6,7 @@ namespace World.Variants
     {
         public override LocationType Type => LocationType.port;
 
-        public PortLocation(string name, Vector2 position) : base(name, position)
+        public PortLocation(int id, string name) : base(id, name)
         {
         }
     }

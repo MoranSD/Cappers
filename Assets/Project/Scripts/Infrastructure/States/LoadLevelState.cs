@@ -6,14 +6,12 @@ namespace Infrastructure.States
 {
     public class LoadLevelState : IPayloadedState<SceneType>
     {
-        private readonly GameStateMachine stateMachine;
         private readonly ILoadingCurtain loadingCurtain;
         private readonly ISceneLoader sceneLoader;
         private readonly ICompositionController compositionController;
 
-        public LoadLevelState(GameStateMachine stateMachine, ILoadingCurtain loadingCurtain, ISceneLoader sceneLoader, ICompositionController compositionController)
+        public LoadLevelState(ILoadingCurtain loadingCurtain, ISceneLoader sceneLoader, ICompositionController compositionController)
         {
-            this.stateMachine = stateMachine;
             this.loadingCurtain = loadingCurtain;
             this.sceneLoader = sceneLoader;
             this.compositionController = compositionController;

@@ -1,10 +1,11 @@
 ﻿using Infrastructure.Curtain;
 using Infrastructure.Root;
 using Infrastructure.SceneLoad;
-using Infrastructure.Map;
 using System;
 using System.Collections.Generic;
 using Infrastructure.Composition;
+using Infrastructure.Routine;
+using Gameplay.Game;
 
 namespace Infrastructure.States
 {
@@ -13,14 +14,14 @@ namespace Infrastructure.States
         private Dictionary<Type, IExitableState> states;
         private IExitableState activeState;
 
-        public GameStateMachine(Game game, ISceneLoader sceneLoader, ILoadingCurtain loadingCurtain, ICompositionController compositionController)
+        public GameStateMachine(Game game, ILoadingCurtain loadingCurtain, ICoroutineRunner coroutineRunner)
         {
             states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootStrapState)] = new BootStrapState(game, this, sceneLoader),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, game, ServiceLocator.Get<WorldMapService>()),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, loadingCurtain, sceneLoader, compositionController),
-                [typeof(DisposeServicesState)] = new DisposeServicesState(compositionController),
+                [typeof(BootStrapState)] = new BootStrapState(game, this, coroutineRunner),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, game, ServiceLocator.Get<GameData>()),
+                [typeof(LoadLevelState)] = new LoadLevelState(loadingCurtain, ServiceLocator.Get<ISceneLoader>(), ServiceLocator.Get<ICompositionController>()),
+                [typeof(DisposeServicesState)] = new DisposeServicesState(ServiceLocator.Get<ICompositionController>()),
             };
         }
 

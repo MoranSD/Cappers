@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Infrastructure
 {
     public class ServiceLocator
     {
-        private static Dictionary<string, object> services = new Dictionary<string, object>();
+        private static Dictionary<string, object> services;
 
         public static void Register<T>(T service)
         {
@@ -46,6 +47,17 @@ namespace Infrastructure
 
             if (services.ContainsKey(serviceTag))
                 services.Remove(serviceTag);
+        }
+
+        public static void Initialize()
+        {
+            services = new Dictionary<string, object>();
+        }
+
+        public static void Clear()
+        {
+            services.Clear();
+            services = null;
         }
     }
 }

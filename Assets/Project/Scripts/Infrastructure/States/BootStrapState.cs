@@ -2,10 +2,13 @@
 using Infrastructure.SceneLoad;
 using Infrastructure.TickManagement;
 using Infrastructure.GameInput;
-using Infrastructure.Map;
 using UnityEngine;
-using World.Variants;
-using World;
+using Infrastructure.Panels;
+using Infrastructure.Routine;
+using Infrastructure.Travel;
+using Infrastructure.Composition;
+using Infrastructure.DataProviding;
+using Gameplay.Game;
 
 namespace Infrastructure.States
 {
@@ -13,20 +16,20 @@ namespace Infrastructure.States
     {
         private readonly Game game;
         private readonly GameStateMachine stateMachine;
-        private readonly ISceneLoader sceneLoader;
+        private readonly ICoroutineRunner coroutineRunner;
 
-        public BootStrapState(Game game, GameStateMachine stateMachine, ISceneLoader sceneLoader)
+        public BootStrapState(Game game, GameStateMachine stateMachine, ICoroutineRunner coroutineRunner)
         {
             this.game = game;
             this.stateMachine = stateMachine;
-            this.sceneLoader = sceneLoader;
+            this.coroutineRunner = coroutineRunner;
 
             RegisterServices();
         }
 
         public void Enter()
         {
-            sceneLoader.Load(SceneType.Initial, OnLoadInitialScene);
+            ServiceLocator.Get<ISceneLoader>().Load(SceneType.Initial, OnLoadInitialScene);
         }
 
         public void Exit()
@@ -42,12 +45,17 @@ namespace Infrastructure.States
         private void RegisterServices()
         {
             Application.targetFrameRate = 60;
+            ServiceLocator.Initialize();
 
             ServiceLocator.Register(game);
             ServiceLocator.Register<IInput>(new PCInput());
+            ServiceLocator.Register<ISceneLoader>(new SceneLoader(coroutineRunner));
+            ServiceLocator.Register<ICompositionController>(new CompositionController());
+            ServiceLocator.Register<IAssetProvider>(new AssetProvider());
             ServiceLocator.Register(new TickManager());
-
-            ServiceLocator.Register(new WorldMapService());
+            ServiceLocator.Register(new PanelsManager(PanelType.gameplay, coroutineRunner));
+            ServiceLocator.Register(new TravelSystem());
+            ServiceLocator.Register(new GameData());
         }
     }
 }
