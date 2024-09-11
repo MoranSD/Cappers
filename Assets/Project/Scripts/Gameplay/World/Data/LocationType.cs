@@ -2,6 +2,7 @@
 {
     public enum LocationType
     {
-        port
+        port,
+        island,
     }
 }

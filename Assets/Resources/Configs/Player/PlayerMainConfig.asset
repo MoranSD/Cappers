@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f02bca2c04602154b85e4fab4d02747e, type: 3}
-  m_Name: New Player Config SO
+  m_Name: PlayerMainConfig
   m_EditorClassIdentifier: 
   MainConfig:
     MovementConfig:

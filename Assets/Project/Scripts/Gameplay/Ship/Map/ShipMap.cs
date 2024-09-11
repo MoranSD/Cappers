@@ -3,6 +3,7 @@ using Gameplay.Ship.Map.View;
 using Infrastructure.Panels;
 using Infrastructure.Travel;
 using System.Linq;
+using UnityEngine;
 
 namespace Gameplay.Ship.Map
 {

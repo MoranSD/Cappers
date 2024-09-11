@@ -1,4 +1,5 @@
-﻿using Infrastructure.Panels;
+﻿using Gameplay.Ship.Map.View.IconsHolder;
+using Infrastructure.Panels;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -16,13 +17,20 @@ namespace Gameplay.Ship.Map.View
 
         public PanelType Type => PanelType.shipMap;
 
+        [field: SerializeField] public Transform IconsHolderPivot { get; private set; }
+
         [SerializeField] private GameObject panelObject;
         [SerializeField] private Button closeButton;
         [Space]
         [SerializeField] private PlayerTriggerInteractor interactor;
 
-        public void Initialize()//сюда по идее передать сущность, в которой будут все иконки
+        private MapIconsHolder iconsHolder;
+
+        public void Initialize(MapIconsHolder iconsHolder)
         {
+            this.iconsHolder = iconsHolder;
+            iconsHolder.OnClickOnLocation += OnPressOnLocation;
+
             panelObject.SetActive(false);
             closeButton.onClick.AddListener(() => OnTryToClose?.Invoke());
             interactor.OnInteracted += OnInteract;
@@ -30,14 +38,13 @@ namespace Gameplay.Ship.Map.View
 
         public void Dispose()
         {
+            iconsHolder.OnClickOnLocation -= OnPressOnLocation;
+
             closeButton.onClick.RemoveAllListeners();
             interactor.OnInteracted -= OnInteract;
         }
 
-        public void UpdateLocationsVisibility(params int[] ids)
-        {
-            //тут мы просто обновим видимость иконок
-        }
+        public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
 
         public IEnumerator Hide()
         {
@@ -51,5 +58,6 @@ namespace Gameplay.Ship.Map.View
         }
 
         private void OnInteract() => OnPlayerInteract?.Invoke();
+        private void OnPressOnLocation(int locationId) => OnSelectLocation?.Invoke(locationId);
     }
 }

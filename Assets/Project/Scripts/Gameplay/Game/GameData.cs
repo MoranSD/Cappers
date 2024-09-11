@@ -15,15 +15,15 @@ namespace Gameplay.Game
             openedLocations = new List<int>();
         }
 
-        public void SetWorld(GameWorld world)
+        public void SetWorld(GameWorld newWorld)
         {
             if (World != null)
                 throw new System.Exception();
 
-            if (world != null)
+            if (newWorld == null)
                 throw new System.Exception();
 
-            World = world;
+            World = newWorld;
         }
 
         public void OpenLocation(int locationId)

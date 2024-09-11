@@ -581,6 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a90eb2d955d31442a17d74658d108ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <IconsHolderPivot>k__BackingField: {fileID: 2081486182}
   panelObject: {fileID: 15838667}
   closeButton: {fileID: 859025172}
   interactor: {fileID: 414022527}

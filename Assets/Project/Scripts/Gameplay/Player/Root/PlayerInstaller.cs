@@ -3,6 +3,7 @@ using Gameplay.Player.Data;
 using Gameplay.Player.View;
 using Infrastructure;
 using Infrastructure.Composition;
+using Infrastructure.DataProviding;
 using Infrastructure.GameInput;
 using Infrastructure.TickManagement;
 using UnityEngine;
@@ -11,7 +12,6 @@ namespace Gameplay.Player.Root
 {
     public class PlayerInstaller : Installer
     {
-        [SerializeField] private PlayerConfigSO playerConfigSO;
         [SerializeField] private PlayerView playerView;
         [Space]
         [SerializeField] private GameCamera gameCamera;
@@ -22,9 +22,12 @@ namespace Gameplay.Player.Root
         public override void Initialize()
         {
             var input = ServiceLocator.Get<IInput>();
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
             tickManager = ServiceLocator.Get<TickManager>();
 
-            player = new PlayerController(playerConfigSO.MainConfig, playerView, input, gameCamera);
+            var playerConfig = assetProvider.Load<PlayerConfigSO>("Configs/Player/PlayerMainConfig");
+
+            player = new PlayerController(playerConfig.MainConfig, playerView, input, gameCamera);
             player.Initialize();
             tickManager.Add(player);
         }

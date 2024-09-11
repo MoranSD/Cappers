@@ -20,11 +20,6 @@ namespace Infrastructure.Panels
             this.coroutineRunner = coroutineRunner;
         }
 
-        public void SetDefault(PanelType panelType)
-        {
-            throw new NotImplementedException();
-        }
-
         public void RegisterPanel(IPanel panel)
         {
             if (activePanels.ContainsKey(panel.Type))

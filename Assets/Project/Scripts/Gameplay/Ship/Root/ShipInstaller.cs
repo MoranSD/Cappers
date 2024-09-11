@@ -1,11 +1,14 @@
 ﻿using Gameplay.Game;
 using Gameplay.Ship.Map;
 using Gameplay.Ship.Map.View;
+using Gameplay.Ship.Map.View.IconsHolder;
 using Infrastructure;
 using Infrastructure.Composition;
+using Infrastructure.DataProviding;
 using Infrastructure.Panels;
 using Infrastructure.Travel;
 using UnityEngine;
+using World.Data;
 
 namespace Gameplay.Ship.Root
 {
@@ -15,6 +18,7 @@ namespace Gameplay.Ship.Root
 
         private PanelsManager panelsManager;
         private ShipMap shipMap;
+        private MapIconsHolder iconsHolder;
 
         public override void Initialize()
         {
@@ -23,10 +27,18 @@ namespace Gameplay.Ship.Root
 
             var gameData = ServiceLocator.Get<GameData>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
 
             shipMap = new ShipMap(gameData, travelSystem, mapView, panelsManager);
 
-            mapView.Initialize();
+            var allWorldsConfig = assetProvider.Load<AllWorldsConfig>("Configs/World/AllWorldsConfig");
+            var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameData.World.Id);
+            var iconsHolderPrefab = currentWorldConfig.MapIconsHolderPrefab;
+
+            iconsHolder = Instantiate(iconsHolderPrefab, mapView.IconsHolderPivot);
+            iconsHolder.Initialize(currentWorldConfig);
+
+            mapView.Initialize(iconsHolder);
             shipMap.Initialize();
         }
 
@@ -36,6 +48,8 @@ namespace Gameplay.Ship.Root
 
             panelsManager.UnregisterPanel(mapView);
             mapView.Dispose();
+
+            iconsHolder.Dispose();
         }
     }
 }

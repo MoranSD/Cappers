@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Infrastructure.Composition;
 using Infrastructure.Routine;
 using Gameplay.Game;
+using Infrastructure.DataProviding;
 
 namespace Infrastructure.States
 {
@@ -19,7 +20,7 @@ namespace Infrastructure.States
             states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootStrapState)] = new BootStrapState(game, this, coroutineRunner),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, game, ServiceLocator.Get<GameData>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, game, ServiceLocator.Get<GameData>(), ServiceLocator.Get<IAssetProvider>()),
                 [typeof(LoadLevelState)] = new LoadLevelState(loadingCurtain, ServiceLocator.Get<ISceneLoader>(), ServiceLocator.Get<ICompositionController>()),
                 [typeof(DisposeServicesState)] = new DisposeServicesState(ServiceLocator.Get<ICompositionController>()),
             };
