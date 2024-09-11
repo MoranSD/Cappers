@@ -34,11 +34,18 @@ namespace Infrastructure.States
             compositionController.Dispose();
 
             ServiceLocator.Remove<Game>();
+            
+            var input = ServiceLocator.Get<IInput>();
             ServiceLocator.Remove<IInput>();
+
             ServiceLocator.Remove<ISceneLoader>();
             ServiceLocator.Remove<ICompositionController>();
             ServiceLocator.Remove<IAssetProvider>();
+
+            var tickManager = ServiceLocator.Get<TickManager>();
+            tickManager.Remove(input as ITickable);
             ServiceLocator.Remove<TickManager>();
+
             ServiceLocator.Remove<PanelsManager>();
             ServiceLocator.Remove<TravelSystem>();
             ServiceLocator.Remove<GameData>();

@@ -1,9 +1,10 @@
 ﻿using Gameplay.Game;
+using Gameplay.Player.InteractController;
 using Gameplay.Ship.Map.View;
 using Infrastructure.Panels;
 using Infrastructure.Travel;
 using System.Linq;
-using UnityEngine;
+using Utils.Interaction;
 
 namespace Gameplay.Ship.Map
 {
@@ -12,56 +13,60 @@ namespace Gameplay.Ship.Map
         private readonly GameData gameData;
         private readonly TravelSystem travelSystem;
         private readonly IShipMapView view;
-        private readonly PanelsManager panelsManager;
+        private readonly PlayerMenuInteractController playerMenuInteract;
 
-        public ShipMap(GameData gameData, TravelSystem travelSystem, IShipMapView view, PanelsManager panelsManager)
+        public ShipMap(GameData gameData, TravelSystem travelSystem, IShipMapView view, PlayerMenuInteractController playerMenuInteract)
         {
             this.gameData = gameData;
             this.travelSystem = travelSystem;
             this.view = view;
-            this.panelsManager = panelsManager;
+            this.playerMenuInteract = playerMenuInteract;
         }
 
         public void Initialize()
         {
             view.OnSelectLocation += OnSelectLocation;
-            view.OnPlayerInteract += OnPlayerInteractWithMap;
+            view.Interactor.OnInteracted += OnPlayerInteractWithMap;
             view.OnTryToClose += OnViewTryToClose;
         }
 
         public void Dispose()
         {
             view.OnSelectLocation -= OnSelectLocation;
-            view.OnPlayerInteract -= OnPlayerInteractWithMap;
+            view.Interactor.OnInteracted -= OnPlayerInteractWithMap;
             view.OnTryToClose -= OnViewTryToClose;
         }
 
         private void OnSelectLocation(int mapId)
         {
-            if (panelsManager.ActivePanel != PanelType.shipMap)
+            if (IsPlayerInteractingWithMap() == false)
                 throw new System.Exception();
 
             travelSystem.BeginTravel(mapId);
-            panelsManager.ShowDefault();
+            playerMenuInteract.ExitInteractState();
         }
 
         private void OnPlayerInteractWithMap()
         {
-            if (panelsManager.ActivePanel == PanelType.shipMap)
+            if (IsPlayerInteractingWithMap())
                 throw new System.Exception();
 
             var openedLocationsIds = gameData.OpenedLocations.ToArray();
             view.UpdateLocationsVisibility(openedLocationsIds);
 
-            panelsManager.ShowPanel(PanelType.shipMap);
+            playerMenuInteract.EnterInteractState(PanelType.shipMap, 
+                view.Interactor is ICameraFollowInteractor cameraInteractor ? cameraInteractor : null);
         }
 
         private void OnViewTryToClose()
         {
-            if (panelsManager.ActivePanel != PanelType.shipMap)
+            if (IsPlayerInteractingWithMap() == false)
                 throw new System.Exception();
 
-            panelsManager.ShowDefault();
+            playerMenuInteract.ExitInteractState();
         }
+
+        private bool IsPlayerInteractingWithMap() =>
+            playerMenuInteract.IsInteracting && playerMenuInteract.InteractPanelType == PanelType.shipMap;
     }
 }

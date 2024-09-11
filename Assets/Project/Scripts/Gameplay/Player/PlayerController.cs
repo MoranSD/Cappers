@@ -8,6 +8,8 @@ namespace Gameplay.Player
 {
     public class PlayerController : ITickable
     {
+        public bool IsFreezed { get; private set; }
+
         private readonly PlayerConfig config;
         private readonly IPlayerView view;
         private readonly IInput input;
@@ -23,11 +25,18 @@ namespace Gameplay.Player
 
         public void Initialize()
         {
+            input.OnPressInteractButton += OnInteract;
+        }
 
+        public void Dispose()
+        {
+            input.OnPressInteractButton -= OnInteract;
         }
 
         public void Update(float deltaTime)
         {
+            if (IsFreezed) return;
+
             var moveInput = input.MoveInput;
 
             if (moveInput == UnityEngine.Vector2.zero) return;
@@ -43,9 +52,21 @@ namespace Gameplay.Player
             view.MovementView.Turn(moveDirection, turnSpeed);
         }
 
-        public void Dispose()
+        public void SetFreezee(bool freezee)
         {
+            if(IsFreezed == freezee)
+                throw new System.Exception(freezee.ToString());
 
+            IsFreezed = freezee;
+        }
+
+        private void OnInteract()
+        {
+            if (IsFreezed) return;
+
+            if (view.LookView.TryGetInteractor(config.LookConfig.InteractRange, out var interactor))
+                if (interactor.IsInteractable)
+                    interactor.Interact();
         }
     }
 }

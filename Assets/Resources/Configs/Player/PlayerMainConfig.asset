@@ -16,3 +16,5 @@ MonoBehaviour:
     MovementConfig:
       MoveSpeed: 7
       RotationSpeed: 300
+    LookConfig:
+      InteractRange: 1

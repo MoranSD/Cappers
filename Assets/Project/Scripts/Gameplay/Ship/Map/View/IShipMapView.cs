@@ -1,4 +1,5 @@
 ﻿using System;
+using Utils.Interaction;
 
 namespace Gameplay.Ship.Map.View
 {
@@ -7,7 +8,7 @@ namespace Gameplay.Ship.Map.View
         event Action<int> OnSelectLocation;
         event Action OnTryToClose;
 
-        event Action OnPlayerInteract;
+        IInteractor Interactor { get; }
 
         void UpdateLocationsVisibility(params int[] ids);
     }

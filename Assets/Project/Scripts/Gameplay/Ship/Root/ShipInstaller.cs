@@ -1,4 +1,5 @@
 ﻿using Gameplay.Game;
+using Gameplay.Player.InteractController;
 using Gameplay.Ship.Map;
 using Gameplay.Ship.Map.View;
 using Gameplay.Ship.Map.View.IconsHolder;
@@ -28,8 +29,9 @@ namespace Gameplay.Ship.Root
             var gameData = ServiceLocator.Get<GameData>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
+            var playerInteractor = ServiceLocator.Get<PlayerMenuInteractController>();
 
-            shipMap = new ShipMap(gameData, travelSystem, mapView, panelsManager);
+            shipMap = new ShipMap(gameData, travelSystem, mapView, playerInteractor);
 
             var allWorldsConfig = assetProvider.Load<AllWorldsConfig>("Configs/World/AllWorldsConfig");
             var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameData.World.Id);

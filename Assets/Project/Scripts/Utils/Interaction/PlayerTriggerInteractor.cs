@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace Utils.Interaction
 {
-    public class PlayerTriggerInteractor : MonoBehaviour, IInteractor
+    public class PlayerTriggerInteractor : MonoBehaviour, IInteractor, ICameraFollowInteractor
     {
         public event Action OnInteracted;
 
         public bool IsInteractable => isPlayerInTrigger;
 
         [SerializeField] private LayerMask playerLayer;
+        [SerializeField] private Transform cameraPivot;
 
         private bool isPlayerInTrigger;
 
@@ -20,6 +21,8 @@ namespace Utils.Interaction
 
             OnInteracted?.Invoke();
         }
+
+        public Vector3 GetCameraPivot() => cameraPivot.position;
 
         private void OnTriggerEnter(Collider other)
         {

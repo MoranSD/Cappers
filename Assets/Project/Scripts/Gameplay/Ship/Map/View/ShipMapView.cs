@@ -13,9 +13,8 @@ namespace Gameplay.Ship.Map.View
         public event Action<int> OnSelectLocation;
         public event Action OnTryToClose;
 
-        public event Action OnPlayerInteract;
-
         public PanelType Type => PanelType.shipMap;
+        public IInteractor Interactor => interactor;
 
         [field: SerializeField] public Transform IconsHolderPivot { get; private set; }
 
@@ -33,17 +32,13 @@ namespace Gameplay.Ship.Map.View
 
             panelObject.SetActive(false);
             closeButton.onClick.AddListener(() => OnTryToClose?.Invoke());
-            interactor.OnInteracted += OnInteract;
         }
-
         public void Dispose()
         {
             iconsHolder.OnClickOnLocation -= OnPressOnLocation;
 
             closeButton.onClick.RemoveAllListeners();
-            interactor.OnInteracted -= OnInteract;
         }
-
         public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
 
         public IEnumerator Hide()
@@ -53,11 +48,11 @@ namespace Gameplay.Ship.Map.View
         }
         public IEnumerator Show()
         {
+            yield return new WaitForSeconds(0.5f);
             panelObject.SetActive(true);
             yield return null;
         }
 
-        private void OnInteract() => OnPlayerInteract?.Invoke();
         private void OnPressOnLocation(int locationId) => OnSelectLocation?.Invoke(locationId);
     }
 }

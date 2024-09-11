@@ -48,11 +48,17 @@ namespace Infrastructure.States
             ServiceLocator.Initialize();
 
             ServiceLocator.Register(game);
-            ServiceLocator.Register<IInput>(new PCInput());
+
+            var tickManager = new TickManager();
+            ServiceLocator.Register(tickManager);
+
+            var input = new PCInput();
+            tickManager.Add(input);
+            ServiceLocator.Register<IInput>(input);
+
             ServiceLocator.Register<ISceneLoader>(new SceneLoader(coroutineRunner));
             ServiceLocator.Register<ICompositionController>(new CompositionController());
             ServiceLocator.Register<IAssetProvider>(new AssetProvider());
-            ServiceLocator.Register(new TickManager());
             ServiceLocator.Register(new PanelsManager(PanelType.gameplay, coroutineRunner));
             ServiceLocator.Register(new TravelSystem());
             ServiceLocator.Register(new GameData());

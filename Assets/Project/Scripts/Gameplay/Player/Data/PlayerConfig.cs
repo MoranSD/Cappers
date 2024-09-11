@@ -4,5 +4,6 @@
     public class PlayerConfig
     {
         public PlayerMovementConfig MovementConfig;
+        public PlayerLookConfig LookConfig;
     }
 }
