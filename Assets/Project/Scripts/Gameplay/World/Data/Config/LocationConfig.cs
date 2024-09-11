@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Infrastructure.SceneLoad;
+using UnityEngine;
 
 namespace World.Data
 {
@@ -6,6 +7,7 @@ namespace World.Data
     {
         public int Id;
         public string Name;
+        public SceneType SceneType;
 
         public abstract Location CreateLocation();
     }

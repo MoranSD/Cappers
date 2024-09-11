@@ -1,40 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using Infrastructure;
+using System.Collections.Generic;
 using World;
 
 namespace Gameplay.Game
 {
     public class GameData
     {
-        public GameWorld World { get; private set; }
-        public IReadOnlyList<int> OpenedLocations => openedLocations;
+        /*
+         * основная инфа о мире, по сути, это прогресс игрока, тут будет храниться все
+         * текущий мир
+         * текущая локация в которой находится игрок
+         * открытые локации на карте
+         * квесты всех видов (взятые, выполненные)
+         * уровень прокачки игрока
+         * 
+         * в общем прогресс в игре
+         */
 
-        private List<int> openedLocations;
+        public GameWorld World;
+        public bool IsInSea => CurrentLocationId == Constants.SeaLocationId;
+        public int CurrentLocationId;
+        public List<int> OpenedLocations;
 
         public GameData()
         {
-            openedLocations = new List<int>();
-        }
-
-        public void SetWorld(GameWorld newWorld)
-        {
-            if (World != null)
-                throw new System.Exception();
-
-            if (newWorld == null)
-                throw new System.Exception();
-
-            World = newWorld;
-        }
-
-        public void OpenLocation(int locationId)
-        {
-            if (World.HasLocation(locationId) == false)
-                throw new System.Exception(locationId.ToString());
-
-            if(openedLocations.Contains(locationId))
-                throw new System.Exception(locationId.ToString());
-
-            openedLocations.Add(locationId);
+            OpenedLocations = new List<int>();
         }
     }
 }

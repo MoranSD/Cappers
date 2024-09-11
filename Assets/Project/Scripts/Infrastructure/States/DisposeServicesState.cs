@@ -7,6 +7,7 @@ using Infrastructure.Travel;
 using Infrastructure.SceneLoad;
 using Infrastructure.DataProviding;
 using Gameplay.Game;
+using Gameplay.LevelLoad;
 
 namespace Infrastructure.States
 {
@@ -33,21 +34,15 @@ namespace Infrastructure.States
         {
             compositionController.Dispose();
 
-            ServiceLocator.Remove<Game>();
-            
-            var input = ServiceLocator.Get<IInput>();
-            ServiceLocator.Remove<IInput>();
-
+            var input = ServiceLocator.Remove<IInput>();
             ServiceLocator.Remove<ISceneLoader>();
             ServiceLocator.Remove<ICompositionController>();
             ServiceLocator.Remove<IAssetProvider>();
-
-            var tickManager = ServiceLocator.Get<TickManager>();
+            var tickManager = ServiceLocator.Remove<TickManager>();
             tickManager.Remove(input as ITickable);
-            ServiceLocator.Remove<TickManager>();
-
             ServiceLocator.Remove<PanelsManager>();
             ServiceLocator.Remove<TravelSystem>();
+            ServiceLocator.Remove<ILevelLoadService>();
             ServiceLocator.Remove<GameData>();
 
             ServiceLocator.Clear();

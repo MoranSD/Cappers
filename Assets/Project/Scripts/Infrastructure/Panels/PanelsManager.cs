@@ -22,9 +22,6 @@ namespace Infrastructure.Panels
 
         public void RegisterPanel(IPanel panel)
         {
-            if (activePanels.ContainsKey(panel.Type))
-                throw new Exception(panel.Type.ToString());
-
             activePanels.Add(panel.Type, panel);
         }
         public void UnregisterPanel(IPanel panel)

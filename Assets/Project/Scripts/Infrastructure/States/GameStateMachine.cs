@@ -1,12 +1,12 @@
 ﻿using Infrastructure.Curtain;
 using Infrastructure.Root;
-using Infrastructure.SceneLoad;
 using System;
 using System.Collections.Generic;
 using Infrastructure.Composition;
 using Infrastructure.Routine;
 using Gameplay.Game;
 using Infrastructure.DataProviding;
+using Gameplay.LevelLoad;
 
 namespace Infrastructure.States
 {
@@ -19,9 +19,8 @@ namespace Infrastructure.States
         {
             states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootStrapState)] = new BootStrapState(game, this, coroutineRunner),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, game, ServiceLocator.Get<GameData>(), ServiceLocator.Get<IAssetProvider>()),
-                [typeof(LoadLevelState)] = new LoadLevelState(loadingCurtain, ServiceLocator.Get<ISceneLoader>(), ServiceLocator.Get<ICompositionController>()),
+                [typeof(BootStrapState)] = new BootStrapState(this, coroutineRunner, loadingCurtain),
+                [typeof(LoadProgressState)] = new LoadProgressState(ServiceLocator.Get<ILevelLoadService>(), game, ServiceLocator.Get<GameData>(), ServiceLocator.Get<IAssetProvider>()),
                 [typeof(DisposeServicesState)] = new DisposeServicesState(ServiceLocator.Get<ICompositionController>()),
             };
         }

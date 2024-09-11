@@ -2,14 +2,11 @@
 using Infrastructure.Routine;
 using Infrastructure.TickManagement;
 using Infrastructure.States;
-using World;
 
 namespace Infrastructure.Root
 {
     public class Game
     {
-        public GameWorld GameWorld { get; private set; }
-
         private GameStateMachine stateMachine;
         private bool isGameStarted;
         private TickManager tickManager;
@@ -39,11 +36,6 @@ namespace Infrastructure.Root
             isGameStarted = false;
 
             stateMachine.Enter<DisposeServicesState>();
-        }
-
-        public void SetWorld(GameWorld gameWorld)
-        {
-            GameWorld = gameWorld;
         }
     }
 }

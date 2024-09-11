@@ -8,7 +8,7 @@ namespace Infrastructure
     {
         private static Dictionary<string, object> services;
 
-        public static void Register<T>(T service)
+        public static T Register<T>(T service)
         {
             var serviceTag = typeof(T).ToString();
 
@@ -20,6 +20,8 @@ namespace Infrastructure
             {
                 Debug.LogError($"ServiceLocator.Register: already have component '{service.GetType()}' with tag={serviceTag}");
             }
+
+            return service;
         }
 
         public static bool TryGet<T>(out T service)
@@ -41,12 +43,20 @@ namespace Infrastructure
             return default;
         }
 
-        public static void Remove<T>()
+        public static T Remove<T>()
         {
             var serviceTag = typeof(T).ToString();
 
             if (services.ContainsKey(serviceTag))
+            {
+                var service = services[serviceTag];
                 services.Remove(serviceTag);
+                return (T)service;
+            }
+            else
+            {
+                return default;
+            }
         }
 
         public static void Initialize()

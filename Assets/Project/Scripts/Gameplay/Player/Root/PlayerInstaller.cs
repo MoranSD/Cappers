@@ -27,7 +27,7 @@ namespace Gameplay.Player.Root
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             tickManager = ServiceLocator.Get<TickManager>();
 
-            var playerConfig = assetProvider.Load<PlayerConfigSO>("Configs/Player/PlayerMainConfig");
+            var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
 
             gameCamera.Initialize();
 

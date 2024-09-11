@@ -8,6 +8,7 @@ using Infrastructure.Composition;
 using Infrastructure.DataProviding;
 using Infrastructure.Panels;
 using Infrastructure.Travel;
+using System.Collections;
 using UnityEngine;
 using World.Data;
 
@@ -18,12 +19,15 @@ namespace Gameplay.Ship.Root
         [SerializeField] private ShipMapView mapView;
 
         private PanelsManager panelsManager;
+        private TemporaryGameplayPanel gameplayTemporary;
         private ShipMap shipMap;
         private MapIconsHolder iconsHolder;
 
         public override void Initialize()
         {
             panelsManager = ServiceLocator.Get<PanelsManager>();
+            gameplayTemporary = new TemporaryGameplayPanel();
+            panelsManager.RegisterPanel(gameplayTemporary);
             panelsManager.RegisterPanel(mapView);
 
             var gameData = ServiceLocator.Get<GameData>();
@@ -33,7 +37,7 @@ namespace Gameplay.Ship.Root
 
             shipMap = new ShipMap(gameData, travelSystem, mapView, playerInteractor);
 
-            var allWorldsConfig = assetProvider.Load<AllWorldsConfig>("Configs/World/AllWorldsConfig");
+            var allWorldsConfig = assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath);
             var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameData.World.Id);
             var iconsHolderPrefab = currentWorldConfig.MapIconsHolderPrefab;
 
@@ -48,10 +52,26 @@ namespace Gameplay.Ship.Root
         {
             shipMap.Dispose();
 
+            panelsManager.UnregisterPanel(gameplayTemporary);
             panelsManager.UnregisterPanel(mapView);
             mapView.Dispose();
 
             iconsHolder.Dispose();
+        }
+    }
+
+    public class TemporaryGameplayPanel : IPanel
+    {
+        public PanelType Type => PanelType.gameplay;
+
+        public IEnumerator Hide()
+        {
+            yield break;
+        }
+
+        public IEnumerator Show()
+        {
+            yield break;
         }
     }
 }

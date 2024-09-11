@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1
   Name: Port 1
+  SceneType: 2

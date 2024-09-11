@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 2
   Name: Island 0
+  SceneType: 3
