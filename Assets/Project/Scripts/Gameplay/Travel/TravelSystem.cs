@@ -32,7 +32,6 @@ namespace Gameplay.Travel
                 throw new System.Exception(locationId.ToString());
 
             DestinationLocationId = locationId;
-            TravelTimer = 3;
             IsTraveling = true;
 
             coroutineRunner.StartCoroutine(TravelProcess(locationId));
@@ -42,11 +41,12 @@ namespace Gameplay.Travel
         {
             if (gameState.IsInSea == false)
             {
+                yield return TimerProcess(3);
                 levelLoadService.LoadLocation(GameConstants.SeaLocationId);
                 yield return new WaitWhile(() => levelLoadService.IsLoading);
             }
 
-            yield return coroutineRunner.StartCoroutine(TimerProcess());
+            yield return TimerProcess(3);
 
             levelLoadService.LoadLocation(locationId);
             yield return new WaitWhile(() => levelLoadService.IsLoading);
@@ -55,8 +55,9 @@ namespace Gameplay.Travel
             IsTraveling = false;
         }
 
-        private IEnumerator TimerProcess()
+        private IEnumerator TimerProcess(int duration)
         {
+            TravelTimer = duration;
             var timerWaiter = new WaitForSeconds(1);
 
             while (TravelTimer > 0)

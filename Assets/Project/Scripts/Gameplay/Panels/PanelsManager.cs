@@ -44,7 +44,7 @@ namespace Gameplay.Panels
         public void ShowDefault() => ShowPanel(defaultPanelType);
         public IEnumerator ShowDefaultRoutine()
         {
-            yield return coroutineRunner.StartCoroutine(ShowPanelRoutine(defaultPanelType));
+            yield return ShowPanelRoutine(defaultPanelType);
         }
         public IEnumerator ShowPanelRoutine(PanelType panelType)
         {
@@ -52,9 +52,9 @@ namespace Gameplay.Panels
                 throw new Exception(panelType.ToString());
 
             yield return new WaitWhile(() => IsChanging);
-            yield return coroutineRunner.StartCoroutine(ChangePanelProcess(panelType));
+            yield return ChangePanelProcess(panelType);
         }
-        public void ShowPanel(PanelType panelType) => coroutineRunner.StartCoroutine(ShowPanelRoutine(panelType));
+        public void ShowPanel(PanelType panelType) => ShowPanelRoutine(panelType);
         private IEnumerator ChangePanelProcess(PanelType panelType)
         {
             IsChanging = true;

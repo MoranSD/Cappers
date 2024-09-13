@@ -11,7 +11,7 @@ namespace Gameplay.CameraSystem
 
         [SerializeField] private CinemachineVirtualCamera playerFollowCamera;
         [SerializeField] private CinemachineVirtualCamera interactFollowCamera;
-        [SerializeField] private float changeCameraDuration = 1.75f;
+        [SerializeField] private float changeCameraDuration = 0.75f;
 
         public void Initialize()
         {

@@ -2140,6 +2140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerFollowCamera: {fileID: 1591989734}
   interactFollowCamera: {fileID: 95346191}
+  changeCameraDuration: 0.75
 --- !u!1 &2010627072
 GameObject:
   m_ObjectHideFlags: 3

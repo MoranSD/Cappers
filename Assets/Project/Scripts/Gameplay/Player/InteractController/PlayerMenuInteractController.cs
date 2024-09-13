@@ -38,7 +38,7 @@ namespace Gameplay.Player.InteractController
             InteractPanelType = panelType;
             playerController.SetFreezee(true);
             
-            coroutineRunner.StartCoroutine(EnterInteractStateProcess(panelType));
+            coroutineRunner.StartCoroutine(EnterInteractStateProcess(panelType, followInteractor));
         }
 
         public void ExitInteractState()
@@ -59,13 +59,13 @@ namespace Gameplay.Player.InteractController
 
             yield return new WaitWhile(() => isExiting);
 
-            yield return coroutineRunner.StartCoroutine(panelsManager.ShowPanelRoutine(panelType));
-
             if (followInteractor != null)
             {
                 isCameraInteracting = true;
-                yield return coroutineRunner.StartCoroutine(playerController.GameCamera.EnterInteractStateRoutine(followInteractor.GetCameraPivot()));
+                yield return playerController.GameCamera.EnterInteractStateRoutine(followInteractor.GetCameraPivot());
             }
+
+            yield return panelsManager.ShowPanelRoutine(panelType);
 
             isEntering = false;
         }
@@ -75,7 +75,7 @@ namespace Gameplay.Player.InteractController
 
             yield return new WaitWhile(() => isEntering);
 
-            yield return coroutineRunner.StartCoroutine(panelsManager.ShowDefaultRoutine());
+            yield return panelsManager.ShowDefaultRoutine();
 
             if (isCameraInteracting)
             {
