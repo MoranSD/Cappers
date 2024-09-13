@@ -20,7 +20,7 @@ namespace Infrastructure.States
             states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootStrapState)] = new BootStrapState(this, coroutineRunner, loadingCurtain),
-                [typeof(LoadProgressState)] = new LoadProgressState(ServiceLocator.Get<ILevelLoadService>(), game, ServiceLocator.Get<GameData>(), ServiceLocator.Get<IAssetProvider>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(ServiceLocator.Get<ILevelLoadService>(), game, ServiceLocator.Get<GameState>(), ServiceLocator.Get<IAssetProvider>()),
                 [typeof(DisposeServicesState)] = new DisposeServicesState(ServiceLocator.Get<ICompositionController>()),
             };
         }

@@ -1,4 +1,4 @@
-﻿namespace World.Data
+﻿namespace Gameplay.World.Data
 {
     public enum LocationType
     {

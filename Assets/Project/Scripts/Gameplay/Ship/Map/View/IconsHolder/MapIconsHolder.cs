@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using World.Data;
+using Gameplay.World.Data;
 
 namespace Gameplay.Ship.Map.View.IconsHolder
 {

@@ -6,9 +6,10 @@ using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
 using Infrastructure.GameInput;
-using Infrastructure.Panels;
+using Gameplay.Panels;
 using Infrastructure.TickManagement;
 using UnityEngine;
+using Infrastructure.Routine;
 
 namespace Gameplay.Player.Root
 {
@@ -36,7 +37,8 @@ namespace Gameplay.Player.Root
             tickManager.Add(player);
 
             var panelsManager = ServiceLocator.Get<PanelsManager>();
-            ServiceLocator.Register(new PlayerMenuInteractController(player, panelsManager, gameCamera));
+            var coroutineRunner = ServiceLocator.Get<ICoroutineRunner>();
+            ServiceLocator.Register(new PlayerMenuInteractController(player, panelsManager, coroutineRunner));
         }
 
         public override void Dispose()

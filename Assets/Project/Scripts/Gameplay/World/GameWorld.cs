@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace World
+namespace Gameplay.World
 {
     public class GameWorld
     {
@@ -14,6 +14,7 @@ namespace World
             this.locations = locations;
         }
 
+        public Location GetLocation(int id) => locations.FirstOrDefault(p => p.Id == id);
         public bool HasLocation(int id) => locations.Any(p => p.Id == id);
     }
 }

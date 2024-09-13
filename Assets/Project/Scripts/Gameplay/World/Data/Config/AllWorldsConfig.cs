@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace World.Data
+namespace Gameplay.World.Data
 {
     [CreateAssetMenu(menuName = "World/AllWorldsConfig")]
     public class AllWorldsConfig : ScriptableObject

@@ -1,5 +1,5 @@
 ﻿using Gameplay.Ship.Map.View.IconsHolder;
-using Infrastructure.Panels;
+using Gameplay.Panels;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -21,7 +21,7 @@ namespace Gameplay.Ship.Map.View
         [SerializeField] private GameObject panelObject;
         [SerializeField] private Button closeButton;
         [Space]
-        [SerializeField] private PlayerTriggerInteractor interactor;
+        [SerializeField] private TriggerInteractor interactor;
 
         private MapIconsHolder iconsHolder;
 
@@ -48,7 +48,6 @@ namespace Gameplay.Ship.Map.View
         }
         public IEnumerator Show()
         {
-            yield return new WaitForSeconds(0.5f);
             panelObject.SetActive(true);
             yield return null;
         }

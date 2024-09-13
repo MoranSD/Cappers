@@ -2,12 +2,14 @@
 using Infrastructure.TickManagement;
 using Infrastructure.GameInput;
 using Infrastructure.Composition;
-using Infrastructure.Panels;
-using Infrastructure.Travel;
+using Gameplay.Panels;
+using Gameplay.Travel;
 using Infrastructure.SceneLoad;
 using Infrastructure.DataProviding;
 using Gameplay.Game;
 using Gameplay.LevelLoad;
+using Gameplay.QuestSystem;
+using Infrastructure.Routine;
 
 namespace Infrastructure.States
 {
@@ -34,6 +36,7 @@ namespace Infrastructure.States
         {
             compositionController.Dispose();
 
+            ServiceLocator.Remove<ICoroutineRunner>();
             var input = ServiceLocator.Remove<IInput>();
             ServiceLocator.Remove<ISceneLoader>();
             ServiceLocator.Remove<ICompositionController>();
@@ -43,7 +46,9 @@ namespace Infrastructure.States
             ServiceLocator.Remove<PanelsManager>();
             ServiceLocator.Remove<TravelSystem>();
             ServiceLocator.Remove<ILevelLoadService>();
-            ServiceLocator.Remove<GameData>();
+            ServiceLocator.Remove<GameState>();
+            var questManager = ServiceLocator.Remove<QuestManager>();
+            questManager.Dispose();
 
             ServiceLocator.Clear();
         }

@@ -6,11 +6,11 @@ using Gameplay.Ship.Map.View.IconsHolder;
 using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
-using Infrastructure.Panels;
-using Infrastructure.Travel;
+using Gameplay.Panels;
+using Gameplay.Travel;
 using System.Collections;
 using UnityEngine;
-using World.Data;
+using Gameplay.World.Data;
 
 namespace Gameplay.Ship.Root
 {
@@ -30,7 +30,7 @@ namespace Gameplay.Ship.Root
             panelsManager.RegisterPanel(gameplayTemporary);
             panelsManager.RegisterPanel(mapView);
 
-            var gameData = ServiceLocator.Get<GameData>();
+            var gameData = ServiceLocator.Get<GameState>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             var playerInteractor = ServiceLocator.Get<PlayerMenuInteractController>();

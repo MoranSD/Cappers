@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using System.Collections;
 using UnityEngine;
 
 namespace Gameplay.CameraSystem
@@ -10,7 +11,7 @@ namespace Gameplay.CameraSystem
 
         [SerializeField] private CinemachineVirtualCamera playerFollowCamera;
         [SerializeField] private CinemachineVirtualCamera interactFollowCamera;
-
+        [SerializeField] private float changeCameraDuration = 1.75f;
 
         public void Initialize()
         {
@@ -29,6 +30,12 @@ namespace Gameplay.CameraSystem
         {
             playerFollowCamera.Priority = 1;
             interactFollowCamera.Priority = 0;
+        }
+
+        public IEnumerator EnterInteractStateRoutine(Vector3 followPosition)
+        {
+            EnterInteractState(followPosition);
+            yield return new WaitForSeconds(changeCameraDuration);
         }
     }
 }

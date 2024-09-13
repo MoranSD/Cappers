@@ -5,7 +5,7 @@ using Infrastructure.Curtain;
 using Infrastructure.DataProviding;
 using Infrastructure.SceneLoad;
 using System.Linq;
-using World.Data;
+using Gameplay.World.Data;
 
 namespace Gameplay.LevelLoad
 {
@@ -16,28 +16,28 @@ namespace Gameplay.LevelLoad
         private readonly ILoadingCurtain loadingCurtain;
         private readonly ISceneLoader sceneLoader;
         private readonly ICompositionController compositionController;
-        private readonly GameData gameData;
+        private readonly GameState gameState;
         private readonly IAssetProvider assetProvider;
 
-        public LevelLoadService(ILoadingCurtain loadingCurtain, ISceneLoader sceneLoader, ICompositionController compositionController, GameData gameData, IAssetProvider assetProvider)
+        public LevelLoadService(ILoadingCurtain loadingCurtain, ISceneLoader sceneLoader, ICompositionController compositionController, GameState gameState, IAssetProvider assetProvider)
         {
             this.loadingCurtain = loadingCurtain;
             this.sceneLoader = sceneLoader;
             this.compositionController = compositionController;
-            this.gameData = gameData;
+            this.gameState = gameState;
             this.assetProvider = assetProvider;
         }
 
         public void LoadLocation(int locationId)
         {
-            if (locationId == Constants.SeaLocationId)
+            if (locationId == GameConstants.SeaLocationId)
             {
                 Load(SceneType.ShipAtSea);
             }
             else
             {
                 var allWorldsConfig = assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath);
-                var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameData.World.Id);
+                var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameState.World.Id);
                 
                 var targetLocationConfig = currentWorldConfig.Locations.FirstOrDefault(x => x.Id == locationId);
 

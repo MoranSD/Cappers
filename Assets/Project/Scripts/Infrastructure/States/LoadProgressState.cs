@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Root;
 using Gameplay.Game;
 using Infrastructure.DataProviding;
-using World.Data;
+using Gameplay.World.Data;
 using Gameplay.LevelLoad;
 
 namespace Infrastructure.States
@@ -10,10 +10,10 @@ namespace Infrastructure.States
     {
         private readonly ILevelLoadService levelLoadService;
         private readonly Game game;
-        private readonly GameData gameData;
+        private readonly GameState gameData;
         private readonly IAssetProvider assetProvider;
 
-        public LoadProgressState(ILevelLoadService levelLoadService, Game game, GameData gameData, IAssetProvider assetProvider)
+        public LoadProgressState(ILevelLoadService levelLoadService, Game game, GameState gameData, IAssetProvider assetProvider)
         {
             this.levelLoadService = levelLoadService;
             this.game = game;
@@ -29,8 +29,8 @@ namespace Infrastructure.States
             var gameWorld = worldConfig.CreateWorld();
 
             gameData.World = gameWorld;
-            gameData.CurrentLocationId = Constants.SeaLocationId;
-            gameData.OpenedLocations.Add(1);//1 is "Port1" location id
+            gameData.CurrentLocationId = GameConstants.SeaLocationId;
+            gameData.OpenedLocations.Add(0);//0 is "Port 0" location id
 
             levelLoadService.LoadLocation(gameData.CurrentLocationId);
         }

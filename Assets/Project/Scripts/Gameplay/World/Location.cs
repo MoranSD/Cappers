@@ -1,6 +1,6 @@
-﻿using World.Data;
+﻿using Gameplay.World.Data;
 
-namespace World
+namespace Gameplay.World
 {
     public abstract class Location
     {

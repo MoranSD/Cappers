@@ -1,7 +1,8 @@
 ﻿using Gameplay.Ship.Map.View.IconsHolder;
+using System.Linq;
 using UnityEngine;
 
-namespace World.Data
+namespace Gameplay.World.Data
 {
     [CreateAssetMenu(menuName = "World/Config")]
     public class GameWorldConfig : ScriptableObject
@@ -10,6 +11,8 @@ namespace World.Data
         [field: SerializeField] public MapIconsHolder MapIconsHolderPrefab { get; private set; }
 
         [field: SerializeField] public LocationConfig[] Locations { get; private set; }
+
+        public LocationConfig GetLocationConfig(int id) => Locations.FirstOrDefault(x => x.Id == id);
 
         public GameWorld CreateWorld()
         {

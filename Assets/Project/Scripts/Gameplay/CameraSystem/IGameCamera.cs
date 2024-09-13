@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Gameplay.CameraSystem
 {
@@ -8,6 +9,7 @@ namespace Gameplay.CameraSystem
         Vector3 Right { get; }
 
         void EnterInteractState(Vector3 followPosition);
+        IEnumerator EnterInteractStateRoutine(Vector3 followPosition);
         void ExitInteractState();
     }
 }

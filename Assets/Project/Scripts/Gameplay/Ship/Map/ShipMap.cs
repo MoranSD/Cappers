@@ -1,8 +1,8 @@
 ﻿using Gameplay.Game;
 using Gameplay.Player.InteractController;
 using Gameplay.Ship.Map.View;
-using Infrastructure.Panels;
-using Infrastructure.Travel;
+using Gameplay.Panels;
+using Gameplay.Travel;
 using System.Linq;
 using Utils.Interaction;
 
@@ -10,14 +10,14 @@ namespace Gameplay.Ship.Map
 {
     public class ShipMap
     {
-        private readonly GameData gameData;
+        private readonly GameState gameState;
         private readonly TravelSystem travelSystem;
         private readonly IShipMapView view;
         private readonly PlayerMenuInteractController playerMenuInteract;
 
-        public ShipMap(GameData gameData, TravelSystem travelSystem, IShipMapView view, PlayerMenuInteractController playerMenuInteract)
+        public ShipMap(GameState gameState, TravelSystem travelSystem, IShipMapView view, PlayerMenuInteractController playerMenuInteract)
         {
-            this.gameData = gameData;
+            this.gameState = gameState;
             this.travelSystem = travelSystem;
             this.view = view;
             this.playerMenuInteract = playerMenuInteract;
@@ -39,7 +39,7 @@ namespace Gameplay.Ship.Map
 
         private void OnSelectLocation(int mapId)
         {
-            if (IsPlayerInteractingWithMap() == false)
+            if (playerMenuInteract.CheckInteraction(PanelType.shipMap) == false)
                 throw new System.Exception();
 
             travelSystem.BeginTravel(mapId);
@@ -48,10 +48,10 @@ namespace Gameplay.Ship.Map
 
         private void OnPlayerInteractWithMap()
         {
-            if (IsPlayerInteractingWithMap())
+            if (playerMenuInteract.CheckInteraction(PanelType.shipMap))
                 throw new System.Exception();
 
-            var openedLocationsIds = gameData.OpenedLocations.ToArray();
+            var openedLocationsIds = gameState.OpenedLocations.ToArray();
             view.UpdateLocationsVisibility(openedLocationsIds);
 
             playerMenuInteract.EnterInteractState(PanelType.shipMap, 
@@ -60,13 +60,10 @@ namespace Gameplay.Ship.Map
 
         private void OnViewTryToClose()
         {
-            if (IsPlayerInteractingWithMap() == false)
+            if (playerMenuInteract.CheckInteraction(PanelType.shipMap) == false)
                 throw new System.Exception();
 
             playerMenuInteract.ExitInteractState();
         }
-
-        private bool IsPlayerInteractingWithMap() =>
-            playerMenuInteract.IsInteracting && playerMenuInteract.InteractPanelType == PanelType.shipMap;
     }
 }
