@@ -1,7 +1,6 @@
-﻿using Infrastructure.Curtain;
-using Infrastructure.Routine;
-using Infrastructure.TickManagement;
+﻿using Infrastructure.TickManagement;
 using Infrastructure.States;
+using UnityEngine;
 
 namespace Infrastructure.Root
 {
@@ -11,9 +10,9 @@ namespace Infrastructure.Root
         private bool isGameStarted;
         private TickManager tickManager;
 
-        public Game(ILoadingCurtain loadingCurtain, ICoroutineRunner coroutineRunner)
+        public Game(Transform mainObjectTF)
         {
-            stateMachine = new GameStateMachine(this, loadingCurtain, coroutineRunner);
+            stateMachine = new GameStateMachine(this, mainObjectTF);
         }
 
         public void Start()

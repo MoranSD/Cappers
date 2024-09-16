@@ -1,21 +1,16 @@
-using Infrastructure.Curtain;
-using Infrastructure.Routine;
 using UnityEngine;
 
 namespace Infrastructure.Root
 {
-    public class GameBootStrap : MonoBehaviour, ICoroutineRunner
+    public class GameBootStrap : MonoBehaviour
     {
         public Game Game { get; private set; }
-
-        [SerializeField] private LoadingCurtain loadingCurtain;
 
         private void Awake()
         {
             DontDestroyOnLoad(this);
 
-            var curtain = Instantiate(loadingCurtain, transform);
-            Game = new Game(curtain, this);
+            Game = new Game(transform);
             Game.Start();
         }
 

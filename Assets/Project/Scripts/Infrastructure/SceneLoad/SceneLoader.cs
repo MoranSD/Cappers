@@ -1,31 +1,24 @@
-﻿using Infrastructure.Routine;
+﻿using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace Infrastructure.SceneLoad
 {
     public class SceneLoader : ISceneLoader
     {
-        private readonly ICoroutineRunner runner;
-
-        public SceneLoader(ICoroutineRunner runner)
+        public async void Load(SceneType sceneType, Action onLoaded = null)
         {
-            this.runner = runner;
+            await LoadProcess(sceneType, onLoaded);
         }
 
-        public void Load(SceneType sceneType, Action onLoaded = null)
-        {
-            runner.StartCoroutine(LoadProcess(sceneType, onLoaded));
-        }
+        public async Task LoadAsync(SceneType sceneType) => await LoadProcess(sceneType);
 
-        private IEnumerator LoadProcess(SceneType sceneType, Action onLoaded = null)
+        private async Task LoadProcess(SceneType sceneType, Action onLoaded = null)
         {
             var asyncOperation = SceneManager.LoadSceneAsync((int)sceneType);
 
-            yield return new WaitUntil(() => asyncOperation.isDone);
-
+            await Utils.TaskUtils.WaitWhile(() => asyncOperation.isDone == false);
             onLoaded?.Invoke();
         }
     }

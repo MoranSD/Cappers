@@ -1,5 +1,4 @@
-﻿using Infrastructure.Root;
-using Infrastructure.TickManagement;
+﻿using Infrastructure.TickManagement;
 using Infrastructure.GameInput;
 using Infrastructure.Composition;
 using Gameplay.Panels;
@@ -9,7 +8,6 @@ using Infrastructure.DataProviding;
 using Gameplay.Game;
 using Gameplay.LevelLoad;
 using Gameplay.QuestSystem;
-using Infrastructure.Routine;
 
 namespace Infrastructure.States
 {
@@ -36,14 +34,15 @@ namespace Infrastructure.States
         {
             compositionController.Dispose();
 
-            ServiceLocator.Remove<ICoroutineRunner>();
             var input = ServiceLocator.Remove<IInput>();
             ServiceLocator.Remove<ISceneLoader>();
             ServiceLocator.Remove<ICompositionController>();
             ServiceLocator.Remove<IAssetProvider>();
             var tickManager = ServiceLocator.Remove<TickManager>();
             tickManager.Remove(input as ITickable);
-            ServiceLocator.Remove<PanelsManager>();
+            var panelsManager = ServiceLocator.Remove<PanelsManager>();
+            var curtainPanel = ServiceLocator.Remove<CurtainPanel>();
+            panelsManager.UnregisterPanel(curtainPanel);
             ServiceLocator.Remove<TravelSystem>();
             ServiceLocator.Remove<ILevelLoadService>();
             ServiceLocator.Remove<GameState>();

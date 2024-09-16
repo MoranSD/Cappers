@@ -1,8 +1,7 @@
 ﻿using Gameplay.Game;
 using Gameplay.LevelLoad;
-using Infrastructure.Routine;
-using System.Collections;
-using UnityEngine;
+using System;
+using System.Threading.Tasks;
 
 namespace Gameplay.Travel
 {
@@ -14,16 +13,14 @@ namespace Gameplay.Travel
 
         private readonly GameState gameState;
         private readonly ILevelLoadService levelLoadService;
-        private readonly ICoroutineRunner coroutineRunner;
 
-        public TravelSystem(GameState gameState, ILevelLoadService levelLoadService, ICoroutineRunner coroutineRunner)
+        public TravelSystem(GameState gameState, ILevelLoadService levelLoadService)
         {
             this.gameState = gameState;
             this.levelLoadService = levelLoadService;
-            this.coroutineRunner = coroutineRunner;
         }
 
-        public void BeginTravel(int locationId)
+        public async void BeginTravel(int locationId)
         {
             if (IsTraveling)
                 throw new System.Exception();
@@ -34,35 +31,32 @@ namespace Gameplay.Travel
             DestinationLocationId = locationId;
             IsTraveling = true;
 
-            coroutineRunner.StartCoroutine(TravelProcess(locationId));
+            await TravelProcess(locationId);
         }
 
-        private IEnumerator TravelProcess(int locationId)
+        private async Task TravelProcess(int locationId)
         {
             if (gameState.IsInSea == false)
             {
-                yield return TimerProcess(3);
-                levelLoadService.LoadLocation(GameConstants.SeaLocationId);
-                yield return new WaitWhile(() => levelLoadService.IsLoading);
+                await TimerProcess(3);
+                await levelLoadService.LoadLocationAsync(GameConstants.SeaLocationId);
             }
 
-            yield return TimerProcess(3);
-
-            levelLoadService.LoadLocation(locationId);
-            yield return new WaitWhile(() => levelLoadService.IsLoading);
+            await TimerProcess(3);
+            await levelLoadService.LoadLocationAsync(locationId);
 
             gameState.CurrentLocationId = locationId; 
             IsTraveling = false;
         }
 
-        private IEnumerator TimerProcess(int duration)
+        private async Task TimerProcess(int duration)
         {
             TravelTimer = duration;
-            var timerWaiter = new WaitForSeconds(1);
+            var timerWaiter = TimeSpan.FromSeconds(1);
 
             while (TravelTimer > 0)
             {
-                yield return timerWaiter;
+                await Task.Delay(timerWaiter);
                 TravelTimer--;
             }
         }

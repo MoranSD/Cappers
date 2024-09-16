@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
 
 namespace Gameplay.Panels
 {
     public interface IPanel
     {
         PanelType Type { get; }
-        IEnumerator Show();
-        IEnumerator Hide();
+        Task Show();
+        Task Hide();
     }
 }

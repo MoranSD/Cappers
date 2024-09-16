@@ -1,8 +1,6 @@
-﻿using Gameplay.CameraSystem;
-using Gameplay.Panels;
-using Infrastructure.Routine;
-using System.Collections;
-using UnityEngine;
+﻿using Gameplay.Panels;
+using System.Threading.Tasks;
+using Utils;
 using Utils.Interaction;
 
 namespace Gameplay.Player.InteractController
@@ -14,22 +12,20 @@ namespace Gameplay.Player.InteractController
 
         private readonly PlayerController playerController;
         private readonly PanelsManager panelsManager;
-        private readonly ICoroutineRunner coroutineRunner;
 
         private bool isCameraInteracting;
         private bool isEntering;
         private bool isExiting;
 
-        public PlayerMenuInteractController(PlayerController playerController, PanelsManager panelsManager, ICoroutineRunner coroutineRunner)
+        public PlayerMenuInteractController(PlayerController playerController, PanelsManager panelsManager)
         {
             this.playerController = playerController;
             this.panelsManager = panelsManager;
-            this.coroutineRunner = coroutineRunner;
         }
 
         public bool CheckInteraction(PanelType panelType) => IsInteracting && InteractPanelType == panelType;
 
-        public void EnterInteractState(PanelType panelType, ICameraFollowInteractor followInteractor = null)
+        public async void EnterInteractState(PanelType panelType, ICameraFollowInteractor followInteractor = null)
         {
             if (IsInteracting || isEntering)
                 throw new System.Exception($"{IsInteracting}:{isEntering}");
@@ -37,11 +33,11 @@ namespace Gameplay.Player.InteractController
             IsInteracting = true;
             InteractPanelType = panelType;
             playerController.SetFreezee(true);
-            
-            coroutineRunner.StartCoroutine(EnterInteractStateProcess(panelType, followInteractor));
+
+            await EnterInteractStateProcess(panelType, followInteractor);
         }
 
-        public void ExitInteractState()
+        public async void ExitInteractState()
         {
             if (IsInteracting == false || isExiting)
                 throw new System.Exception($"{IsInteracting}:{isExiting}");
@@ -50,32 +46,32 @@ namespace Gameplay.Player.InteractController
             InteractPanelType = default;
             playerController.SetFreezee(false);
 
-            coroutineRunner.StartCoroutine(ExitInteractStateProcess());
+            await ExitInteractStateProcess();
         }
 
-        private IEnumerator EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
+        private async Task EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
         {
             isEntering = true;
 
-            yield return new WaitWhile(() => isExiting);
+            await TaskUtils.WaitWhile(() => isExiting);
 
             if (followInteractor != null)
             {
                 isCameraInteracting = true;
-                yield return playerController.GameCamera.EnterInteractStateRoutine(followInteractor.GetCameraPivot());
+                await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot());
             }
 
-            yield return panelsManager.ShowPanelRoutine(panelType);
+            await panelsManager.ShowPanelAsync(panelType);
 
             isEntering = false;
         }
-        private IEnumerator ExitInteractStateProcess()
+        private async Task ExitInteractStateProcess()
         {
             isExiting = true;
 
-            yield return new WaitWhile(() => isEntering);
+            await TaskUtils.WaitWhile(() => isEntering);
 
-            yield return panelsManager.ShowDefaultRoutine();
+            await panelsManager.ShowDefaultAsync();
 
             if (isCameraInteracting)
             {

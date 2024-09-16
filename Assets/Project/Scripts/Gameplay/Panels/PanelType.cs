@@ -2,6 +2,7 @@
 {
     public enum PanelType
     {
+        curtain,
         gameplay,
         shipMap,
         questMenu,

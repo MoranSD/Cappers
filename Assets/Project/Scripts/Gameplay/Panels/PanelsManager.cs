@@ -1,26 +1,23 @@
-﻿using Infrastructure.Routine;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections.Generic;
 using System;
-using UnityEngine;
+using System.Threading.Tasks;
+using Utils;
 
 namespace Gameplay.Panels
 {
     public class PanelsManager
     {
-        public PanelType ActivePanel { get; private set; }
+        public PanelType? ActivePanel { get; private set; } = null;
 
         private readonly PanelType defaultPanelType;
-        private readonly ICoroutineRunner coroutineRunner;
         private Dictionary<PanelType, IPanel> activePanels;
 
         private bool IsChanging = false;
 
-        public PanelsManager(PanelType defaultPanelType, ICoroutineRunner coroutineRunner)
+        public PanelsManager(PanelType defaultPanelType)
         {
             activePanels = new Dictionary<PanelType, IPanel>();
             this.defaultPanelType = defaultPanelType;
-            this.coroutineRunner = coroutineRunner;
         }
 
         public void RegisterPanel(IPanel panel)
@@ -38,31 +35,29 @@ namespace Gameplay.Panels
             activePanels.Remove(panel.Type);
 
             if (ActivePanel == panel.Type)
-                ActivePanel = default;
+                ActivePanel = null;
         }
 
-        public void ShowDefault() => ShowPanel(defaultPanelType);
-        public IEnumerator ShowDefaultRoutine()
-        {
-            yield return ShowPanelRoutine(defaultPanelType);
-        }
-        public IEnumerator ShowPanelRoutine(PanelType panelType)
+        public async void ShowDefault() => await ShowPanelAsync(defaultPanelType);
+        public async Task ShowDefaultAsync() => await ShowPanelAsync(defaultPanelType);
+        public async void ShowPanel(PanelType panelType) => await ShowPanelAsync(panelType);
+        public async Task ShowPanelAsync(PanelType panelType)
         {
             if (activePanels.ContainsKey(panelType) == false)
                 throw new Exception(panelType.ToString());
 
-            yield return new WaitWhile(() => IsChanging);
-            yield return ChangePanelProcess(panelType);
+            await TaskUtils.WaitWhile(() => IsChanging);
+
+            await ChangePanelProcess(panelType);
         }
-        public void ShowPanel(PanelType panelType) => ShowPanelRoutine(panelType);
-        private IEnumerator ChangePanelProcess(PanelType panelType)
+        private async Task ChangePanelProcess(PanelType panelType)
         {
             IsChanging = true;
 
-            if (ActivePanel != default)
-                yield return activePanels[ActivePanel].Hide();
+            if (ActivePanel != null)
+                await activePanels[ActivePanel.Value].Hide();
 
-            yield return activePanels[panelType].Show();
+            await activePanels[panelType].Show();
 
             ActivePanel = panelType;
             IsChanging = false;

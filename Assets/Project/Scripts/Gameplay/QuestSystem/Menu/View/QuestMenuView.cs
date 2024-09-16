@@ -4,6 +4,7 @@ using Gameplay.QuestSystem.Quests;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Interaction;
@@ -62,16 +63,16 @@ namespace Gameplay.QuestSystem.Menu.View
             }
         }
 
-        public IEnumerator Show()
+        public async Task Show()
         {
             panel.SetActive(true);
-            yield break;
+            await Task.Delay(0);
         }
 
-        public IEnumerator Hide()
+        public async Task Hide()
         {
             panel.SetActive(false);
-            yield break;
+            await Task.Delay(0);
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using Infrastructure.Curtain;
-using Infrastructure.Root;
+﻿using Infrastructure.Root;
 using System;
 using System.Collections.Generic;
 using Infrastructure.Composition;
-using Infrastructure.Routine;
 using Gameplay.Game;
 using Infrastructure.DataProviding;
 using Gameplay.LevelLoad;
+using UnityEngine;
 
 namespace Infrastructure.States
 {
@@ -15,11 +14,11 @@ namespace Infrastructure.States
         private Dictionary<Type, IExitableState> states;
         private IExitableState activeState;
 
-        public GameStateMachine(Game game, ILoadingCurtain loadingCurtain, ICoroutineRunner coroutineRunner)
+        public GameStateMachine(Game game, Transform mainObjectTF)
         {
             states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootStrapState)] = new BootStrapState(this, coroutineRunner, loadingCurtain),
+                [typeof(BootStrapState)] = new BootStrapState(this, mainObjectTF),
                 [typeof(LoadProgressState)] = new LoadProgressState(ServiceLocator.Get<ILevelLoadService>(), game, ServiceLocator.Get<GameState>(), ServiceLocator.Get<IAssetProvider>()),
                 [typeof(DisposeServicesState)] = new DisposeServicesState(ServiceLocator.Get<ICompositionController>()),
             };

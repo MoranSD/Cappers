@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Interaction;
+using System.Threading.Tasks;
 
 namespace Gameplay.Ship.Map.View
 {
@@ -41,15 +42,15 @@ namespace Gameplay.Ship.Map.View
         }
         public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
 
-        public IEnumerator Hide()
+        public async Task Hide()
         {
             panelObject.SetActive(false);
-            yield return null;
+            await Task.Delay(0);
         }
-        public IEnumerator Show()
+        public async Task Show()
         {
             panelObject.SetActive(true);
-            yield return null;
+            await Task.Delay(0);
         }
 
         private void OnPressOnLocation(int locationId) => OnSelectLocation?.Invoke(locationId);

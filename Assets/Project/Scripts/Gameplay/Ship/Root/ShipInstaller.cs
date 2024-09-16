@@ -11,6 +11,7 @@ using Gameplay.Travel;
 using System.Collections;
 using UnityEngine;
 using Gameplay.World.Data;
+using System.Threading.Tasks;
 
 namespace Gameplay.Ship.Root
 {
@@ -64,14 +65,14 @@ namespace Gameplay.Ship.Root
     {
         public PanelType Type => PanelType.gameplay;
 
-        public IEnumerator Hide()
+        public async Task Hide()
         {
-            yield break;
+            await Task.Delay(0);
         }
 
-        public IEnumerator Show()
+        public async Task Show()
         {
-            yield break;
+            await Task.Delay(0);
         }
     }
 }
