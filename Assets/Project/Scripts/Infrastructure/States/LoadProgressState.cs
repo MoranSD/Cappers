@@ -1,9 +1,9 @@
 ﻿using Infrastructure.Root;
 using Gameplay.Game;
 using Infrastructure.DataProviding;
-using Gameplay.World.Data;
 using Gameplay.LevelLoad;
-using Gameplay.World.Factory;
+using Gameplay.World;
+using Utils;
 
 namespace Infrastructure.States
 {
@@ -24,7 +24,7 @@ namespace Infrastructure.States
 
         public void Enter()
         {
-            gameData.World = new WorldFactory(assetProvider).CreateWorld(0);
+            gameData.World = CreateWorld(0);
             gameData.CurrentLocationId = GameConstants.SeaLocationId;
             gameData.OpenedLocations.Add(0);//0 is "Port 0" location id, depends on index in config
 
@@ -34,6 +34,18 @@ namespace Infrastructure.States
         public void Exit()
         {
 
+        }
+
+        private GameWorld CreateWorld(int worldId)
+        {
+            var currentWorldConfig = GameDataProvider.GetWorldConfig(worldId);
+
+            var locations = new Location[currentWorldConfig.LocationsCount];
+            for (int i = 0; i < locations.Length; i++)
+                locations[i] = currentWorldConfig.GetLocationConfig(i).CreateLocation(i);
+
+            var gameWorld = new GameWorld(worldId, locations);
+            return gameWorld;
         }
     }
 }
