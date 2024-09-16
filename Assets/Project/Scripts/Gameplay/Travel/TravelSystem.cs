@@ -7,7 +7,10 @@ namespace Gameplay.Travel
 {
     public class TravelSystem
     {
-        public int DestinationLocationId { get; private set; }
+        public event Action OnLeaveLocation;
+        public event Action OnArriveToLocation;
+
+        public int LastDestinationLocationId { get; private set; }
         public bool IsTraveling { get; private set; }
         public int TravelTimer { get; private set; }
 
@@ -28,7 +31,7 @@ namespace Gameplay.Travel
             if (gameState.OpenedLocations.Contains(locationId) == false)
                 throw new System.Exception(locationId.ToString());
 
-            DestinationLocationId = locationId;
+            LastDestinationLocationId = locationId;
             IsTraveling = true;
 
             await TravelProcess(locationId);
@@ -40,6 +43,7 @@ namespace Gameplay.Travel
             {
                 await TimerProcess(3);
                 await levelLoadService.LoadLocationAsync(GameConstants.SeaLocationId);
+                OnLeaveLocation?.Invoke();
             }
 
             await TimerProcess(3);
@@ -47,6 +51,7 @@ namespace Gameplay.Travel
 
             gameState.CurrentLocationId = locationId; 
             IsTraveling = false;
+            OnArriveToLocation?.Invoke();
         }
 
         private async Task TimerProcess(int duration)

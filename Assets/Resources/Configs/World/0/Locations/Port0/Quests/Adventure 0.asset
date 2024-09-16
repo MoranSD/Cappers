@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d984cde682ffb4ca505c9fa2999ec0, type: 3}
   m_Name: Adventure 0
   m_EditorClassIdentifier: 
-  QuestName: "\u0417\u0430\u043A\u0430\u0437 \u043D\u0430 \"\u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435
-    \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430\""
+  QuestName: "\u0417\u0430\u043A\u0430\u0437"
+  RequiredItem: {fileID: 11400000, guid: 30300dbe0313dce47adb88acacbdaab1, type: 2}
   ItemLocation: {fileID: 11400000, guid: b3a610ef8211afa4999827113507ea5f, type: 2}
   CompletionLocation: {fileID: 11400000, guid: 2053ddc6a0716f44a8b866f886830dc6, type: 2}
   descriptionFormat: "\u041E\u0442\u043F\u0440\u0430\u0432\u043B\u044F\u0439\u0441\u044F
-    \u0432 {0}, \u0437\u0430\u0431\u0435\u0440\u0438 \"\u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435
-    \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u0430\" \u0438 \u043F\u0440\u0438\u043D\u0435\u0441\u0438
-    \u0432 {1}"
+    \u0432 {0}, \u0437\u0430\u0431\u0435\u0440\u0438 \"{1}\" \u0438 \u043F\u0440\u0438\u043D\u0435\u0441\u0438
+    \u0432 {2}"

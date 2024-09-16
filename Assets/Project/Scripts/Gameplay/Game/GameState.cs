@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Gameplay.QuestSystem;
 using Gameplay.QuestSystem.Quests;
 using Gameplay.World;
 
@@ -22,6 +21,13 @@ namespace Gameplay.Game
             OpenedLocations = new();
             CurrentQuests = new();
             CompletedQuests = new();
+        }
+
+        public void OpenLocation(int locationId)
+        {
+            if(OpenedLocations.Contains(locationId)) return;
+
+            OpenedLocations.Add(locationId);
         }
     }
 }

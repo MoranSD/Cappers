@@ -1,7 +1,10 @@
-﻿namespace Gameplay.QuestSystem.Quests
+﻿using Gameplay.QuestSystem.Data;
+
+namespace Gameplay.QuestSystem.Quests
 {
     public abstract class Quest
     {
+        public abstract QuestType QuestType { get; }
         public readonly QuestData Data;
 
         public Quest(QuestData data)

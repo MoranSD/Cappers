@@ -7,6 +7,8 @@ namespace Gameplay.QuestSystem.Data
     {
         public string QuestName;
 
+        public abstract QuestType QuestType { get; }
+
         public abstract Quest CreateQuest(QuestData questData);
         public abstract string GetDescription();
     }

@@ -22,7 +22,7 @@ namespace Gameplay.QuestSystem.Menu.View
         [SerializeField] private GameObject panel;
         [SerializeField] private Transform questWidgetPivot;
         [SerializeField] private Button closeButton;
-        [SerializeField] private TriggerInteractor triggerInteractor;
+        [SerializeField] private CameraFollowTriggerInteractor triggerInteractor;
 
         private List<QuestWidget> activeWidgets;
         private QuestWidgetFactory widgetFactory;

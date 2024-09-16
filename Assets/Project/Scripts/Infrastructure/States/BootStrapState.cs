@@ -11,6 +11,8 @@ using Gameplay.LevelLoad;
 using Gameplay.QuestSystem;
 using Gameplay.QuestSystem.Quests.Factory;
 using Gameplay.World.Data;
+using QuestSystem.Quests.Item.Spawn;
+using Gameplay.QuestSystem.Quests.Item.Spawn.Factory;
 
 namespace Infrastructure.States
 {
@@ -59,9 +61,12 @@ namespace Infrastructure.States
             var gameState = ServiceLocator.Register(new GameState());
             var levelLoadService = ServiceLocator.Register<ILevelLoadService>
                 (new LevelLoadService(panelsManager, sceneLoader, compositionController, gameState, assetProvider));
-            ServiceLocator.Register(new TravelSystem(gameState, levelLoadService));
+            var travelSystem = ServiceLocator.Register(new TravelSystem(gameState, levelLoadService));
             var questFactory = new QuestFactory(assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath), gameState);
-            ServiceLocator.Register(new QuestManager(gameState, questFactory));
+            var questManager = ServiceLocator.Register(new QuestManager(gameState, questFactory));
+            var questItemFactory = new QuestItemFactory(assetProvider);
+            var questItemSpawnSystem = ServiceLocator.Register(new QuestItemSpawnSystem(gameState, questManager, travelSystem, questItemFactory));
+            questItemSpawnSystem.Initialize();
         }
     }
 }

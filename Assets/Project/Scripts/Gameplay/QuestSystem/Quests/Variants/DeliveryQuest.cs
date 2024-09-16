@@ -1,10 +1,13 @@
 ﻿using Gameplay.Game;
+using Gameplay.QuestSystem.Data;
 
 namespace Gameplay.QuestSystem.Quests.Variants
 {
     public class DeliveryQuest : Quest
     {
         public int CompletionLocationId { get; }
+
+        public override QuestType QuestType => QuestType.delivery;
 
         private readonly GameState gameState;
 
@@ -16,8 +19,7 @@ namespace Gameplay.QuestSystem.Quests.Variants
 
         public override void Initialize()
         {
-            if(gameState.OpenedLocations.Contains(CompletionLocationId) == false)
-                gameState.OpenedLocations.Add(CompletionLocationId);
+            gameState.OpenLocation(CompletionLocationId);
         }
 
         public override bool IsConditionFulfilled()

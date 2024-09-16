@@ -22,7 +22,7 @@ namespace Gameplay.Ship.Map.View
         [SerializeField] private GameObject panelObject;
         [SerializeField] private Button closeButton;
         [Space]
-        [SerializeField] private TriggerInteractor interactor;
+        [SerializeField] private CameraFollowTriggerInteractor interactor;
 
         private MapIconsHolder iconsHolder;
 

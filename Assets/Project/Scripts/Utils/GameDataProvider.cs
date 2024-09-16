@@ -2,6 +2,7 @@
 using Gameplay.World.Data;
 using Infrastructure.DataProviding;
 using Infrastructure;
+using QuestSystem.Quests.Item;
 
 namespace Utils
 {
@@ -32,6 +33,14 @@ namespace Utils
         {
             var worldConfig = GetCurrentWorldConfig();
             return worldConfig.GetLocationId(locationConfig);
+        }
+
+        public static int GetQuestItemIdInCurrentWorld(QuestItemConfig questItemConfig)
+        {
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
+            var gameState = ServiceLocator.Get<GameState>();
+            var worldQuestItemsConfig = assetProvider.Load<WorldQuestItemsConfig>(string.Format(Constants.WorldQuestItemsConfigPathFormat, gameState.World.Id));
+            return worldQuestItemsConfig.GetItemId(questItemConfig);
         }
     }
 }

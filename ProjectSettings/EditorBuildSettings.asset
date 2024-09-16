@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/Port.unity
     guid: c1209fe9683241b4aad74b132c826ca1
+  - enabled: 1
+    path: Assets/Project/Scenes/Island.unity
+    guid: 0a3651040b751364eba658edfb88f921
   m_configObjects: {}

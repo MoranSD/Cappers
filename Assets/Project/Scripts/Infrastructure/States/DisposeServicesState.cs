@@ -8,6 +8,7 @@ using Infrastructure.DataProviding;
 using Gameplay.Game;
 using Gameplay.LevelLoad;
 using Gameplay.QuestSystem;
+using QuestSystem.Quests.Item.Spawn;
 
 namespace Infrastructure.States
 {
@@ -48,6 +49,8 @@ namespace Infrastructure.States
             ServiceLocator.Remove<GameState>();
             var questManager = ServiceLocator.Remove<QuestManager>();
             questManager.Dispose();
+            var questItemSpawnSystem = ServiceLocator.Remove<QuestItemSpawnSystem>();
+            questItemSpawnSystem.Dispose();
 
             ServiceLocator.Clear();
         }

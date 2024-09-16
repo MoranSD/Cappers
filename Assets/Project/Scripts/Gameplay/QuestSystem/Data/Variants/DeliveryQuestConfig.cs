@@ -8,10 +8,12 @@ using Utils;
 
 namespace Gameplay.QuestSystem.Data.Variants
 {
-    [CreateAssetMenu(menuName = "Quests/DeliveryQuestConfig")]
+    [CreateAssetMenu(menuName = "Quests/Variants/DeliveryQuestConfig")]
     public class DeliveryQuestConfig : QuestConfig
     {
         public LocationConfig CompletionLocation;
+
+        public override QuestType QuestType => QuestType.delivery;
 
         [SerializeField, TextArea()] private string descriptionFormat;
 

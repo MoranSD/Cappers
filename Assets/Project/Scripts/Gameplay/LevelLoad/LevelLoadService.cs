@@ -7,11 +7,15 @@ using System.Linq;
 using Gameplay.World.Data;
 using System.Threading.Tasks;
 using Gameplay.Panels;
+using System;
 
 namespace Gameplay.LevelLoad
 {
     public class LevelLoadService : ILevelLoadService
     {
+        public event Action OnBeginChangeLocation;
+        public event Action OnEndChangeLocation;
+
         public bool IsLoading { get; private set; }
 
         private readonly PanelsManager panelsManager;
@@ -53,6 +57,7 @@ namespace Gameplay.LevelLoad
 
         private async Task Load(SceneType sceneType)
         {
+            OnBeginChangeLocation?.Invoke();
             IsLoading = true;
             await panelsManager.ShowPanelAsync(PanelType.curtain);
             compositionController.Dispose();
@@ -62,6 +67,7 @@ namespace Gameplay.LevelLoad
             compositionController.Initialize();
             await panelsManager.ShowDefaultAsync();
             IsLoading = false;
+            OnEndChangeLocation?.Invoke();
         }
     }
 }
