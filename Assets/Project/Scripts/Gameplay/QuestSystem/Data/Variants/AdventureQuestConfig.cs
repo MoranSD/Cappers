@@ -1,6 +1,7 @@
 ﻿using Gameplay.Game;
 using Gameplay.QuestSystem.Quests;
 using Gameplay.QuestSystem.Quests.Variants;
+using Gameplay.Ship.Inventory;
 using Gameplay.World.Data;
 using Infrastructure;
 using QuestSystem.Quests.Item;
@@ -26,8 +27,9 @@ namespace Gameplay.QuestSystem.Data.Variants
             int itemLocationId = GameDataProvider.GetLocationIdInCurrentWorld(ItemLocation);
             int completionLocationId = GameDataProvider.GetLocationIdInCurrentWorld(CompletionLocation);
             int requiredItemId = GameDataProvider.GetQuestItemIdInCurrentWorld(RequiredItem);
+            var shipInventory = ServiceLocator.Get<ShipInventory>();
 
-            return new AdventureQuest(requiredItemId, itemLocationId, completionLocationId, gameState, questData);
+            return new AdventureQuest(requiredItemId, itemLocationId, completionLocationId, gameState, shipInventory, questData);
         }
 
         public override string GetDescription()

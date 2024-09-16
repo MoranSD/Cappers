@@ -14,6 +14,7 @@ namespace Gameplay.QuestSystem.Quests
 
         public abstract bool IsConditionFulfilled();
         public virtual void Initialize() { }
+        public virtual void Complete() { }
         public virtual void Dispose() { }
     }
 }

@@ -15,12 +15,15 @@ namespace Gameplay.Game
         //location id - quest id
         public List<QuestData> CurrentQuests;
         public List<QuestData> CompletedQuests;
+        //ship inventory
+        public List<int> QuestItems;
 
         public GameState()
         {
             OpenedLocations = new();
             CurrentQuests = new();
             CompletedQuests = new();
+            QuestItems = new();
         }
 
         public void OpenLocation(int locationId)

@@ -1,4 +1,5 @@
-﻿using QuestSystem.Quests.Item.View;
+﻿using Gameplay.Ship.Inventory;
+using QuestSystem.Quests.Item.View;
 using System;
 using UnityEngine;
 
@@ -7,13 +8,15 @@ namespace QuestSystem.Quests.Item
     public class QuestItem
     {
         private readonly int itemId;
+        private readonly ShipInventory shipInventory;
         private readonly IQuestItemView view;
 
         private bool isTaken;
 
-        public QuestItem(int itemId, IQuestItemView view)//link to ship inventory
+        public QuestItem(int itemId, ShipInventory shipInventory, IQuestItemView view)
         {
             this.itemId = itemId;
+            this.shipInventory = shipInventory;
             this.view = view;
         }
 
@@ -33,6 +36,7 @@ namespace QuestSystem.Quests.Item
                 throw new Exception(itemId.ToString());
 
             Debug.Log($"Item {itemId} taken");
+            shipInventory.AddQuestItem(itemId);
             isTaken = true;
             view.Destroy();
         }

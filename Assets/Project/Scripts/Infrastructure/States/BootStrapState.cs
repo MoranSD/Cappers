@@ -13,6 +13,7 @@ using Gameplay.QuestSystem.Quests.Factory;
 using Gameplay.World.Data;
 using QuestSystem.Quests.Item.Spawn;
 using Gameplay.QuestSystem.Quests.Item.Spawn.Factory;
+using Gameplay.Ship.Inventory;
 
 namespace Infrastructure.States
 {
@@ -64,7 +65,8 @@ namespace Infrastructure.States
             var travelSystem = ServiceLocator.Register(new TravelSystem(gameState, levelLoadService));
             var questFactory = new QuestFactory(assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath), gameState);
             var questManager = ServiceLocator.Register(new QuestManager(gameState, questFactory));
-            var questItemFactory = new QuestItemFactory(assetProvider);
+            var shipInventory = ServiceLocator.Register(new ShipInventory(gameState));
+            var questItemFactory = new QuestItemFactory(assetProvider, shipInventory);
             var questItemSpawnSystem = ServiceLocator.Register(new QuestItemSpawnSystem(gameState, questManager, travelSystem, questItemFactory));
             questItemSpawnSystem.Initialize();
         }

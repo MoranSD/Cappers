@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b900c610185f2145ab942e4e662835c, type: 3}
-  m_Name: port1QuestItem
+  m_Name: QuestItem 0
   m_EditorClassIdentifier: 
   ItemName: "\u0421\u043E\u0441\u043E\u043A"
   ViewPrefab: {fileID: 5688120926676601415, guid: ebf3e170364ffd94c838cd5868402531,

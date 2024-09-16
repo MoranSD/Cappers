@@ -9,6 +9,7 @@ using Gameplay.Game;
 using Gameplay.LevelLoad;
 using Gameplay.QuestSystem;
 using QuestSystem.Quests.Item.Spawn;
+using Gameplay.Ship.Inventory;
 
 namespace Infrastructure.States
 {
@@ -51,6 +52,7 @@ namespace Infrastructure.States
             questManager.Dispose();
             var questItemSpawnSystem = ServiceLocator.Remove<QuestItemSpawnSystem>();
             questItemSpawnSystem.Dispose();
+            ServiceLocator.Remove<ShipInventory>();
 
             ServiceLocator.Clear();
         }

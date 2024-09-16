@@ -15,4 +15,4 @@ MonoBehaviour:
   LocationName: Port 0
   LocationSceneType: 2
   quests:
-  - {fileID: 11400000, guid: 5d7ce76ee15465f4db16df57cb605c93, type: 2}
+  - {fileID: 11400000, guid: d6f3944f1631c064da26489e987729f0, type: 2}

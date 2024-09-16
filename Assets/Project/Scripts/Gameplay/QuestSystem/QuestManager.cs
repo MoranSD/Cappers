@@ -100,8 +100,9 @@ namespace Gameplay.QuestSystem
                 throw new Exception($"{targetQuest.ToString()}:{questData.ToString()}");
 
             CompleteQuestInState(questData);
-
             activeQuests.Remove(targetQuest);
+
+            targetQuest.Complete();
             targetQuest.Dispose();
         }
 
