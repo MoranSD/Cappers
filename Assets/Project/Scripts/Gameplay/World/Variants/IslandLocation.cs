@@ -6,7 +6,7 @@ namespace Gameplay.World.Variants
     {
         public override LocationType Type => LocationType.island;
 
-        public IslandLocation(int id, string name) : base(id, name)
+        public IslandLocation(int id) : base(id)
         {
         }
     }

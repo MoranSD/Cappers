@@ -24,7 +24,7 @@ namespace Gameplay.QuestSystem.Menu.Factory
             var widget = Object.Instantiate(questWidgetPrefab, pivot);
 
             widget.QuestNameText.text = questConfig.QuestName;
-            widget.QuestDescriptionText.text = questConfig.QuestDescription;
+            widget.QuestDescriptionText.text = questConfig.GetDescription();
 
             return widget;
         }

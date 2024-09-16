@@ -42,12 +42,12 @@ namespace Gameplay.LevelLoad
                 var allWorldsConfig = assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath);
                 var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameState.World.Id);
 
-                var targetLocationConfig = currentWorldConfig.Locations.FirstOrDefault(x => x.Id == locationId);
+                var targetLocationConfig = currentWorldConfig.GetLocationConfig(locationId);
 
                 if (targetLocationConfig == null)
                     throw new System.Exception(locationId.ToString());
 
-                await Load(targetLocationConfig.SceneType);
+                await Load(targetLocationConfig.LocationSceneType);
             }
         }
 

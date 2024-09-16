@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3138c67bb08a5944d8f498b55ed83cd2, type: 3}
   m_Name: Island0
   m_EditorClassIdentifier: 
-  Id: 2
-  Name: "\u041E\u0441\u0442\u0440\u043E\u0432 \u043D\u0430\u0434\u0435\u0436\u0434"
-  SceneType: 3
+  LocationName: Island 0
+  LocationSceneType: 3

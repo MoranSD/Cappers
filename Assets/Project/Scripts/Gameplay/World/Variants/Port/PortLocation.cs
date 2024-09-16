@@ -8,7 +8,7 @@ namespace Gameplay.World.Variants.Port
         public override LocationType Type => LocationType.port;
         public readonly QuestData[] Quests;
 
-        public PortLocation(int id, string name, QuestData[] quests) : base(id, name)
+        public PortLocation(int id, QuestData[] quests) : base(id)
         {
             Quests = quests;
         }

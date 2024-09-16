@@ -5,10 +5,9 @@ namespace Gameplay.World.Data
 {
     public abstract class LocationConfig : ScriptableObject
     {
-        public int Id;
-        public string Name;
-        public SceneType SceneType;
+        public string LocationName;
+        public SceneType LocationSceneType;
 
-        public abstract Location CreateLocation();
+        public abstract Location CreateLocation(int locationId);
     }
 }

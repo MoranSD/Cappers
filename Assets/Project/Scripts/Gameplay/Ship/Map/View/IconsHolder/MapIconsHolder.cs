@@ -13,24 +13,22 @@ namespace Gameplay.Ship.Map.View.IconsHolder
 
         public void Initialize(GameWorldConfig worldConfig)
         {
-            var locationsConfigs = worldConfig.Locations;
-
             for (int i = 0; i < icons.Length; i++)
             {
                 var icon = icons[i];
 
-                if(locationsConfigs.Any(x => x.Id == icon.LocationId) == false)
+                if(worldConfig.HasLocationConfig(icon.LocationId) == false)
                 {
                     icon.gameObject.SetActive(false);
                     Debug.LogError($"Missing location config {icon.LocationId}");
                     continue;
                 }
 
-                var locationConfig = locationsConfigs.First(x => x.Id == icon.LocationId);
+                var locationConfig = worldConfig.GetLocationConfig(icon.LocationId);
 
                 var iconLocationId = icon.LocationId;
                 icon.SelectButton.onClick.AddListener(() => OnClickOnLocation?.Invoke(iconLocationId));
-                icon.LocationNameText.text = locationConfig.Name;
+                icon.LocationNameText.text = locationConfig.LocationName;
                 //TODO: set icon from config
             }
         }

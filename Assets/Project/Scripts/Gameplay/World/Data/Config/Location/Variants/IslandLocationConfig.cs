@@ -6,9 +6,9 @@ namespace Gameplay.World.Data
     [CreateAssetMenu(menuName = "World/Locations/IslandLocationConfig")]
     public class IslandLocationConfig : LocationConfig
     {
-        public override Location CreateLocation()
+        public override Location CreateLocation(int locationId)
         {
-            return new IslandLocation(Id, Name);
+            return new IslandLocation(locationId);
         }
     }
 }

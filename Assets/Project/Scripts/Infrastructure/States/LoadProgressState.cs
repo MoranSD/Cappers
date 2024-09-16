@@ -3,6 +3,7 @@ using Gameplay.Game;
 using Infrastructure.DataProviding;
 using Gameplay.World.Data;
 using Gameplay.LevelLoad;
+using Gameplay.World.Factory;
 
 namespace Infrastructure.States
 {
@@ -23,14 +24,9 @@ namespace Infrastructure.States
 
         public void Enter()
         {
-            var allWorldsConfig = assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath);
-            var worldConfig = allWorldsConfig.GetWorldConfig(0);//0 is temporary world config
-
-            var gameWorld = worldConfig.CreateWorld();
-
-            gameData.World = gameWorld;
+            gameData.World = new WorldFactory(assetProvider).CreateWorld(0);
             gameData.CurrentLocationId = GameConstants.SeaLocationId;
-            gameData.OpenedLocations.Add(0);//0 is "Port 0" location id
+            gameData.OpenedLocations.Add(0);//0 is "Port 0" location id, depends on index in config
 
             levelLoadService.LoadLocation(gameData.CurrentLocationId);
         }

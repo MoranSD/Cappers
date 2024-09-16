@@ -20,7 +20,7 @@ namespace Gameplay.QuestSystem.Quests.Factory
             //тут тоже надо будет заменить (см уточнение в QuestManager GetAvailableLocationQuests)
             var locationConfig = (PortLocationConfig)worldConfig.GetLocationConfig(questData.OwnerLocationId);
 
-            return locationConfig.GetQuestConfig(questData.QuestId).CreateQuest();
+            return locationConfig.GetQuestConfig(questData.QuestId).CreateQuest(questData);
         }
     }
 }

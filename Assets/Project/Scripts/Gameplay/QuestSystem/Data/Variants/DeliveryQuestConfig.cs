@@ -1,17 +1,32 @@
-﻿using Gameplay.QuestSystem.Quests;
+﻿using Gameplay.Game;
+using Gameplay.QuestSystem.Quests;
 using Gameplay.QuestSystem.Quests.Variants;
+using Gameplay.World.Data;
+using Infrastructure;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.QuestSystem.Data.Variants
 {
     [CreateAssetMenu(menuName = "Quests/DeliveryQuestConfig")]
     public class DeliveryQuestConfig : QuestConfig
     {
-        public int CompletionLocationId;
+        public LocationConfig CompletionLocation;
 
-        public override Quest CreateQuest()
+        [SerializeField, TextArea()] private string descriptionFormat;
+
+        public override Quest CreateQuest(QuestData questData)
         {
-            return new DeliveryQuest(CompletionLocationId, QuestData);
+            var gameState = ServiceLocator.Get<GameState>();
+            var completionLocationId = GameDataProvider.GetLocationIdInCurrentWorld(CompletionLocation);
+            return new DeliveryQuest(gameState, completionLocationId, questData);
+        }
+
+        public override string GetDescription()
+        {
+            var completionLocationId = GameDataProvider.GetLocationIdInCurrentWorld(CompletionLocation);
+            var completionLocationName = CompletionLocation.LocationName;
+            return string.Format(descriptionFormat, completionLocationName);
         }
     }
 }

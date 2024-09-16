@@ -4,15 +4,12 @@
     {
         public readonly QuestData Data;
 
-        public bool ConditionFulfilled { get; protected set; }
-
         public Quest(QuestData data)
         {
             Data = data;
-
-            ConditionFulfilled = false;
         }
 
+        public abstract bool IsConditionFulfilled();
         public virtual void Initialize() { }
         public virtual void Dispose() { }
     }

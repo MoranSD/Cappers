@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gameplay.World.Data
 {
@@ -8,9 +7,6 @@ namespace Gameplay.World.Data
     {
         [SerializeField] private GameWorldConfig[] worlds;
 
-        public GameWorldConfig GetWorldConfig(int worldId)
-        {
-            return worlds.FirstOrDefault(x => x.Id == worldId);
-        }
+        public GameWorldConfig GetWorldConfig(int worldId) => worlds[worldId];
     }
 }

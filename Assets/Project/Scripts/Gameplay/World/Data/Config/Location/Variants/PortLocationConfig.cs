@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Gameplay.World.Variants.Port;
 using Gameplay.QuestSystem.Data;
-using System.Linq;
+using Gameplay.QuestSystem.Quests;
 
 namespace Gameplay.World.Data
 {
@@ -10,11 +10,15 @@ namespace Gameplay.World.Data
     {
         [SerializeField] private QuestConfig[] quests;
 
-        public QuestConfig GetQuestConfig(int id) => quests.FirstOrDefault(x => x.QuestData.QuestId == id);
+        public QuestConfig GetQuestConfig(int id) => quests[id];
 
-        public override Location CreateLocation()
+        public override Location CreateLocation(int locationId)
         {
-            return new PortLocation(Id, Name, quests.Select(x => x.QuestData).ToArray());
+            var questsDatas = new QuestData[quests.Length];
+            for (int i = 0; i < quests.Length; i++)
+                questsDatas[i] = new QuestData(i, locationId);
+
+            return new PortLocation(locationId, questsDatas);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Gameplay.QuestSystem.Menu
             var availableQuests = new List<QuestData>();
 
             //текущие квесты которые можно сдать
-            availableQuests.AddRange(questManager.ActiveQuests.Where(x => x.ConditionFulfilled).Select(x => x.Data));
+            availableQuests.AddRange(questManager.ActiveQuests.Where(x => x.IsConditionFulfilled()).Select(x => x.Data));
             //квесты локации которые не взяли/выполнили
             availableQuests.AddRange(questManager.GetAvailableLocationQuests());
 

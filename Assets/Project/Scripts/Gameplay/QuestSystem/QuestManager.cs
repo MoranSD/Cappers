@@ -76,7 +76,7 @@ namespace Gameplay.QuestSystem
 
             var targetQuest = activeQuests.First(x => x.Data.Compare(questData));
 
-            return targetQuest.ConditionFulfilled;
+            return targetQuest.IsConditionFulfilled();
         }
         public bool HasQuest(QuestData questData)
         {
@@ -96,7 +96,7 @@ namespace Gameplay.QuestSystem
         {
             var targetQuest = activeQuests.FirstOrDefault(x => x.Data.Compare(questData));
 
-            if (targetQuest == null || targetQuest.ConditionFulfilled == false)
+            if (targetQuest == null || targetQuest.IsConditionFulfilled() == false)
                 throw new Exception($"{targetQuest.ToString()}:{questData.ToString()}");
 
             CompleteQuestInState(questData);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76470ebd9f6f8b469121a338e182139, type: 3}
   m_Name: Port1
   m_EditorClassIdentifier: 
-  Id: 1
-  Name: Port 1
-  SceneType: 2
-  quests: []
+  LocationName: Port 1
+  LocationSceneType: 2
+  quests:
+  - {fileID: 11400000, guid: 5d7ce76ee15465f4db16df57cb605c93, type: 2}

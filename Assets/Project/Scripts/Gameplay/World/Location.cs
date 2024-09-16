@@ -7,12 +7,10 @@ namespace Gameplay.World
         public abstract LocationType Type { get; }
 
         public readonly int Id;
-        public readonly string Name;
 
-        public Location(int id, string name)
+        public Location(int id)
         {
             Id = id;
-            Name = name;
         }
     }
 }
