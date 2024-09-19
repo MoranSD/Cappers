@@ -3,7 +3,6 @@ using Utils;
 
 namespace Gameplay.Player.Fight
 {
-
     public class PlayerFight
     {
         public bool HandleInput = true;
@@ -12,6 +11,8 @@ namespace Gameplay.Player.Fight
 
         private float meleeDelayTime;
         private float longDelayTime;
+
+        private IAttackTarget closestTarget;
 
         public PlayerFight(PlayerController controller)
         {
@@ -43,11 +44,12 @@ namespace Gameplay.Player.Fight
 
             if(controller.View.Look.TryGetTargetsAround(controller.Config.FightConfig.AttackRange, out var targets))
             {
-                var closestTarget = GetClosestTarget(targets);
+                closestTarget = GetClosestTarget(targets);
                 controller.Movement.SetLookTarget(closestTarget);
             }
             else
             {
+                closestTarget = null;
                 controller.Movement.ResetLookTarget();
             }
         }
@@ -63,26 +65,47 @@ namespace Gameplay.Player.Fight
         {
             if (HandleInput == false) return;
             if (meleeDelayTime != 0) return;
+            if (closestTarget == null) return;
+
+            var ourPosition = controller.View.Movement.GetPosition();
+            var targetPosition = closestTarget.GetPosition();
+            var attackDistance = controller.Config.FightConfig.MeleeAttackDistance;
+
+            if (Vector3.Distance(ourPosition, targetPosition) > attackDistance)
+                return;
 
             meleeDelayTime = controller.Config.FightConfig.MeleeAttackDelay;
+            closestTarget.ApplyDamage(controller.Config.FightConfig.BaseMeleeDamage);
+            controller.View.Fight.PerformMeleeAttack();
         }
 
         private void OnLongAttack()
         {
             if (HandleInput == false) return;
             if (longDelayTime != 0) return;
+            if (closestTarget == null) return;
+
+            var ourPosition = controller.View.Movement.GetPosition();
+            var targetPosition = closestTarget.GetPosition();
+            var attackDistance = controller.Config.FightConfig.LongAttackDistance;
+
+            if (Vector3.Distance(ourPosition, targetPosition) > attackDistance)
+                return;
 
             longDelayTime = controller.Config.FightConfig.LongAttackDelay;
+            closestTarget.ApplyDamage(controller.Config.FightConfig.BaseLongDamage);
+            controller.View.Fight.PerformLongAttack();
         }
 
         private IAttackTarget GetClosestTarget(IAttackTarget[] targets)
         {
+            var ourPosition = controller.View.Movement.GetPosition();
             var closestTarget = targets[0];
 
             foreach (var target in targets)
             {
-                if(Vector3.Distance(controller.View.Movement.GetPosition(), target.GetPosition()) <
-                    Vector3.Distance(controller.View.Movement.GetPosition(), closestTarget.GetPosition()))
+                if (Vector3.Distance(ourPosition, target.GetPosition()) <
+                    Vector3.Distance(ourPosition, closestTarget.GetPosition()))
                     closestTarget = target;
             }
 

@@ -5,7 +5,7 @@ using Utils.Interaction;
 
 namespace Gameplay.Player.Look
 {
-    public class PlayerLook : MonoBehaviour, IPlayerLook
+    public class PlayerLookView : MonoBehaviour, IPlayerLookView
     {
         [SerializeField] private LayerMask interactorLayer;
         [SerializeField] private LayerMask targetLayer;

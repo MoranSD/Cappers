@@ -20,6 +20,10 @@ MonoBehaviour:
     LookConfig:
       InteractRange: 1
     FightConfig:
-      AttackRange: 3
+      AttackRange: 8
       MeleeAttackDelay: 1
       LongAttackDelay: 5
+      MeleeAttackDistance: 3
+      LongAttackDistance: 8
+      BaseMeleeDamage: 2
+      BaseLongDamage: 6

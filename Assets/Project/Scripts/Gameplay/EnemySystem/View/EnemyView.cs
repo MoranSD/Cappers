@@ -29,7 +29,7 @@ namespace Gameplay.EnemySystem.View
 
         public void ApplyDamage(float damage)
         {
-            throw new System.NotImplementedException();
+            Debug.Log($"get damage {damage}");
         }
     }
 }
