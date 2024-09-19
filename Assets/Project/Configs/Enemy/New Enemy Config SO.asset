@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41501136ea3cdc046a763d6e41f33025, type: 3}
+  m_Name: New Enemy Config SO
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  ViewPrefab: {fileID: 6091852834102599213, guid: 74e51bc25696b4d4292597473418db19,
+    type: 3}
+  Config:
+    MovementConfig:
+      Speed: 2
+    LookConfig:
+      VisionRange: 8
+    FollowConfig:
+      UpdateDestinationRate: 0.5
+      MaxFollowDistance: 16
+    AttackConfig:
+      AttackDistance: 2
+      MinTimeToUpdateDelay: 1
+      FirstAttackDelay: 3
+      AttackRate: 2

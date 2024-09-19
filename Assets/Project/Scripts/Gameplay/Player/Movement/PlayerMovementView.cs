@@ -6,6 +6,8 @@ namespace Gameplay.Player.Movement
     {
         [SerializeField] private CharacterController characterController;
 
+        public Vector3 GetPosition() => transform.position;
+
         public void Move(Vector3 direction, float speed)
         {
             direction *= speed;

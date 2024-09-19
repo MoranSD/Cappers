@@ -2,25 +2,45 @@ namespace Utilities.BehaviourTree
 {
     public class BehaviourTreeRoot
     {
-        public NodeStatus RootNodeStatus => rootNode.Status;
-
-        public BehaviourTreeBlackBoard LocalBlackBoard { get; private set; }
-
         private BehaviourNode rootNode;
 
-        public BehaviourTreeRoot(BehaviourNode rootNode, BehaviourTreeBlackBoard blackBoard = null)
+        public BehaviourTreeRoot(BehaviourNode rootNode)
         {
             if (rootNode == null)
                 throw new System.Exception("root node shouldn't be null");
-
-            LocalBlackBoard = blackBoard == null ? new() : blackBoard;
 
             this.rootNode = rootNode;
         }
 
         public void Initialize() => rootNode?.Enter();
-        public void Run(float deltaTime) => rootNode?.Run(deltaTime);
+        public void Run(float deltaTime)
+        {
+            if (rootNode.Status != NodeStatus.run) return;
+
+            rootNode.Run(deltaTime);
+        }
         public void Dispose() => rootNode?.Exit();
+
+        public void MoveToNode(BehaviourNode node)
+        {
+            if(rootNode == node)
+            {
+                rootNode.Exit();
+                rootNode.Enter();
+            }
+            else
+            {
+                if (rootNode is INodeWithChildren nodeWithChildren && nodeWithChildren.Contains(node))
+                {
+                    rootNode.Exit();
+                    nodeWithChildren.MoveTo(node);
+                }
+                else
+                {
+                    throw new System.Exception($"BT doesnot contain node {node.GetType().ToString()}");
+                }
+            }
+        }
 
         public void ChangeBehaviour(BehaviourNode newBehaviourNode)
         {

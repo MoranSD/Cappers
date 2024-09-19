@@ -1,6 +1,8 @@
-﻿namespace Utilities.BehaviourTree
+﻿using System;
+
+namespace Utilities.BehaviourTree
 {
-    public sealed class SelectorNode : BehaviourNode
+    public sealed class SelectorNode : BehaviourNode, INodeWithChildren
     {
         private BehaviourNode[] childNodes;
         private int nodeIndex;
@@ -8,6 +10,51 @@
         public SelectorNode(params BehaviourNode[] behaviourNodes)
         {
             childNodes = behaviourNodes;
+        }
+
+        public bool Contains(BehaviourNode node)
+        {
+            for (int i = 0; i < childNodes.Length; i++)
+            {
+                if (childNodes[i] == node)
+                {
+                    return true;
+                }
+                else if (childNodes[i] is INodeWithChildren nodeWithChildren)
+                {
+                    if (nodeWithChildren.Contains(node))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void MoveTo(BehaviourNode node)
+        {
+            if (Contains(node) == false)
+                throw new Exception($"{node.GetType().ToString()}");
+
+            for (int i = 0; i < childNodes.Length; i++)
+            {
+                if (childNodes[i] == node)
+                {
+                    nodeIndex = i;
+                    childNodes[nodeIndex].Enter();
+                    return;
+                }
+                else if (childNodes[i] is INodeWithChildren nodeWithChildren)
+                {
+                    if (nodeWithChildren.Contains(node))
+                    {
+                        nodeIndex = i;
+                        nodeWithChildren.MoveTo(node);
+                        return;
+                    }
+                }
+            }
+
+            throw new Exception(node.GetType().ToString());
         }
 
         protected override void OnEnter()

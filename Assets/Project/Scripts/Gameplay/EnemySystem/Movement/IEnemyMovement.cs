@@ -4,8 +4,9 @@ namespace Gameplay.EnemySystem.Movement
 {
     public interface IEnemyMovement
     {
-        void SetSpeed(float speed);
-        void SetDestination(Vector3 destination);
+        Vector3 GetPosition();
+        void LookAt(Vector3 position);
+        void SetDestination(Vector3 destination, float speed);
         void Stop();
     }
 }

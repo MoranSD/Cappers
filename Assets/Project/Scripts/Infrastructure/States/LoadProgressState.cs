@@ -26,7 +26,7 @@ namespace Infrastructure.States
         {
             gameData.World = CreateWorld(0);
             gameData.CurrentLocationId = GameConstants.SeaLocationId;
-            gameData.OpenLocation(0);//0 is "Port 0" location id, depends on index in config
+            gameData.OpenLocation(2);//0 is "Port 0" location id, depends on index in config
 
             levelLoadService.LoadLocation(gameData.CurrentLocationId);
         }
