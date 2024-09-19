@@ -7,8 +7,8 @@ namespace Gameplay.Player.View
 {
     public class PlayerView : MonoBehaviour, IPlayerView, IAttackTarget
     {
-        public IPlayerMovementView MovementView => movementView;
-        public IPlayerLook LookView => lookView;
+        public IPlayerMovement Movement => movementView;
+        public IPlayerLook Look => lookView;
 
         [SerializeField] private PlayerMovementView movementView;
         [SerializeField] private PlayerLook lookView;

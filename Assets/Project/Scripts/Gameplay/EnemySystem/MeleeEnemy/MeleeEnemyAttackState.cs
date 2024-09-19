@@ -28,8 +28,6 @@ namespace Gameplay.EnemySystem.MeleeEnemy
             var ourPosition = enemyController.View.Movement.GetPosition();
             var targetPosition = target.GetPosition();
 
-            enemyController.View.Movement.LookAt(targetPosition);
-
             if (Vector3.Distance(ourPosition, targetPosition) > enemyController.Config.AttackConfig.AttackDistance)
             {
                 enemyController.StateController.ChangeState<EnemyFollowTargetState, IAttackTarget>(target);

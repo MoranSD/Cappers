@@ -2,10 +2,11 @@
 using Gameplay.EnemySystem.Look;
 using Gameplay.EnemySystem.Movement;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.EnemySystem.View
 {
-    public class EnemyView : MonoBehaviour, IEnemyView
+    public class EnemyView : MonoBehaviour, IEnemyView, IAttackTarget
     {
         public IEnemyMovement Movement => enemyMovement;
         public IEnemyLook Look => enemyLook;
@@ -23,5 +24,12 @@ namespace Gameplay.EnemySystem.View
         }
 
         public Vector3 GetIdlePosition() => idlePosition;
+
+        public Vector3 GetPosition() => transform.position;
+
+        public void ApplyDamage(float damage)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

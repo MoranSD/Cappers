@@ -1,9 +1,12 @@
-﻿namespace Gameplay.Player.Data
+﻿using System;
+
+namespace Gameplay.Player.Data
 {
-    [System.Serializable]
+    [Serializable]
     public class PlayerConfig
     {
         public PlayerMovementConfig MovementConfig;
         public PlayerLookConfig LookConfig;
+        public PlayerFightConfig FightConfig;
     }
 }

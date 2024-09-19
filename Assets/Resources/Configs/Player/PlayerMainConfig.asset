@@ -15,6 +15,11 @@ MonoBehaviour:
   MainConfig:
     MovementConfig:
       MoveSpeed: 7
-      RotationSpeed: 350
+      LookSpeed: 300
+      TargetLookSpeed: 360
     LookConfig:
       InteractRange: 1
+    FightConfig:
+      AttackRange: 3
+      MeleeAttackDelay: 1
+      LongAttackDelay: 5

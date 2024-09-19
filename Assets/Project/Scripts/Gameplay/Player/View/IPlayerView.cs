@@ -5,7 +5,7 @@ namespace Gameplay.Player.View
 {
     public interface IPlayerView
     {
-        IPlayerMovementView MovementView { get; }
-        IPlayerLook LookView { get; }
+        IPlayerMovement Movement { get; }
+        IPlayerLook Look { get; }
     }
 }

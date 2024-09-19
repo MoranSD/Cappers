@@ -7,6 +7,9 @@ namespace Infrastructure.GameInput
     {
         event Action OnPressInteractButton;
 
+        event Action OnPressMeleeAttackButton;
+        event Action OnPressLongAttackButton;
+
         Vector2 MoveInput { get; }
     }
 }

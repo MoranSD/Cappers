@@ -4,6 +4,7 @@
     public class PlayerMovementConfig
     {
         public float MoveSpeed;
-        public float RotationSpeed;
+        public float LookSpeed;
+        public float TargetLookSpeed;
     }
 }

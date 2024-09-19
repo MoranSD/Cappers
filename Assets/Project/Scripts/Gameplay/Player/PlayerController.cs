@@ -3,45 +3,65 @@ using Infrastructure.TickManagement;
 using Gameplay.Player.Data;
 using Gameplay.Player.View;
 using Infrastructure.GameInput;
-using Utils;
-using UnityEngine;
+using Gameplay.Player.Movement;
+using Gameplay.Player.Interact;
+using Utils.StateMachine;
+using Gameplay.Player.Behaviour;
+using Gameplay.Player.Fight;
 
 namespace Gameplay.Player
 {
     public class PlayerController : ITickable
     {
         public bool IsFreezed { get; private set; }
-        public readonly IGameCamera GameCamera;
+        public PlayerMovement Movement { get; private set; }
+        public PlayerInteraction Interaction { get; private set; }
+        public PlayerFight Fight { get; private set; }
 
-        private readonly PlayerConfig config;
-        private readonly IPlayerView view;
-        private readonly IInput input;
+        public StateController StateController { get; private set; }
+
+        public readonly PlayerConfig Config;
+        public readonly IPlayerView View;
+        public readonly IInput Input;
+        public readonly IGameCamera GameCamera;
 
         public PlayerController(PlayerConfig config, IPlayerView view, IInput input, IGameCamera gameCamera)
         {
             IsFreezed = false;
+
+            Config = config;
+            View = view;
+            Input = input;
             GameCamera = gameCamera;
 
-            this.config = config;
-            this.view = view;
-            this.input = input;
+            Movement = new(this);
+            Interaction = new(this);
+            Fight = new(this);
+
+            StateController = new(
+                new PlayerNormalState(this),
+                new PlayerFreezedState(this)
+                );
         }
 
         public void Initialize()
         {
-            input.OnPressInteractButton += OnInteract;
+            Interaction.Initialize();
+            Fight.Initialize();
+
+            StateController.ChangeState<PlayerNormalState>();
         }
 
         public void Dispose()
         {
-            input.OnPressInteractButton -= OnInteract;
+            StateController.ExitCurrent();
+            Interaction.Dispose();
+            Fight.Dispose();
         }
 
         public void Update(float deltaTime)
         {
-            if (IsFreezed) return;
-
-            Move(deltaTime);
+            StateController.UpdateCurrentState(deltaTime);
         }
 
         public void SetFreezee(bool freezee)
@@ -50,32 +70,9 @@ namespace Gameplay.Player
                 throw new System.Exception(freezee.ToString());
 
             IsFreezed = freezee;
-        }
 
-        private void Move(float deltaTime)
-        {
-            var moveInput = input.MoveInput;
-
-            if (moveInput == UnityEngine.Vector2.zero) return;
-
-            var moveDirection = GameCamera.Forward * moveInput.y + GameCamera.Right * moveInput.x;
-            moveDirection.y = 0;
-            moveDirection.Normalize();
-
-            var moveSpeed = config.MovementConfig.MoveSpeed * deltaTime;
-            var turnSpeed = config.MovementConfig.RotationSpeed * deltaTime;
-
-            view.MovementView.Move(moveDirection, moveSpeed);
-            view.MovementView.Turn(moveDirection, turnSpeed);
-        }
-
-        private void OnInteract()
-        {
-            if (IsFreezed) return;
-
-            if (view.LookView.TryGetInteractor(config.LookConfig.InteractRange, out var interactor))
-                if (interactor.IsInteractable)
-                    interactor.Interact();
+            if (IsFreezed) StateController.ChangeState<PlayerFreezedState>();
+            else StateController.ChangeState<PlayerNormalState>();
         }
     }
 }
