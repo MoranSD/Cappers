@@ -1,11 +1,11 @@
-﻿using Pathfinding;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace Gameplay.EnemySystem.Movement
 {
     public class EnemyMovement : MonoBehaviour, IEnemyMovement
     {
-        [SerializeField] private AIPath agent;
+        [SerializeField] private NavMeshAgent agent;
 
         public Vector3 GetPosition() => transform.position;
         public void LookAt(Vector3 position)
@@ -16,14 +16,14 @@ namespace Gameplay.EnemySystem.Movement
 
         public void SetDestination(Vector3 destination, float speed)
         {
-            agent.canMove = true;
-            agent.maxSpeed = speed;
-            agent.destination = destination;
+            agent.isStopped = false;
+            agent.speed = speed;
+            agent.SetDestination(destination);
         }
 
         public void Stop()
         {
-            agent.canMove = false;
+            agent.isStopped = true;
         }
     }
 }

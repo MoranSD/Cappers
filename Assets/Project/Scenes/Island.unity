@@ -161,6 +161,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &28633113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 28633115}
+  - component: {fileID: 28633114}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &28633114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28633113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2284eb46f67d18f4ea7659e201ad069e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConfigSO: {fileID: 11400000, guid: f6e92fd540ae5ee4a8b733034a5f3f0c, type: 2}
+--- !u!4 &28633115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28633113}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.71, y: 0.67, z: -14.85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &43785840
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,51 +976,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 848999488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78396926cbbfc4ac3b48fc5fc34a87d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 1073741824
-  data:
-    dataString: UEsDBBQAAAgIAAAYIewAc1f4vAIAAP4FAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFtVNtuGjEQ/RXk5yZabknpWwuE9CEJKqnyUPLg2LOshbFXvgRIxL93xhhYaCWkXc7MmTlz20+mjK9BBOsmTskHK4F9azF6Z19aJ+M9bPjCmpn6gIPPi5KhIieefH7xoCzibaJ5u4LglPhuFpqcCwSjUaV1q7FcwND64BEuufaAJmcDsQ1Cny22yYRtfn7Qs7XDNwEmgDt5dQbXxW2/1xscvK97g9uv6S+RrrqJFY3QfFWDJPUncq+TWf2b5GawruxBNQirtfJZFAvbOhU95LWPWBI6SMWxyCSH/CtQiyqQqCb5qSw9hFyI49uRctirfVT2w+4buOJ+udf1znWkPJ2saR/04T/2frKXzq7uD4nbBSUJlRLLX3wruA+NFjfh0bnyaNZcL/mbhpcKzKOdOBuNRGNwkajRQ2fUCHUsbliBWJ789mIvwFj/O9T2aai7VP5mFqA+1oFTPKG/PfiZtqn7OSRZMjKgkOBwcj+xnrRDPidClDQi/5kvmsuWDXfK+YCmrCej5DvFEYEEIyA3/oocDMl7s9FRLDZOWqkZMQytM5DgLLAGw3XYTjFiuNyBC1tD14XljtPdZXXZdjinC0qCT/5FcWGa2vVx2A6316eVPrz9eaUh+MquH8BXTzFoZRrdJsMjNnhojdmvbrOZB9osupKLBi3AJkQHIx54yoZycMFkk4q9TAwTtaZdTgUkRVgA/V6pvxXHvDrB7NGadHpnzyR/EZU8PxEmS2h3Oz246XS7hbiRV6KAvii6t0WnLUpZ9lg6IWWw3VxP9/3KU8Ltao7G4L0cPoutieN1Olvp+HqiPla2MXplSjsTDsA8nYfw4DALfl7kWCqscwYhKJMWk33OmbZiCXJ+DDRPnR1vguPzU5Q5q9W7DYTM2TB9DOeM4ONJ4u6+K1hT8rNgoHF2IJ+VhhWvyVTs2O4vUEsDBBQAAAgIAAAYIexd0GtgbAAAAHcAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNUz1DPSUVBKL0osyCgGChiCOKWZKSB2tFJKWqqhsZFJqpmRsbFBslmKbrJBqmmygbG5gZFhclpKmolSLFB9SWVBql9ibipET0BiSUZaZl5KZl66nntRZoo7yGil2FoAUEsBAi0AFAAACAgAABgh7ABzV/i8AgAA/gUAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAABgh7F3Qa2BsAAAAdwAAAAkAJAAAAAAAAAAAAAAACQMAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAADAAwAAAAA=
-    file_cachedStartup: {fileID: 0}
-    cacheStartup: 0
-  showNavGraphs: 1
-  showUnwalkableNodes: 1
-  debugMode: 0
-  debugFloor: 0
-  debugRoof: 1
-  manualDebugFloorRoof: 0
-  showSearchTree: 0
-  unwalkableNodeDebugSize: 0.3
-  logPathResults: 1
-  maxNearestNodeDistance: 100
-  scanOnStartup: 1
-  fullGetNearestSearch: 0
-  prioritizeGraphs: 0
-  prioritizeGraphsLimit: 1
-  colorSettings:
-    _SolidColor: {r: 0.11764706, g: 0.4, b: 0.7882353, a: 0.9}
-    _UnwalkableNode: {r: 1, g: 0, b: 0, a: 0.5}
-    _BoundsHandles: {r: 0.29, g: 0.454, b: 0.741, a: 0.9}
-    _ConnectionLowLerp: {r: 0, g: 1, b: 0, a: 0.5}
-    _ConnectionHighLerp: {r: 1, g: 0, b: 0, a: 0.5}
-    _MeshEdgeColor: {r: 0, g: 0, b: 0, a: 0.5}
-    _AreaColors: []
-  tagNames: []
-  heuristic: 2
-  heuristicScale: 1
-  threadCount: 1
-  maxFrameTime: 1
-  batchGraphUpdates: 0
-  graphUpdateBatchingInterval: 0.2
-  navmeshUpdates:
-    updateInterval: 0
-  euclideanEmbedding:
-    mode: 0
-    seed: 0
-    pivotPointRoot: {fileID: 0}
-    spreadOutCount: 1
-  showGraphs: 1
+  m_AgentTypeID: 0
+  m_CollectObjects: 1
+  m_Size: {x: 43.001156, y: 10, z: 106.19643}
+  m_Center: {x: 29.436357, y: 2, z: 3.7661896}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: b1220677329a36e499695ce9699f52e1, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &859025170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1216,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42295bfc2bea70843a77080f6a76851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &883879690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 883879692}
+  - component: {fileID: 883879691}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &883879691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883879690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2284eb46f67d18f4ea7659e201ad069e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConfigSO: {fileID: 11400000, guid: f6e92fd540ae5ee4a8b733034a5f3f0c, type: 2}
+--- !u!4 &883879692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883879690}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.21, y: 0.67, z: -14.85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &898053565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,6 +2214,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!1 &1607567275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1607567277}
+  - component: {fileID: 1607567276}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1607567276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607567275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2284eb46f67d18f4ea7659e201ad069e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConfigSO: {fileID: 11400000, guid: f6e92fd540ae5ee4a8b733034a5f3f0c, type: 2}
+--- !u!4 &1607567277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607567275}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.21, y: 0.67, z: -18.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1632444270
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,6 +2304,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapView: {fileID: 214780173}
+--- !u!1 &1766614454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1766614456}
+  - component: {fileID: 1766614455}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1766614455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766614454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2284eb46f67d18f4ea7659e201ad069e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConfigSO: {fileID: 11400000, guid: f6e92fd540ae5ee4a8b733034a5f3f0c, type: 2}
+--- !u!4 &1766614456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766614454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.46, y: 0.67, z: -12.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1799501392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,3 +2846,7 @@ SceneRoots:
   - {fileID: 898053568}
   - {fileID: 871278097}
   - {fileID: 2008473306}
+  - {fileID: 1766614456}
+  - {fileID: 28633115}
+  - {fileID: 1607567277}
+  - {fileID: 883879692}

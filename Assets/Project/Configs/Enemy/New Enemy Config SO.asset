@@ -25,6 +25,6 @@ MonoBehaviour:
       MaxFollowDistance: 16
     AttackConfig:
       AttackDistance: 2
-      MinTimeToUpdateDelay: 1
-      FirstAttackDelay: 3
+      MinTimeToUpdateDelay: 2
+      FirstAttackDelay: 2.25
       AttackRate: 2
