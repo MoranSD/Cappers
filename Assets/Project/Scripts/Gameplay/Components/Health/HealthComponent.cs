@@ -1,21 +1,19 @@
-﻿using Gameplay.EnemySystem.BaseEnemy;
-using System;
+﻿using System;
 
-namespace Gameplay.EnemySystem.Health
+namespace Gameplay.Components.Health
 {
-    public class EnemyHealth
+    public class HealthComponent
     {
+
         public event Action OnDie;
         public float Health { get; private set; }
 
-        private readonly EnemyController controller;
-        private readonly IEnemyHealthView view;
+        private readonly IHealthView view;
 
-        public EnemyHealth(EnemyController controller)
+        public HealthComponent(IHealthView view, float startHealth)
         {
-            this.controller = controller;
-            view = controller.View.Health;
-            Health = controller.Config.HealthConfig.StartHealthCount;
+            this.view = view;
+            Health = startHealth;
         }
 
         public void Initialize()
@@ -33,14 +31,13 @@ namespace Gameplay.EnemySystem.Health
             if (Health <= 0) return;
 
             Health -= damage;
-            
-            if(Health > 0)
+
+            if (Health > 0)
             {
                 view.DrawGetDamage();
             }
             else
             {
-                controller.StateController.ExitCurrent();
                 view.DrawDie();
                 OnDie?.Invoke();
             }

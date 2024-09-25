@@ -1,5 +1,5 @@
-﻿using Gameplay.EnemySystem.Fight;
-using Gameplay.EnemySystem.Health;
+﻿using Gameplay.Components.Health;
+using Gameplay.EnemySystem.Fight;
 using Gameplay.EnemySystem.Look;
 using Gameplay.EnemySystem.Movement;
 using UnityEngine;
@@ -10,12 +10,12 @@ namespace Gameplay.EnemySystem.View
     {
         public IEnemyMovementView Movement => enemyMovement;
         public IEnemyLookView Look => enemyLook;
-        public IEnemyHealthView Health => enemyHealth;
+        public IHealthView Health => enemyHealth;
         public IEnemyFightView Fight => enemyFight;
 
         [SerializeField] private EnemyMovementView enemyMovement;
         [SerializeField] private EnemyLookView enemyLook;
-        [SerializeField] private EnemyHealthView enemyHealth;
+        [SerializeField] private HealthView enemyHealth;
         [SerializeField] private EnemyFightView enemyFight;
 
         private Vector3 idlePosition;

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Gameplay.EnemySystem.Health
+namespace Gameplay.Components.Health
 {
-    public interface IEnemyHealthView
+    public interface IHealthView
     {
         event Action<float> OnGetDamage;
         void DrawGetDamage();

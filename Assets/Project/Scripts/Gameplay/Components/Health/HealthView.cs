@@ -2,9 +2,9 @@
 using UnityEngine;
 using Utils;
 
-namespace Gameplay.EnemySystem.Health
+namespace Gameplay.Components.Health
 {
-    public class EnemyHealthView : MonoBehaviour, IEnemyHealthView, IAttackTarget
+    public class HealthView : MonoBehaviour, IHealthView, IAttackTarget
     {
         public event Action<float> OnGetDamage;
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4411704329067762269}
   - component: {fileID: 199370763346389244}
   - component: {fileID: 473430852983744841}
+  - component: {fileID: 8538826382001164051}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -78,6 +79,7 @@ MonoBehaviour:
   movementView: {fileID: 4411704329067762269}
   lookView: {fileID: 199370763346389244}
   fightView: {fileID: 473430852983744841}
+  healthView: {fileID: 8538826382001164051}
 --- !u!114 &4411704329067762269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,12 +123,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c67dff81c71b84c9be51c4b3e2917f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  meleeAttackPivot: {fileID: 0}
-  meleeAttackBoxSize: {x: 0, y: 0, z: 0}
-  longAttackPivot: {fileID: 0}
+--- !u!114 &8538826382001164051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5519746214919137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8be6412833d4e4dba7791cd81944a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &19974463791187802
 GameObject:
   m_ObjectHideFlags: 0

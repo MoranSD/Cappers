@@ -8,5 +8,6 @@ namespace Gameplay.Player.Data
         public PlayerMovementConfig MovementConfig;
         public PlayerLookConfig LookConfig;
         public PlayerFightConfig FightConfig;
+        public PlayerHealthConfig HealthConfig;
     }
 }

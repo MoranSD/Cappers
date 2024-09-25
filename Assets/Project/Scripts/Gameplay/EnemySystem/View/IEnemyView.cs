@@ -1,5 +1,5 @@
-﻿using Gameplay.EnemySystem.Fight;
-using Gameplay.EnemySystem.Health;
+﻿using Gameplay.Components.Health;
+using Gameplay.EnemySystem.Fight;
 using Gameplay.EnemySystem.Look;
 using Gameplay.EnemySystem.Movement;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace Gameplay.EnemySystem.View
     {
         IEnemyMovementView Movement { get; }
         IEnemyLookView Look { get; }
-        IEnemyHealthView Health { get; }
+        IHealthView Health { get; }
         IEnemyFightView Fight { get; }
 
         Vector3 GetIdlePosition();

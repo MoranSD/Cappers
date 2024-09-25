@@ -8,6 +8,7 @@ using Gameplay.Player.Interact;
 using Utils.StateMachine;
 using Gameplay.Player.Behaviour;
 using Gameplay.Player.Fight;
+using Gameplay.Components.Health;
 
 namespace Gameplay.Player
 {
@@ -17,6 +18,7 @@ namespace Gameplay.Player
         public PlayerMovement Movement { get; private set; }
         public PlayerInteraction Interaction { get; private set; }
         public PlayerFight Fight { get; private set; }
+        public HealthComponent Health { get; private set; }
 
         public StateController StateController { get; private set; }
 
@@ -37,6 +39,7 @@ namespace Gameplay.Player
             Movement = new(this);
             Interaction = new(this);
             Fight = new(this);
+            Health = new(view.Health, config.HealthConfig.StartHealth);
 
             StateController = new(
                 new PlayerNormalState(this),
@@ -48,15 +51,19 @@ namespace Gameplay.Player
         {
             Interaction.Initialize();
             Fight.Initialize();
+            Health.Initialize();
+            Health.OnDie += OnDie;
 
             StateController.ChangeState<PlayerNormalState>();
         }
 
         public void Dispose()
         {
-            StateController.ExitCurrent();
+            StateController.DisposeCurrent();
             Interaction.Dispose();
             Fight.Dispose();
+            Health.Dispose();
+            Health.OnDie -= OnDie;
         }
 
         public void Update(float deltaTime)
@@ -73,6 +80,11 @@ namespace Gameplay.Player
 
             if (IsFreezed) StateController.ChangeState<PlayerFreezedState>();
             else StateController.ChangeState<PlayerNormalState>();
+        }
+
+        private void OnDie()
+        {
+            StateController.ExitCurrent();
         }
     }
 }
