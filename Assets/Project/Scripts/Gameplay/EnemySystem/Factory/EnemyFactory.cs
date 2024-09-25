@@ -1,6 +1,5 @@
 ﻿using Gameplay.EnemySystem.BaseEnemy;
 using Gameplay.EnemySystem.Data;
-using Gameplay.EnemySystem.View;
 using UnityEngine;
 
 namespace Gameplay.EnemySystem.Factory
@@ -10,11 +9,12 @@ namespace Gameplay.EnemySystem.Factory
         public EnemyController Create(Transform spawnPoint, EnemyConfigSO enemyConfigSO)
         {
             var enemyView = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
-            var enemyController = CreateEnemy(enemyConfigSO.enemyType, enemyView, enemyConfigSO.Config);
+            var enemyController = new EnemyController(enemyView, enemyConfigSO.Config);
             enemyView.Initialize();
             return enemyController;
         }
 
+        /*
         private EnemyController CreateEnemy(EnemyType enemyType, IEnemyView enemyView, EnemyConfig config)
         {
             return enemyType switch
@@ -24,5 +24,6 @@ namespace Gameplay.EnemySystem.Factory
                 _ => throw new System.NotImplementedException(),
             };
         }
+         */
     }
 }

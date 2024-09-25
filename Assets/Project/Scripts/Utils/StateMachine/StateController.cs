@@ -26,6 +26,14 @@ namespace Utils.StateMachine
             currentUpdateableState?.Update(deltaTime);
         }
 
+        public void DisposeCurrent()
+        {
+            if (currentState == null) return;
+
+            if (currentState is IDisposableState disposable)
+                disposable.Dispose();
+        }
+
         public void ExitCurrent()
         {
             if(currentState == null) return;

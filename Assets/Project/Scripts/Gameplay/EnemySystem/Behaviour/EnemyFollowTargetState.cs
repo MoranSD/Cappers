@@ -5,7 +5,7 @@ using Utils.StateMachine;
 
 namespace Gameplay.EnemySystem.Behaviour
 {
-    public class EnemyFollowTargetState : EnemyState<EnemyController>, IPayloadedEnterableState<IAttackTarget>, IUpdateableState
+    public class EnemyFollowTargetState : EnemyState<EnemyController>, IPayloadedEnterableState<IAttackTarget>, IUpdateableState, IExitableState
     {
         private IAttackTarget target;
         private float updateDestinationTime;
@@ -18,8 +18,12 @@ namespace Gameplay.EnemySystem.Behaviour
         {
             this.target = target;
             updateDestinationTime = 0;
-            enemyController.View.Animation.SetAnimation(EnemyConstants.WalkAnimationName);
             UpdateDestination();
+        }
+
+        public void Exit()
+        {
+            enemyController.View.Movement.Stop();
         }
 
         public void Update(float deltaTime)
@@ -34,7 +38,7 @@ namespace Gameplay.EnemySystem.Behaviour
             }
             else if (Vector3.Distance(ourPosition, targetPosition) <= enemyController.Config.AttackConfig.AttackDistance)
             {
-                enemyController.StateController.ChangeState<IEnemyAttackState, IAttackTarget>(target);
+                enemyController.StateController.ChangeState<EnemyAttackState, IAttackTarget>(target);
                 return;
             }
 

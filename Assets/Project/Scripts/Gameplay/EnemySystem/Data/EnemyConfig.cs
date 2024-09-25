@@ -9,6 +9,14 @@ namespace Gameplay.EnemySystem.Data
         public EnemyLookConfig LookConfig;
         public EnemyFollowConfig FollowConfig;
         public EnemyAttackConfig AttackConfig;
+        public EnemyHealthConfig HealthConfig;
+    }
+
+    [Serializable]
+    public class EnemyHealthConfig
+    {
+        public float StartHealthCount;
+        public float MaxHealthCount;
     }
 
     [Serializable]

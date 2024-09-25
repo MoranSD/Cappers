@@ -15,7 +15,6 @@ namespace Gameplay.EnemySystem.Behaviour
             var destinationPosition = enemyController.View.GetIdlePosition();
             var moveSpeed = enemyController.Config.MovementConfig.Speed;
             enemyController.View.Movement.SetDestination(destinationPosition, moveSpeed);
-            enemyController.View.Animation.SetAnimation(EnemyConstants.IdleAnimationName);
         }
 
         public void Update(float deltaTime)

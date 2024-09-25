@@ -1,23 +1,22 @@
-﻿using Gameplay.EnemySystem.Behaviour;
+﻿using Gameplay.EnemySystem.BaseEnemy;
 using UnityEngine;
 using Utils;
 using Utils.StateMachine;
 
-namespace Gameplay.EnemySystem.MeleeEnemy
+namespace Gameplay.EnemySystem.Behaviour
 {
-    public class MeleeEnemyAttackState : EnemyState<MeleeEnemyController>, IEnemyAttackState, IUpdateableState
+    public class EnemyAttackState : EnemyState<EnemyController>, IPayloadedEnterableState<IAttackTarget>, IUpdateableState
     {
         private IAttackTarget target;
         private float nextAttackTime;
 
-        public MeleeEnemyAttackState(MeleeEnemyController enemyController) : base(enemyController)
+        public EnemyAttackState(EnemyController enemyController) : base(enemyController)
         {
         }
 
         public void Enter(IAttackTarget target)
         {
             this.target = target;
-            enemyController.View.Animation.SetAnimation(EnemyConstants.IdleAnimationName);
 
             if (nextAttackTime <= enemyController.Config.AttackConfig.MinTimeToUpdateDelay)
                 nextAttackTime = enemyController.Config.AttackConfig.FirstAttackDelay;
@@ -37,14 +36,10 @@ namespace Gameplay.EnemySystem.MeleeEnemy
             nextAttackTime -= deltaTime;
             if(nextAttackTime <= 0)
             {
-                PerformAttack();
+                enemyController.View.Fight.DrawAttack();
+                //TODO: perform attack here
                 nextAttackTime = enemyController.Config.AttackConfig.AttackRate;
             }
-        }
-
-        private void PerformAttack()
-        {
-            enemyController.View.Animation.SetAnimation(EnemyConstants.AttackAnimationName);
         }
     }
 }

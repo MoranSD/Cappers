@@ -3,7 +3,7 @@ using Utils;
 
 namespace Gameplay.EnemySystem.Look
 {
-    public class EnemyLook : MonoBehaviour, IEnemyLook
+    public class EnemyLookView : MonoBehaviour, IEnemyLookView
     {
         [SerializeField] private LayerMask targetMask;
 

@@ -1,20 +1,22 @@
-﻿using Gameplay.EnemySystem.Animation;
+﻿using Gameplay.EnemySystem.Fight;
+using Gameplay.EnemySystem.Health;
 using Gameplay.EnemySystem.Look;
 using Gameplay.EnemySystem.Movement;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.EnemySystem.View
 {
-    public class EnemyView : MonoBehaviour, IEnemyView, IAttackTarget
+    public class EnemyView : MonoBehaviour, IEnemyView
     {
-        public IEnemyMovement Movement => enemyMovement;
-        public IEnemyLook Look => enemyLook;
-        public IEnemyAnimation Animation => enemyAnimation;
+        public IEnemyMovementView Movement => enemyMovement;
+        public IEnemyLookView Look => enemyLook;
+        public IEnemyHealthView Health => enemyHealth;
+        public IEnemyFightView Fight => enemyFight;
 
-        [SerializeField] private EnemyMovement enemyMovement;
-        [SerializeField] private EnemyLook enemyLook;
-        [SerializeField] private EnemyAnimation enemyAnimation;
+        [SerializeField] private EnemyMovementView enemyMovement;
+        [SerializeField] private EnemyLookView enemyLook;
+        [SerializeField] private EnemyHealthView enemyHealth;
+        [SerializeField] private EnemyFightView enemyFight;
 
         private Vector3 idlePosition;
 
@@ -24,12 +26,5 @@ namespace Gameplay.EnemySystem.View
         }
 
         public Vector3 GetIdlePosition() => idlePosition;
-
-        public Vector3 GetPosition() => transform.position;
-
-        public void ApplyDamage(float damage)
-        {
-            Debug.Log($"get damage {damage}");
-        }
     }
 }

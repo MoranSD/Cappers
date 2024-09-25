@@ -2,7 +2,7 @@
 
 namespace Gameplay.EnemySystem.Movement
 {
-    public interface IEnemyMovement
+    public interface IEnemyMovementView
     {
         Vector3 GetPosition();
         void LookAt(Vector3 position);
