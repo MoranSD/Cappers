@@ -4,7 +4,6 @@ namespace Gameplay.Components.Health
 {
     public class HealthComponent
     {
-
         public event Action OnDie;
         public float Health { get; private set; }
 

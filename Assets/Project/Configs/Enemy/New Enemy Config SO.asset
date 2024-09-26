@@ -28,3 +28,6 @@ MonoBehaviour:
       MinTimeToUpdateDelay: 2
       FirstAttackDelay: 2.25
       AttackRate: 2
+    HealthConfig:
+      StartHealthCount: 5
+      MaxHealthCount: 5

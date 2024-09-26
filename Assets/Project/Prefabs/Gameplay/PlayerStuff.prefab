@@ -76,10 +76,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42295bfc2bea70843a77080f6a76851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementView: {fileID: 4411704329067762269}
-  lookView: {fileID: 199370763346389244}
-  fightView: {fileID: 473430852983744841}
-  healthView: {fileID: 8538826382001164051}
+  movement: {fileID: 4411704329067762269}
+  look: {fileID: 199370763346389244}
+  fight: {fileID: 473430852983744841}
+  health: {fileID: 8538826382001164051}
+  bodyCollider: {fileID: 1875696148630770663}
 --- !u!114 &4411704329067762269
 MonoBehaviour:
   m_ObjectHideFlags: 0

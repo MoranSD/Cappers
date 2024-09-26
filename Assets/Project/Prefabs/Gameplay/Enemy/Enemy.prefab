@@ -408,10 +408,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca6e70f3c9fb2b489a96399f4bdb76e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMovement: {fileID: 1326894668221733861}
-  enemyLook: {fileID: 3018116163159586447}
-  enemyHealth: {fileID: 1296935335306235686}
-  enemyFight: {fileID: 9059808667504231366}
+  movement: {fileID: 1326894668221733861}
+  look: {fileID: 3018116163159586447}
+  health: {fileID: 1296935335306235686}
+  fight: {fileID: 9059808667504231366}
+  bodyCollider: {fileID: 5360263891121931959}
 --- !u!114 &1326894668221733861
 MonoBehaviour:
   m_ObjectHideFlags: 0

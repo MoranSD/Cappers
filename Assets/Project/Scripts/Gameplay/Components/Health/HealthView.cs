@@ -8,6 +8,13 @@ namespace Gameplay.Components.Health
     {
         public event Action<float> OnGetDamage;
 
+        private Collider bodyCollider;
+
+        public void Initialize(Collider bodyCollider)
+        {
+            this.bodyCollider = bodyCollider;
+        }
+
         public void ApplyDamage(float damage)
         {
             Debug.Log($"get damage {damage}");
@@ -16,7 +23,7 @@ namespace Gameplay.Components.Health
 
         public void DrawDie()
         {
-
+            bodyCollider.enabled = false;
         }
 
         public void DrawGetDamage()

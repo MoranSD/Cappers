@@ -27,3 +27,6 @@ MonoBehaviour:
       LongAttackDistance: 8
       BaseMeleeDamage: 2
       BaseLongDamage: 6
+    HealthConfig:
+      StartHealth: 10
+      MaxHealth: 10

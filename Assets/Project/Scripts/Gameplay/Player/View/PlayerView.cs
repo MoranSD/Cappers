@@ -9,17 +9,23 @@ namespace Gameplay.Player.View
 {
     public class PlayerView : MonoBehaviour, IPlayerView, IAttackTarget
     {
-        public IPlayerMovement Movement => movementView;
-        public IPlayerLookView Look => lookView;
-        public IPlayerFightView Fight => fightView;
-        public IHealthView Health => healthView;
+        public IPlayerMovement Movement => movement;
+        public IPlayerLookView Look => look;
+        public IPlayerFightView Fight => fight;
+        public IHealthView Health => health;
 
-        [SerializeField] private PlayerMovementView movementView;
-        [SerializeField] private PlayerLookView lookView;
-        [SerializeField] private PlayerFightView fightView;
-        [SerializeField] private HealthView healthView;
+        [SerializeField] private PlayerMovementView movement;
+        [SerializeField] private PlayerLookView look;
+        [SerializeField] private PlayerFightView fight;
+        [SerializeField] private HealthView health;
+        [SerializeField] private Collider bodyCollider;
 
-        public Vector3 GetPosition() => movementView.GetPosition();
+        public void Initialize()
+        {
+            health.Initialize(bodyCollider);
+        }
+
+        public Vector3 GetPosition() => movement.GetPosition();
 
         public void ApplyDamage(float damage)
         {
