@@ -3,7 +3,6 @@ using Gameplay.Player.InteractController;
 using Gameplay.Ship.Map.View;
 using Gameplay.Panels;
 using Gameplay.Travel;
-using System.Linq;
 using Utils.Interaction;
 
 namespace Gameplay.Ship.Map

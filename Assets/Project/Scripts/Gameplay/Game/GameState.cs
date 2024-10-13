@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Gameplay.QuestSystem.Quests;
+using Gameplay.UnitSystem.Data;
 using Gameplay.World;
 
 namespace Gameplay.Game
@@ -17,6 +18,7 @@ namespace Gameplay.Game
         public List<QuestData> CompletedQuests;
         //ship inventory
         public List<int> QuestItems;
+        public List<UnitData> Units;
 
         public GameState()
         {

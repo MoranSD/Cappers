@@ -4,6 +4,7 @@ using Gameplay.QuestSystem.Quests;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +16,8 @@ namespace Gameplay.QuestSystem.Menu.View
     {
         public event Action<QuestData> OnSelectQuest;
         public event Action OnTryToClose;
+        public event Action OnPlayerInteract;
 
-        public IInteractor Interactor => triggerInteractor;
         public PanelType Type => PanelType.questMenu;
 
         [SerializeField] private GameObject panel;
@@ -32,6 +33,7 @@ namespace Gameplay.QuestSystem.Menu.View
             activeWidgets = new();
             this.widgetFactory = widgetFactory;
             closeButton.onClick.AddListener(() => OnTryToClose?.Invoke());
+            triggerInteractor.OnInteracted += OnInteract;
         }
 
         public void Dispose()
@@ -40,6 +42,8 @@ namespace Gameplay.QuestSystem.Menu.View
 
             foreach (var widget in activeWidgets)
                 widget.InteractButton.onClick.RemoveAllListeners();
+
+            triggerInteractor.OnInteracted -= OnInteract;
         }
 
         public void RedrawQuests(params QuestData[] datas)
@@ -63,16 +67,18 @@ namespace Gameplay.QuestSystem.Menu.View
             }
         }
 
-        public async Task Show()
+        public async Task Show(CancellationToken token)
         {
             panel.SetActive(true);
             await Task.Delay(0);
         }
 
-        public async Task Hide()
+        public async Task Hide(CancellationToken token)
         {
             panel.SetActive(false);
             await Task.Delay(0);
         }
+
+        private void OnInteract() => OnPlayerInteract?.Invoke();
     }
 }

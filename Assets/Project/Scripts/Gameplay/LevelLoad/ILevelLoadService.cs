@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gameplay.LevelLoad
@@ -9,6 +10,6 @@ namespace Gameplay.LevelLoad
         event Action OnEndChangeLocation;
         bool IsLoading { get; }
         void LoadLocation(int locationId);
-        Task LoadLocationAsync(int locationId);
+        Task LoadLocationAsync(int locationId, CancellationToken token);
     }
 }

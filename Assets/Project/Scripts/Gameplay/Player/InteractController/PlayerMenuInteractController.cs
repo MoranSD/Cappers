@@ -1,4 +1,5 @@
 ﻿using Gameplay.Panels;
+using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 using Utils.Interaction;
@@ -17,10 +18,22 @@ namespace Gameplay.Player.InteractController
         private bool isEntering;
         private bool isExiting;
 
+        private CancellationTokenSource cancellationTokenSource;
+
         public PlayerMenuInteractController(PlayerController playerController, PanelsManager panelsManager)
         {
             this.playerController = playerController;
             this.panelsManager = panelsManager;
+        }
+
+        public void Dispose()
+        {
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
         }
 
         public bool CheckInteraction(PanelType panelType) => IsInteracting && InteractPanelType == panelType;
@@ -52,26 +65,40 @@ namespace Gameplay.Player.InteractController
         private async Task EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
         {
             isEntering = true;
+            cancellationTokenSource = new CancellationTokenSource();
 
-            await TaskUtils.WaitWhile(() => isExiting);
+            await TaskUtils.WaitWhile(() => isExiting, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
 
             if (followInteractor != null)
             {
                 isCameraInteracting = true;
-                await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot());
+                await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot(), cancellationTokenSource.Token);
+
+                if (cancellationTokenSource.Token.IsCancellationRequested) return;
             }
 
-            await panelsManager.ShowPanelAsync(panelType);
+            await panelsManager.ShowPanelAsync(panelType, cancellationTokenSource.Token);
 
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
             isEntering = false;
         }
         private async Task ExitInteractStateProcess()
         {
             isExiting = true;
+            cancellationTokenSource = new CancellationTokenSource();
 
-            await TaskUtils.WaitWhile(() => isEntering);
+            await TaskUtils.WaitWhile(() => isEntering, cancellationTokenSource.Token);
 
-            await panelsManager.ShowDefaultAsync();
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+
+            await panelsManager.ShowDefaultAsync(cancellationTokenSource.Token);
+
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
 
             if (isCameraInteracting)
             {
@@ -79,6 +106,8 @@ namespace Gameplay.Player.InteractController
                 playerController.GameCamera.ExitInteractState();
             }
 
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
             isExiting = false;
         }
     }

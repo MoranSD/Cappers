@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Interaction;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Gameplay.Ship.Map.View
 {
@@ -42,12 +43,12 @@ namespace Gameplay.Ship.Map.View
         }
         public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
 
-        public async Task Hide()
+        public async Task Hide(CancellationToken token)
         {
             panelObject.SetActive(false);
             await Task.Delay(0);
         }
-        public async Task Show()
+        public async Task Show(CancellationToken token)
         {
             panelObject.SetActive(true);
             await Task.Delay(0);

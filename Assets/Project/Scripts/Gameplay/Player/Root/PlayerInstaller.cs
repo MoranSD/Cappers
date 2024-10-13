@@ -44,7 +44,8 @@ namespace Gameplay.Player.Root
         {
             tickManager.Remove(player);
             player.Dispose();
-            ServiceLocator.Remove<PlayerMenuInteractController>();
+            var interactController = ServiceLocator.Remove<PlayerMenuInteractController>();
+            interactController.Dispose();
         }
     }
 }

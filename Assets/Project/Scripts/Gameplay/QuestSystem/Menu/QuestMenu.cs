@@ -22,14 +22,14 @@ namespace Gameplay.QuestSystem.Menu
 
         public void Initialize()
         {
-            view.Interactor.OnInteracted += OnPlayerInteract;
+            view.OnPlayerInteract += OnPlayerInteract;
             view.OnTryToClose += OnTryToClose;
             view.OnSelectQuest += OnSelectQuest;
         }
 
         public void Dispose()
         {
-            view.Interactor.OnInteracted -= OnPlayerInteract;
+            view.OnPlayerInteract -= OnPlayerInteract;
             view.OnTryToClose -= OnTryToClose;
             view.OnSelectQuest -= OnSelectQuest;
         }

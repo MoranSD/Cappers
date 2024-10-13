@@ -1,6 +1,7 @@
 ﻿using Gameplay.Game;
 using Gameplay.LevelLoad;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gameplay.Travel
@@ -17,10 +18,22 @@ namespace Gameplay.Travel
         private readonly GameState gameState;
         private readonly ILevelLoadService levelLoadService;
 
+        private CancellationTokenSource cancellationTokenSource;
+
         public TravelSystem(GameState gameState, ILevelLoadService levelLoadService)
         {
             this.gameState = gameState;
             this.levelLoadService = levelLoadService;
+        }
+
+        public void Dispose()
+        {
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
         }
 
         public async void BeginTravel(int locationId)
@@ -39,15 +52,25 @@ namespace Gameplay.Travel
 
         private async Task TravelProcess(int locationId)
         {
+            cancellationTokenSource = new();
+
             if (gameState.IsInSea == false)
             {
                 await TimerProcess(3);
-                await levelLoadService.LoadLocationAsync(GameConstants.SeaLocationId);
+                await levelLoadService.LoadLocationAsync(GameConstants.SeaLocationId, cancellationTokenSource.Token);
+
+                if (cancellationTokenSource.Token.IsCancellationRequested) return;
+
                 OnLeaveLocation?.Invoke();
             }
 
             await TimerProcess(3);
-            await levelLoadService.LoadLocationAsync(locationId);
+
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+
+            await levelLoadService.LoadLocationAsync(locationId, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource.Token.IsCancellationRequested) return;
 
             gameState.CurrentLocationId = locationId; 
             IsTraveling = false;
@@ -61,8 +84,15 @@ namespace Gameplay.Travel
 
             while (TravelTimer > 0)
             {
-                await Task.Delay(timerWaiter);
-                TravelTimer--;
+                try
+                {
+                    await Task.Delay(timerWaiter, cancellationTokenSource.Token);
+                    TravelTimer--;
+                }
+                catch
+                {
+                    return;
+                }
             }
         }
     }

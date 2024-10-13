@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
@@ -6,18 +7,33 @@ namespace Infrastructure.SceneLoad
 {
     public class SceneLoader : ISceneLoader
     {
-        public async void Load(SceneType sceneType, Action onLoaded = null)
+        private CancellationTokenSource cancellationTokenSource;
+
+        public void Dispose()
         {
-            await LoadProcess(sceneType, onLoaded);
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
         }
 
-        public async Task LoadAsync(SceneType sceneType) => await LoadProcess(sceneType);
+        public async void Load(SceneType sceneType, Action onLoaded = null)
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+            await LoadProcess(sceneType, cancellationTokenSource.Token, onLoaded);
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
+        }
 
-        private async Task LoadProcess(SceneType sceneType, Action onLoaded = null)
+        public async Task LoadAsync(SceneType sceneType, CancellationToken token) => await LoadProcess(sceneType, token, null);
+
+        private async Task LoadProcess(SceneType sceneType, CancellationToken token, Action onLoaded = null)
         {
             var asyncOperation = SceneManager.LoadSceneAsync((int)sceneType);
 
-            await Utils.TaskUtils.WaitWhile(() => asyncOperation.isDone == false);
+            await Utils.TaskUtils.WaitWhile(() => asyncOperation.isDone == false, token);
             onLoaded?.Invoke();
         }
     }

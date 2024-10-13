@@ -37,7 +37,8 @@ namespace Infrastructure.States
             compositionController.Dispose();
 
             var input = ServiceLocator.Remove<IInput>();
-            ServiceLocator.Remove<ISceneLoader>();
+            var sceneLoader = ServiceLocator.Remove<ISceneLoader>() as SceneLoader;
+            sceneLoader.Dispose();
             ServiceLocator.Remove<ICompositionController>();
             ServiceLocator.Remove<IAssetProvider>();
             var tickManager = ServiceLocator.Remove<TickManager>();
@@ -45,8 +46,11 @@ namespace Infrastructure.States
             var panelsManager = ServiceLocator.Remove<PanelsManager>();
             var curtainPanel = ServiceLocator.Remove<CurtainPanel>();
             panelsManager.UnregisterPanel(curtainPanel);
-            ServiceLocator.Remove<TravelSystem>();
-            ServiceLocator.Remove<ILevelLoadService>();
+            panelsManager.Dispose();
+            var travelSystem = ServiceLocator.Remove<TravelSystem>();
+            travelSystem.Dispose();
+            var levelLoadService = ServiceLocator.Remove<ILevelLoadService>() as LevelLoadService;
+            levelLoadService.Dispose();
             ServiceLocator.Remove<GameState>();
             var questManager = ServiceLocator.Remove<QuestManager>();
             questManager.Dispose();

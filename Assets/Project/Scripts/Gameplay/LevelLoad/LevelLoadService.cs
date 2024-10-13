@@ -3,11 +3,11 @@ using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
 using Infrastructure.SceneLoad;
-using System.Linq;
 using Gameplay.World.Data;
 using System.Threading.Tasks;
 using Gameplay.Panels;
 using System;
+using System.Threading;
 
 namespace Gameplay.LevelLoad
 {
@@ -24,6 +24,8 @@ namespace Gameplay.LevelLoad
         private readonly GameState gameState;
         private readonly IAssetProvider assetProvider;
 
+        private CancellationTokenSource cancellationTokenSource;
+
         public LevelLoadService(PanelsManager panelsManager, ISceneLoader sceneLoader, ICompositionController compositionController, GameState gameState, IAssetProvider assetProvider)
         {
             this.panelsManager = panelsManager;
@@ -33,13 +35,29 @@ namespace Gameplay.LevelLoad
             this.assetProvider = assetProvider;
         }
 
-        public async void LoadLocation(int locationId) => await LoadLocationAsync(locationId);
+        public void Dispose()
+        {
+            if (cancellationTokenSource != null) 
+            { 
+                cancellationTokenSource.Cancel(); 
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
+        }
 
-        public async Task LoadLocationAsync(int locationId)
+        public async void LoadLocation(int locationId)
+        {
+            cancellationTokenSource = new CancellationTokenSource();
+            await LoadLocationAsync(locationId, cancellationTokenSource.Token);
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
+        }
+
+        public async Task LoadLocationAsync(int locationId, CancellationToken token)
         {
             if (locationId == GameConstants.SeaLocationId)
             {
-                await Load(SceneType.ShipAtSea);
+                await Load(SceneType.ShipAtSea, token);
             }
             else
             {
@@ -51,21 +69,29 @@ namespace Gameplay.LevelLoad
                 if (targetLocationConfig == null)
                     throw new System.Exception(locationId.ToString());
 
-                await Load(targetLocationConfig.LocationSceneType);
+                await Load(targetLocationConfig.LocationSceneType, token);
             }
         }
 
-        private async Task Load(SceneType sceneType)
+        private async Task Load(SceneType sceneType, CancellationToken token)
         {
             OnBeginChangeLocation?.Invoke();
             IsLoading = true;
-            await panelsManager.ShowPanelAsync(PanelType.curtain);
+            await panelsManager.ShowPanelAsync(PanelType.curtain, token);
+
+            if (token.IsCancellationRequested) return;
+
             compositionController.Dispose();
 
-            await sceneLoader.LoadAsync(sceneType);
+            await sceneLoader.LoadAsync(sceneType, token);
+
+            if (token.IsCancellationRequested) return;
 
             compositionController.Initialize();
-            await panelsManager.ShowDefaultAsync();
+            await panelsManager.ShowDefaultAsync(token);
+
+            if (token.IsCancellationRequested) return;
+
             IsLoading = false;
             OnEndChangeLocation?.Invoke();
         }

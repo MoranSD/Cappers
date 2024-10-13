@@ -1,6 +1,5 @@
 ﻿using Gameplay.QuestSystem.Quests;
 using System;
-using Utils.Interaction;
 
 namespace Gameplay.QuestSystem.Menu.View
 {
@@ -8,7 +7,7 @@ namespace Gameplay.QuestSystem.Menu.View
     {
         event Action<QuestData> OnSelectQuest;
         event Action OnTryToClose;
-        IInteractor Interactor { get; }
+        event Action OnPlayerInteract;
         void RedrawQuests(params QuestData[] datas);
     }
 }
