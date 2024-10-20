@@ -10,5 +10,10 @@ namespace Gameplay.UnitSystem.Data
         public float Health;
         public float Speed;
         public float Damage;
+
+        public override string ToString()
+        {
+            return $"{Id} \n {BodyType} \n {Health} \n {Speed} \n {Damage}";
+        }
     }
 }

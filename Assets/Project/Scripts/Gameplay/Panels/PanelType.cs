@@ -6,5 +6,6 @@
         gameplay,
         shipMap,
         questMenu,
+        unitBuy,
     }
 }

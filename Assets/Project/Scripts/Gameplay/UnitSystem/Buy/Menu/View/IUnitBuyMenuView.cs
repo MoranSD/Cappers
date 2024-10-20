@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gameplay.UnitSystem.Buy.Data;
+using System;
 
 namespace Gameplay.UnitSystem.Buy.Menu.View
 {
@@ -6,5 +7,9 @@ namespace Gameplay.UnitSystem.Buy.Menu.View
     {
         event Action OnTryToClose;
         event Action OnPlayerInteract;
+        event Action<int> OnSelectUnitToBuy;
+
+        void DrawBuyItems(UnitToBuyData[] dtos);
+        void DrawSoldResult(int unitId, bool success);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Gameplay.Game;
 using Gameplay.Ship.Data;
 using Gameplay.Ship.UnitControl.Placement.View;
+using Gameplay.UnitSystem.Controller;
 using System.Linq;
 
 namespace Gameplay.Ship.UnitControl.Placement
@@ -33,19 +34,39 @@ namespace Gameplay.Ship.UnitControl.Placement
             return -1;
         }
 
-        public bool HasPlaceForUnit() => GetNextUnitId() != -1;
+        public bool HasPlaceForUnit()
+        {
+            if (gameState.Units.Count > config.MaxUnitsCount)
+                return false;
 
-        public void AddUnit()
+            for (int i = 0; i < config.MaxUnitsCount; i++)
+            {
+                if (gameState.Units.Any(x => x.Id == i)) continue;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AddUnit(UnitController unitController)
         {
             if (HasPlaceForUnit() == false)
                 throw new System.Exception();
 
-            //добавить данные юнита в gameState
-            //установить новый id для юнита
+            if (unitController.Data.Id != GetNextUnitId())
+                throw new System.Exception(unitController.Data.ToString());
+
+            gameState.Units.Add(unitController.Data);
+
             //установить задачу юниту "иди на idle позицию"
+
+            //если этот класс отвечает за добавление и удаление юнита,
+            //то должен ли он говорить юниту "иди на idle позицию"
+            //по сути да, ведь в его задачи входит "добавить" юнита,
+            //а следовательно записать в GameState и логически сказать "иди на idle позицию"
         }
 
-        //для смерти юнита
         public void RemoveUnit(int unitId)
         {
             if(gameState.Units.Any(x => x.Id == unitId) == false)

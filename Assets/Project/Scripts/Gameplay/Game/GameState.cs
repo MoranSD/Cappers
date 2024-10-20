@@ -26,6 +26,7 @@ namespace Gameplay.Game
             CurrentQuests = new();
             CompletedQuests = new();
             QuestItems = new();
+            Units = new();
         }
 
         public void OpenLocation(int locationId)
