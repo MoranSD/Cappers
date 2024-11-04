@@ -6,8 +6,13 @@ namespace Gameplay.QuestSystem.Menu.View
     public interface IQuestMenuView
     {
         event Action<QuestData> OnSelectQuest;
+        event Action<QuestData> OnCompleteQuest;
         event Action OnTryToClose;
         event Action OnPlayerInteract;
-        void RedrawQuests(params QuestData[] datas);
+
+        void DrawAvailableQuests(QuestData[] questDatas);
+        void DrawCompleteableQuests(QuestData[] questDatas);
+        void DrawSelectSuccess(QuestData questData);
+        void DrawCompleteSuccess(QuestData questData);
     }
 }

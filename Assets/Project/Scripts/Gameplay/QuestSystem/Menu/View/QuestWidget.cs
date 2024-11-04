@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Gameplay.QuestSystem.Quests;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +7,7 @@ namespace Gameplay.QuestSystem.Menu.View
 {
     public class QuestWidget : MonoBehaviour
     {
-        [HideInInspector] public int QuestId;
-        [HideInInspector] public int QuestLocationOwnerId;
+        [HideInInspector] public QuestData QuestData;
 
         public Button InteractButton;
         public TextMeshProUGUI InteractButtonText;

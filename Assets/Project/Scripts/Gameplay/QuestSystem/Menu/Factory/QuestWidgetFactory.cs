@@ -16,12 +16,28 @@ namespace Gameplay.QuestSystem.Menu.Factory
             this.questWidgetPrefab = questWidgetPrefab;
         }
 
+        public QuestWidget CreateAvailableWidget(QuestData questData, Transform pivot)
+        {
+            var widget = CreateWidget(questData, pivot);
+            widget.InteractButtonText.text = "Accept";
+            return widget;
+        }
+
+        public QuestWidget CreateCompleteableWidget(QuestData questData, Transform pivot)
+        {
+            var widget = CreateWidget(questData, pivot);
+            widget.InteractButtonText.text = "Complete";
+            return widget;
+        }
+
         public QuestWidget CreateWidget(QuestData questData, Transform pivot)
         {
             var questLocationConfig = (PortLocationConfig)gameWorldConfig.GetLocationConfig(questData.OwnerLocationId);
             var questConfig = questLocationConfig.GetQuestConfig(questData.QuestId);
 
             var widget = Object.Instantiate(questWidgetPrefab, pivot);
+
+            widget.QuestData = questData;
 
             widget.QuestNameText.text = questConfig.QuestName;
             widget.QuestDescriptionText.text = questConfig.GetDescription();

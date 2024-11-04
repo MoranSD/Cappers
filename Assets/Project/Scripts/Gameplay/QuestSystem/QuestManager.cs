@@ -39,10 +39,6 @@ namespace Gameplay.QuestSystem
         public QuestData[] GetAvailableLocationQuests()
         {
             var currentLocationId = gameState.CurrentLocationId;
-
-            if (gameState.World.HasLocation(currentLocationId) == false)
-                throw new Exception(currentLocationId.ToString());
-
             var currentLocation = gameState.World.GetLocation(currentLocationId);
 
             /*
@@ -71,22 +67,21 @@ namespace Gameplay.QuestSystem
 
         public bool IsAbleToComplete(QuestData questData)
         {
-            if(HasQuest(questData) == false)
-                throw new Exception(questData.ToString());
-
             var targetQuest = activeQuests.First(x => x.Data.Compare(questData));
 
-            return targetQuest.IsConditionFulfilled();
-        }
-        public bool HasQuest(QuestData questData)
-        {
-            var targetQuest = activeQuests.FirstOrDefault(x => x.Data.Compare(questData));
+            if (targetQuest == null)
+                throw new Exception(questData.ToString());
 
-            return targetQuest != null;
+            return targetQuest.IsConditionFulfilled();
         }
 
         public void AddQuest(QuestData questData)
         {
+            var availableQuests = GetAvailableLocationQuests();
+
+            if(availableQuests.Any(x => x.Compare(questData)) == false)
+                throw new Exception(questData.ToString());
+
             AddQuestToState(questData);
             var quest = questFactory.CreateQuest(questData);
             quest.Initialize();
@@ -96,10 +91,13 @@ namespace Gameplay.QuestSystem
         {
             var targetQuest = activeQuests.FirstOrDefault(x => x.Data.Compare(questData));
 
-            if (targetQuest == null || targetQuest.IsConditionFulfilled() == false)
-                throw new Exception($"{targetQuest.ToString()}:{questData.ToString()}");
+            if (targetQuest == null)
+                throw new Exception($"{questData.ToString()}");
 
-            CompleteQuestInState(questData);
+            if (targetQuest.IsConditionFulfilled() == false)
+                throw new Exception($"{targetQuest.Data.ToString()}");
+
+            CompleteQuestInState(targetQuest.Data);
             activeQuests.Remove(targetQuest);
 
             targetQuest.Complete();

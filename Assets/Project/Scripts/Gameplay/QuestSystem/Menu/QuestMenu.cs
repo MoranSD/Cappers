@@ -25,6 +25,7 @@ namespace Gameplay.QuestSystem.Menu
             view.OnPlayerInteract += OnPlayerInteract;
             view.OnTryToClose += OnTryToClose;
             view.OnSelectQuest += OnSelectQuest;
+            view.OnCompleteQuest += OnCompleteQuest;
         }
 
         public void Dispose()
@@ -32,6 +33,7 @@ namespace Gameplay.QuestSystem.Menu
             view.OnPlayerInteract -= OnPlayerInteract;
             view.OnTryToClose -= OnTryToClose;
             view.OnSelectQuest -= OnSelectQuest;
+            view.OnCompleteQuest -= OnCompleteQuest;
         }
 
         private void OnSelectQuest(QuestData questData)
@@ -39,18 +41,19 @@ namespace Gameplay.QuestSystem.Menu
             if (playerMenuInteract.CheckInteraction(Panels.PanelType.questMenu) == false)
                 throw new Exception();
 
-            if(questManager.HasQuest(questData))
+            questManager.AddQuest(questData);
+            view.DrawSelectSuccess(questData);
+        }
+
+        private void OnCompleteQuest(QuestData questData)
+        {
+            if (playerMenuInteract.CheckInteraction(Panels.PanelType.questMenu) == false)
+                throw new Exception();
+
+            if (questManager.IsAbleToComplete(questData))
             {
-                if(questManager.IsAbleToComplete(questData))
-                {
-                    questManager.CompleteQuest(questData);
-                    RedrawQuests();
-                }
-            }
-            else
-            {
-                questManager.AddQuest(questData);
-                RedrawQuests();
+                questManager.CompleteQuest(questData);
+                view.DrawCompleteSuccess(questData);
             }
         }
 
@@ -59,7 +62,11 @@ namespace Gameplay.QuestSystem.Menu
             if (playerMenuInteract.CheckInteraction(Panels.PanelType.questMenu))
                 throw new Exception();
 
-            RedrawQuests();
+            var completeable = questManager.ActiveQuests.Where(x => x.IsConditionFulfilled()).Select(x => x.Data);
+            view.DrawCompleteableQuests(completeable.ToArray());
+
+            var available = questManager.GetAvailableLocationQuests();
+            view.DrawAvailableQuests(available.ToArray());
             playerMenuInteract.EnterInteractState(Panels.PanelType.questMenu);
         }
 
@@ -69,18 +76,6 @@ namespace Gameplay.QuestSystem.Menu
                 throw new Exception();
 
             playerMenuInteract.ExitInteractState();
-        }
-
-        private void RedrawQuests()
-        {
-            var availableQuests = new List<QuestData>();
-
-            //текущие квесты которые можно сдать
-            availableQuests.AddRange(questManager.ActiveQuests.Where(x => x.IsConditionFulfilled()).Select(x => x.Data));
-            //квесты локации которые не взяли/выполнили
-            availableQuests.AddRange(questManager.GetAvailableLocationQuests());
-
-            view.RedrawQuests(availableQuests.ToArray());
         }
     }
 }
