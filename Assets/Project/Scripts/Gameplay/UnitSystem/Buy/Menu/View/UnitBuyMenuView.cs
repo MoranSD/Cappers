@@ -35,8 +35,11 @@ namespace Gameplay.UnitSystem.Buy.Menu.View
         {
             closeButton.onClick.RemoveAllListeners();
 
-            foreach (var card in activeCards)
-                card.BuyButton.onClick.RemoveAllListeners();
+            if (activeCards != null)
+            {
+                foreach (var card in activeCards)
+                    card.BuyButton.onClick.RemoveAllListeners();
+            }
 
             triggerInteractor.OnInteracted -= OnInteract;
         }

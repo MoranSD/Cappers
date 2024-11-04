@@ -15,6 +15,8 @@ using Gameplay.Ship.UnitControl.Placement;
 using Gameplay.Ship.UnitControl.Placement.View;
 using Gameplay.Ship.Data;
 using System.Threading;
+using Gameplay.Ship.UnitControl.LifeTime;
+using Gameplay.UnitSystem.Factory;
 
 namespace Gameplay.Ship.Root
 {
@@ -29,6 +31,7 @@ namespace Gameplay.Ship.Root
 
         private ShipUnitPlacement shipUnitPlacement;
         private ShipMap shipMap;
+        private ShipUnitExistenceControl existenceControl;
 
         public override void Initialize()
         {
@@ -61,6 +64,15 @@ namespace Gameplay.Ship.Root
             ServiceLocator.Register(shipUnitPlacement);
         }
 
+        public override void AfterInitialize()
+        {
+            var gameState = ServiceLocator.Get<GameState>();
+            var unitFactory = ServiceLocator.Get<IUnitFactory>();
+
+            existenceControl = new ShipUnitExistenceControl(gameState, shipUnitPlacement, unitFactory);
+            existenceControl.Initialize();
+        }
+
         public override void Dispose()
         {
             shipMap.Dispose();
@@ -70,6 +82,8 @@ namespace Gameplay.Ship.Root
             mapView.Dispose();
 
             iconsHolder.Dispose();
+
+            existenceControl.Dispose();
 
             ServiceLocator.Remove<ShipUnitPlacement>();
         }

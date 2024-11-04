@@ -1,6 +1,6 @@
 ﻿using Gameplay.World.Data;
 
-namespace Gameplay.World.Variants
+namespace Gameplay.World.Variants.Island
 {
     public class IslandLocation : Location
     {

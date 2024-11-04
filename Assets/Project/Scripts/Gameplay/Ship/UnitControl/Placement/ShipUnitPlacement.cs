@@ -3,6 +3,7 @@ using Gameplay.Ship.Data;
 using Gameplay.Ship.UnitControl.Placement.View;
 using Gameplay.UnitSystem.Controller;
 using System.Linq;
+using UnityEngine;
 
 namespace Gameplay.Ship.UnitControl.Placement
 {
@@ -49,6 +50,8 @@ namespace Gameplay.Ship.UnitControl.Placement
             return false;
         }
 
+        public Vector3 GetUnitIdlePosition(int unitId) => view.GetUnitPositions()[unitId];
+
         public void AddUnit(UnitController unitController)
         {
             if (HasPlaceForUnit() == false)
@@ -59,22 +62,7 @@ namespace Gameplay.Ship.UnitControl.Placement
 
             gameState.Units.Add(unitController.Data);
 
-            //go to idle position
-            unitController.GoToPosition(view.GetUnitPositions()[unitController.Data.Id]);
-
-            //если этот класс отвечает за добавление и удаление юнита,
-            //то должен ли он говорить юниту "иди на idle позицию"
-            //по сути да, ведь в его задачи входит "добавить" юнита,
-            //а следовательно записать в GameState и логически сказать "иди на idle позицию"
-        }
-
-        public void RemoveUnit(int unitId)
-        {
-            if(gameState.Units.Any(x => x.Id == unitId) == false)
-                throw new System.Exception(unitId.ToString());
-
-            var unitData = gameState.Units.First(x => x.Id == unitId);
-            gameState.Units.Remove(unitData);
+            unitController.GoToPosition(GetUnitIdlePosition(unitController.Data.Id));
         }
     }
 }

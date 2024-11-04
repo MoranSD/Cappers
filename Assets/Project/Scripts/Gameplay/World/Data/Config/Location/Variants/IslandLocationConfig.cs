@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Gameplay.World.Variants;
+using Gameplay.World.Variants.Island;
 
 namespace Gameplay.World.Data
 {
