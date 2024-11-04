@@ -59,7 +59,8 @@ namespace Gameplay.Ship.UnitControl.Placement
 
             gameState.Units.Add(unitController.Data);
 
-            //установить задачу юниту "иди на idle позицию"
+            //go to idle position
+            unitController.GoToPosition(view.GetUnitPositions()[unitController.Data.Id]);
 
             //если этот класс отвечает за добавление и удаление юнита,
             //то должен ли он говорить юниту "иди на idle позицию"

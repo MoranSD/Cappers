@@ -4,17 +4,9 @@ namespace Utilities.BehaviourTree
     {
         private BehaviourNode rootNode;
 
-        public BehaviourTreeRoot(BehaviourNode rootNode)
-        {
-            if (rootNode == null)
-                throw new System.Exception("root node shouldn't be null");
-
-            this.rootNode = rootNode;
-        }
-
-        public void Initialize() => rootNode?.Enter();
         public void Run(float deltaTime)
         {
+            if (rootNode == null) return;
             if (rootNode.Status != NodeStatus.run) return;
 
             rootNode.Run(deltaTime);

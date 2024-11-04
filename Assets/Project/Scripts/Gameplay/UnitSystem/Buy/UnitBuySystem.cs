@@ -1,5 +1,6 @@
 ﻿using Gameplay.Ship.UnitControl.Placement;
 using Gameplay.UnitSystem.Buy.Data;
+using Gameplay.UnitSystem.Buy.View;
 using Gameplay.UnitSystem.Data;
 using Gameplay.UnitSystem.Factory;
 using System;
@@ -12,13 +13,14 @@ namespace Gameplay.UnitSystem.BuyMenu
     {
         private readonly ShipUnitPlacement unitPlacement;
         private readonly IUnitFactory unitFactory;
-
+        private readonly IUnitBuySystemView view;
         private List<UnitToBuyData> unitsInStock;
 
-        public UnitBuySystem(ShipUnitPlacement unitPlacement, IUnitFactory unitFactory)
+        public UnitBuySystem(ShipUnitPlacement unitPlacement, IUnitFactory unitFactory, IUnitBuySystemView view)
         {
             this.unitPlacement = unitPlacement;
             this.unitFactory = unitFactory;
+            this.view = view;
             unitsInStock = new List<UnitToBuyData>();
         }
 
@@ -56,7 +58,7 @@ namespace Gameplay.UnitSystem.BuyMenu
 
             var nextUnitId = unitPlacement.GetNextUnitId();
             var unitData = unitToBuyData.ToUnitData(nextUnitId);
-            var unitController = unitFactory.Create(unitData);
+            var unitController = unitFactory.Create(unitData, view.GetUnitStatsPosition());
 
             unitPlacement.AddUnit(unitController);
 

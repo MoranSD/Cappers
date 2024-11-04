@@ -7,5 +7,6 @@
         public const string CurtainPanelPrefabPath = "Prefabs/UI/CurtainCanvas";
         public const string WorldQuestItemsConfigPathFormat = "Configs/World/{0}/WorldQuestItemsConfig";
         public const string ShipConfig = "Configs/Ship/ShipConfig";
+        public const string UnitFactoryConfig = "Configs/Unit/Factory/UnitFactoryConfig";
     }
 }
