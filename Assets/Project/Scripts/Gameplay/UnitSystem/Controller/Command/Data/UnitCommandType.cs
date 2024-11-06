@@ -3,5 +3,6 @@
     public enum UnitCommandType
     {
         GoToPosition,
+        FollowPlayer,
     }
 }

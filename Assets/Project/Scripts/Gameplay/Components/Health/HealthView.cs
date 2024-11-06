@@ -1,24 +1,14 @@
-﻿using System;
-using UnityEngine;
-using Utils;
+﻿using UnityEngine;
 
 namespace Gameplay.Components.Health
 {
-    public class HealthView : MonoBehaviour, IHealthView, IAttackTarget
+    public class HealthView : MonoBehaviour, IHealthView
     {
-        public event Action<float> OnGetDamage;
-
         private Collider bodyCollider;
 
         public void Initialize(Collider bodyCollider)
         {
             this.bodyCollider = bodyCollider;
-        }
-
-        public void ApplyDamage(float damage)
-        {
-            Debug.Log($"get damage {damage}");
-            OnGetDamage?.Invoke(damage);
         }
 
         public void DrawDie()

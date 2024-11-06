@@ -7,12 +7,15 @@ using Utils;
 
 namespace Gameplay.Player.View
 {
-    public class PlayerView : MonoBehaviour, IPlayerView, IAttackTarget
+    public class PlayerView : MonoBehaviour, IPlayerView, IAttackTargetView
     {
+        public PlayerController Controller { get; private set; }
+        public Transform UnitFollowPivot => transform;
         public IPlayerMovement Movement => movement;
         public IPlayerLookView Look => look;
         public IPlayerFightView Fight => fight;
         public IHealthView Health => health;
+        public IAttackTarget Target => Controller;
 
         [SerializeField] private PlayerMovementView movement;
         [SerializeField] private PlayerLookView look;
@@ -20,16 +23,10 @@ namespace Gameplay.Player.View
         [SerializeField] private HealthView health;
         [SerializeField] private Collider bodyCollider;
 
-        public void Initialize()
+        public void Initialize(PlayerController controller)
         {
+            Controller = controller;
             health.Initialize(bodyCollider);
-        }
-
-        public Vector3 GetPosition() => movement.GetPosition();
-
-        public void ApplyDamage(float damage)
-        {
-
         }
     }
 }

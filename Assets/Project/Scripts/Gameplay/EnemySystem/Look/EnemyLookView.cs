@@ -13,8 +13,11 @@ namespace Gameplay.EnemySystem.Look
 
             for (int i = 0; i < colliders.Length; i++)
             {
-                if (colliders[i].TryGetComponent(out attackTarget))
+                if (colliders[i].TryGetComponent(out IAttackTargetView attackTargetView))
+                {
+                    attackTarget = attackTargetView.Target;
                     return true;
+                }
             }
 
             attackTarget = null;

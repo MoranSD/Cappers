@@ -441,7 +441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
 --- !u!195 &8714382797078552445
 NavMeshAgent:
   m_ObjectHideFlags: 0

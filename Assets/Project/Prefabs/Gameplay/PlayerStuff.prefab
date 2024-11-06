@@ -112,6 +112,9 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
+  unitLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &473430852983744841
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32,7 +32,7 @@ namespace Gameplay.Player.Root
             gameCamera.Initialize();
 
             player = new PlayerController(playerConfig.MainConfig, playerView, input, gameCamera);
-            playerView.Initialize();
+            playerView.Initialize(player);
             player.Initialize();
             tickManager.Add(player);
 

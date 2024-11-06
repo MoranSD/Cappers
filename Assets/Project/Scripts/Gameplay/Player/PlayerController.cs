@@ -9,10 +9,12 @@ using Utils.StateMachine;
 using Gameplay.Player.Behaviour;
 using Gameplay.Player.Fight;
 using Gameplay.Components.Health;
+using Utils;
+using UnityEngine;
 
 namespace Gameplay.Player
 {
-    public class PlayerController : ITickable
+    public class PlayerController : ITickable, IAttackTarget
     {
         public bool IsFreezed { get; private set; }
         public PlayerMovement Movement { get; private set; }
@@ -51,7 +53,6 @@ namespace Gameplay.Player
         {
             Interaction.Initialize();
             Fight.Initialize();
-            Health.Initialize();
             Health.OnDie += OnDie;
 
             StateController.ChangeState<PlayerNormalState>();
@@ -62,7 +63,6 @@ namespace Gameplay.Player
             StateController.DisposeCurrent();
             Interaction.Dispose();
             Fight.Dispose();
-            Health.Dispose();
             Health.OnDie -= OnDie;
         }
 
@@ -81,6 +81,10 @@ namespace Gameplay.Player
             if (IsFreezed) StateController.ChangeState<PlayerFreezedState>();
             else StateController.ChangeState<PlayerNormalState>();
         }
+
+        public Vector3 GetPosition() => View.Movement.GetPosition();
+
+        public void ApplyDamage(float damage) => Health.ApplyDamage(damage);
 
         private void OnDie()
         {

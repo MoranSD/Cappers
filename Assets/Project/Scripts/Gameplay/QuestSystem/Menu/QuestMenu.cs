@@ -2,7 +2,6 @@
 using Gameplay.QuestSystem.Menu.View;
 using Gameplay.QuestSystem.Quests;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Gameplay.QuestSystem.Menu

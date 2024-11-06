@@ -11,7 +11,9 @@ namespace Gameplay.UnitSystem.Controller.Command
             switch (commandType)
             {
                 case UnitCommandType.GoToPosition:
-                    return new UnitMoveToNode(blackBoard);
+                    return new UnitMoveToDestinationNode(blackBoard);
+                case UnitCommandType.FollowPlayer:
+                    return new UnitFollowToPointNode(blackBoard);
             }
 
             throw new System.Exception();

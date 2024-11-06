@@ -10,7 +10,7 @@ namespace Gameplay.EnemySystem.Factory
         {
             var enemyView = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
             var enemyController = new EnemyController(enemyView, enemyConfigSO.Config);
-            enemyView.Initialize();
+            enemyView.Initialize(enemyController);
             return enemyController;
         }
 

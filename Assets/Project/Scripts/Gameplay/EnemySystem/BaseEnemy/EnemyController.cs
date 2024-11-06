@@ -3,11 +3,13 @@ using Gameplay.EnemySystem.Behaviour;
 using Gameplay.EnemySystem.Data;
 using Gameplay.EnemySystem.View;
 using Infrastructure.TickManagement;
+using UnityEngine;
+using Utils;
 using Utils.StateMachine;
 
 namespace Gameplay.EnemySystem.BaseEnemy
 {
-    public class EnemyController : ITickable
+    public class EnemyController : ITickable, IAttackTarget
     {
         public readonly EnemyConfig Config;
         public readonly HealthComponent Health;
@@ -28,7 +30,6 @@ namespace Gameplay.EnemySystem.BaseEnemy
 
         public void Initialize()
         {
-            Health.Initialize();
             Health.OnDie += OnDie;
             StateController.ChangeState<EnemyIdleState>();
         }
@@ -42,12 +43,15 @@ namespace Gameplay.EnemySystem.BaseEnemy
         {
             StateController.DisposeCurrent();
             Health.OnDie -= OnDie;
-            Health.Dispose();
         }
 
         private void OnDie()
         {
             StateController.ExitCurrent();
         }
+
+        public Vector3 GetPosition() => View.Movement.GetPosition();
+
+        public void ApplyDamage(float damage) => Health.ApplyDamage(damage);
     }
 }

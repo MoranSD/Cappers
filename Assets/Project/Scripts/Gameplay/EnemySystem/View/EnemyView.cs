@@ -1,17 +1,21 @@
 ﻿using Gameplay.Components.Health;
+using Gameplay.EnemySystem.BaseEnemy;
 using Gameplay.EnemySystem.Fight;
 using Gameplay.EnemySystem.Look;
 using Gameplay.EnemySystem.Movement;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.EnemySystem.View
 {
-    public class EnemyView : MonoBehaviour, IEnemyView
+    public class EnemyView : MonoBehaviour, IEnemyView, IAttackTargetView
     {
+        public EnemyController Controller { get; private set; }
         public IEnemyMovementView Movement => movement;
         public IEnemyLookView Look => look;
         public IHealthView Health => health;
         public IEnemyFightView Fight => fight;
+        public IAttackTarget Target => Controller;
 
         [SerializeField] private EnemyMovementView movement;
         [SerializeField] private EnemyLookView look;
@@ -21,8 +25,9 @@ namespace Gameplay.EnemySystem.View
 
         private Vector3 idlePosition;
 
-        public void Initialize()
+        public void Initialize(EnemyController controller)
         {
+            Controller = controller;
             idlePosition = transform.position;
             health.Initialize(bodyCollider);
         }

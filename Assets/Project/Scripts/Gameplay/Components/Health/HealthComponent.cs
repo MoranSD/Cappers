@@ -15,17 +15,7 @@ namespace Gameplay.Components.Health
             Health = startHealth;
         }
 
-        public void Initialize()
-        {
-            view.OnGetDamage += OnGetDamage;
-        }
-
-        public void Dispose()
-        {
-            view.OnGetDamage -= OnGetDamage;
-        }
-
-        private void OnGetDamage(float damage)
+        public void ApplyDamage(float damage)
         {
             if (Health <= 0) return;
 
