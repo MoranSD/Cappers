@@ -1,14 +1,13 @@
 ﻿using Gameplay.Components.Health;
-using Gameplay.UnitSystem.Controller.Command;
-using Gameplay.UnitSystem.Controller.Command.Data;
+using Gameplay.UnitSystem.Controller.Behaviour;
 using Gameplay.UnitSystem.Controller.View;
 using Gameplay.UnitSystem.Data;
 using Infrastructure.TickManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utilities.BehaviourTree;
 using Utils;
 using Utils.Interaction;
+using Utils.StateMachine;
 
 namespace Gameplay.UnitSystem.Controller
 {
@@ -17,62 +16,53 @@ namespace Gameplay.UnitSystem.Controller
         public UnitData Data { get; private set; }
         public IUnitView View { get; private set; }
         public HealthComponent Health { get; private set; }
-
-        private BehaviourTreeRoot behaviourTreeRoot;
-        private BehaviourTreeBlackBoard blackBoard;
+        public StateController StateController { get; private set; }
 
         public UnitController(UnitData data, IUnitView view)
         {
             Data = data;
             View = view;
-            behaviourTreeRoot = new BehaviourTreeRoot();
-            blackBoard = new BehaviourTreeBlackBoard();
             Health = new(view.HealthView, 1);
+            StateController = new(
+                new UnitGoToIdlePositionState(this),
+                new UnitFollowPlayerState(this)
+                );
         }
 
         public void Initialize()
         {
-            blackBoard.SetValue("Controller", this);
+
         }
 
         public void Update(float deltaTime)
         {
-            behaviourTreeRoot.Run(deltaTime);
+            StateController.UpdateCurrentState(deltaTime);
         }
 
         public void Dispose()
         {
-            behaviourTreeRoot.Dispose();
+            StateController.DisposeCurrent();
         }
 
-        public void GoToPosition(Vector3 position)
+        public void GoToIdlePosition(Vector3 position)
         {
-            blackBoard.SetValue("Destination", position);
-            var commandActions = UnitCommandHolder.GetCommandActions(UnitCommandType.GoToPosition, blackBoard);
-            behaviourTreeRoot.ChangeBehaviour(commandActions);
+            StateController.ChangeState<UnitGoToIdlePositionState, Vector3>(position);
         }
 
         public void FollowPlayer(Transform followPoint)
         {
-            blackBoard.SetValue("FollowPoint", followPoint);
-            var commandActions = UnitCommandHolder.GetCommandActions(UnitCommandType.FollowPlayer, blackBoard);
-            behaviourTreeRoot.ChangeBehaviour(commandActions);
+            StateController.ChangeState<UnitFollowPlayerState, Transform>(followPoint);
         }
 
         public void StopFollowPlayer()
         {
-            //TODO: go to idle position
-            /*
-             * еще как варик, будет же некий контроллер юнитов, а следовательно он будет знать, занят юнит или нет
-             * и вот если он увидит что у юнита нет дел, он либо скажет ему идти на его айдл позицию, либо по делам
-             */
-            behaviourTreeRoot.ChangeBehaviour(null);
+            StateController.ChangeState<UnitGoToIdlePositionState>();
         }
 
         public void InteractWith(IUnitInteractable interactor)
         {
             interactor.Interact();
-            behaviourTreeRoot.ChangeBehaviour(null);
+            StateController.ExitCurrent();
         }
 
         public Vector3 GetPosition() => View.MovementView.GetPosition();

@@ -1,4 +1,5 @@
 ﻿using Gameplay.Components.Health;
+using Gameplay.UnitSystem.Controller.Look;
 using Gameplay.UnitSystem.Controller.Movement;
 using UnityEngine;
 using Utils;
@@ -11,6 +12,7 @@ namespace Gameplay.UnitSystem.Controller.View
         public IUnitMovementView MovementView => movementView;
         public IHealthView HealthView => healthView;
         public IAttackTarget Target => Controller;
+        public IUnitLookView LookView => throw new System.NotImplementedException();
 
         [SerializeField] private UnitMovementView movementView;
         [SerializeField] private HealthView healthView;

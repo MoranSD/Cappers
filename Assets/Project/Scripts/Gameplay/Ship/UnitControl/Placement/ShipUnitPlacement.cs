@@ -62,7 +62,7 @@ namespace Gameplay.Ship.UnitControl.Placement
 
             gameState.Units.Add(unitController.Data);
 
-            unitController.GoToPosition(GetUnitIdlePosition(unitController.Data.Id));
+            unitController.GoToIdlePosition(GetUnitIdlePosition(unitController.Data.Id));
         }
     }
 }
