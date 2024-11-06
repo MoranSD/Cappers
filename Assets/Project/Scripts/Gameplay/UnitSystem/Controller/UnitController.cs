@@ -4,7 +4,6 @@ using Gameplay.UnitSystem.Controller.View;
 using Gameplay.UnitSystem.Data;
 using Infrastructure.TickManagement;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Utils;
 using Utils.Interaction;
 using Utils.StateMachine;
@@ -17,12 +16,13 @@ namespace Gameplay.UnitSystem.Controller
         public IUnitView View { get; private set; }
         public HealthComponent Health { get; private set; }
         public StateController StateController { get; private set; }
+        public bool IsDead => Health.Health <= 0;
 
         public UnitController(UnitData data, IUnitView view)
         {
             Data = data;
             View = view;
-            Health = new(view.HealthView, 1);
+            Health = new(view.HealthView, data.Health);
             StateController = new(
                 new UnitGoToIdlePositionState(this),
                 new UnitFollowPlayerState(this)
@@ -31,7 +31,7 @@ namespace Gameplay.UnitSystem.Controller
 
         public void Initialize()
         {
-
+            Health.OnDie += OnDie;
         }
 
         public void Update(float deltaTime)
@@ -41,6 +41,7 @@ namespace Gameplay.UnitSystem.Controller
 
         public void Dispose()
         {
+            Health.OnDie -= OnDie;
             StateController.DisposeCurrent();
         }
 
@@ -68,5 +69,11 @@ namespace Gameplay.UnitSystem.Controller
         public Vector3 GetPosition() => View.MovementView.GetPosition();
 
         public void ApplyDamage(float damage) => Health.ApplyDamage(damage);
+
+        private void OnDie()
+        {
+            Debug.Log("POMER");
+            StateController.ExitCurrent();
+        }
     }
 }

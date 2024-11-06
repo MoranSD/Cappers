@@ -12,14 +12,17 @@ namespace Gameplay.UnitSystem.Controller.View
         public IUnitMovementView MovementView => movementView;
         public IHealthView HealthView => healthView;
         public IAttackTarget Target => Controller;
-        public IUnitLookView LookView => throw new System.NotImplementedException();
+        public IUnitLookView LookView => lookView;
 
         [SerializeField] private UnitMovementView movementView;
         [SerializeField] private HealthView healthView;
+        [SerializeField] private UnitLookView lookView;
+        [SerializeField] private Collider bodyCollider;
 
-        public void SetController(UnitController controller)
+        public void Initialize(UnitController controller)
         {
             Controller = controller;
+            healthView.Initialize(bodyCollider);
         }
     }
 }

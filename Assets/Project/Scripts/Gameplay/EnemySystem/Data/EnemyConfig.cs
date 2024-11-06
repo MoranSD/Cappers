@@ -45,5 +45,6 @@ namespace Gameplay.EnemySystem.Data
         public float MinTimeToUpdateDelay;
         public float FirstAttackDelay;
         public float AttackRate;
+        public float Damage;
     }
 }

@@ -27,9 +27,9 @@ namespace Gameplay.EnemySystem.Behaviour
             var ourPosition = enemyController.View.Movement.GetPosition();
             var targetPosition = target.GetPosition();
 
-            if (Vector3.Distance(ourPosition, targetPosition) > enemyController.Config.AttackConfig.AttackDistance)
+            if (target.IsDead || Vector3.Distance(ourPosition, targetPosition) > enemyController.Config.AttackConfig.AttackDistance)
             {
-                enemyController.StateController.ChangeState<EnemyFollowTargetState, IAttackTarget>(target);
+                enemyController.StateController.ChangeState<EnemyIdleState>();
                 return;
             }
 
@@ -37,7 +37,8 @@ namespace Gameplay.EnemySystem.Behaviour
             if(nextAttackTime <= 0)
             {
                 enemyController.View.Fight.DrawAttack();
-                //TODO: perform attack here
+                var damage = enemyController.Config.AttackConfig.Damage;
+                target.ApplyDamage(damage);
                 nextAttackTime = enemyController.Config.AttackConfig.AttackRate;
             }
         }

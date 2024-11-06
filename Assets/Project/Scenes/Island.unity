@@ -947,7 +947,7 @@ GameObject:
   - component: {fileID: 848999489}
   - component: {fileID: 848999490}
   m_Layer: 0
-  m_Name: A*
+  m_Name: IslandSurface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -982,8 +982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
   m_CollectObjects: 1
-  m_Size: {x: 43.001156, y: 10, z: 106.19643}
-  m_Center: {x: 29.436357, y: 2, z: 3.7661896}
+  m_Size: {x: 56.545265, y: 5.246826, z: 106.19643}
+  m_Center: {x: 22.664303, y: 2.2046876, z: 3.7661896}
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -997,7 +997,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: b1220677329a36e499695ce9699f52e1, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 0ad77604a780bdd4883d57e172809b9e, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &859025170
 GameObject:
@@ -2758,10 +2758,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 684980504}
+  - {fileID: 848999489}
   - {fileID: 2048395343}
   - {fileID: 1835550585}
   - {fileID: 92672174}
-  - {fileID: 848999489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2128430863

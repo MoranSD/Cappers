@@ -32,7 +32,7 @@ namespace Gameplay.Player.Look
             var colliders = Physics.OverlapSphere(transform.position, range, targetLayer);
 
             targets = colliders
-                .Where(x => x.GetComponent<IAttackTargetView>() != null)
+                .Where(x => x.TryGetComponent(out IAttackTargetView attackTargetView) && attackTargetView.Target.IsDead == false)
                 .Select(x => x.GetComponent<IAttackTargetView>().Target)
                 .ToArray();
 

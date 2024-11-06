@@ -11,6 +11,7 @@ namespace Gameplay.EnemySystem.BaseEnemy
 {
     public class EnemyController : ITickable, IAttackTarget
     {
+        public bool IsDead => Health.Health <= 0;
         public readonly EnemyConfig Config;
         public readonly HealthComponent Health;
         public readonly StateController StateController;

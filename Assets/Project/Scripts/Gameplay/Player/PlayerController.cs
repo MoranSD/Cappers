@@ -21,6 +21,7 @@ namespace Gameplay.Player
         public PlayerInteraction Interaction { get; private set; }
         public PlayerFight Fight { get; private set; }
         public HealthComponent Health { get; private set; }
+        public bool IsDead => Health.Health <= 0;
 
         public StateController StateController { get; private set; }
 

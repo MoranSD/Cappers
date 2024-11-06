@@ -10,7 +10,8 @@ namespace Gameplay.Player.Movement
 
         private void Update()
         {
-            characterController.Move(Physics.gravity * Time.deltaTime);
+            if(characterController.enabled)
+                characterController.Move(Physics.gravity * Time.deltaTime);
         }
 
         public void Move(Vector3 direction, float speed)

@@ -29,7 +29,7 @@ namespace Gameplay.UnitSystem.Factory
             var controller = new UnitController(unitData, body);
             controller.Initialize();
 
-            body.SetController(controller);
+            body.Initialize(controller);
 
             tickManager.Add(controller);
 
