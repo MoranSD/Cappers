@@ -22,7 +22,7 @@ namespace Gameplay.EnemySystem.Behaviour
             var visionRange = enemyController.Config.LookConfig.VisionRange;
             if(enemyController.View.Look.TryGetTargetAround(visionRange, out var attackTarget))
             {
-                enemyController.StateController.ChangeState<EnemyFollowTargetState, IAttackTarget>(attackTarget);
+                enemyController.StateController.ChangeState<EnemyFollowTargetState>();
             }
         }
     }

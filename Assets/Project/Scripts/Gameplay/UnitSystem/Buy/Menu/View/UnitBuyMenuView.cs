@@ -73,7 +73,7 @@ namespace Gameplay.UnitSystem.Buy.Menu.View
 
         public void DrawSoldResult(int unitId, bool success)
         {
-            Debug.Log($"{unitId} {success}");
+            //Debug.Log($"{unitId} {success}");
         }
 
         public async Task Show(CancellationToken token)

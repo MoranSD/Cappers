@@ -5,6 +5,7 @@ using Gameplay.UnitSystem.Data;
 using Gameplay.UnitSystem.Factory;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Gameplay.Ship.UnitControl.LifeTime
 {
@@ -49,7 +50,9 @@ namespace Gameplay.Ship.UnitControl.LifeTime
         private void OnUnitDie()
         {
             var deadUnit = units.First(x => x.IsDead);
+
             deadUnit.Health.OnDie -= OnUnitDie;
+            units.Remove(deadUnit);
             RemoveUnit(deadUnit.Data);
         }
 

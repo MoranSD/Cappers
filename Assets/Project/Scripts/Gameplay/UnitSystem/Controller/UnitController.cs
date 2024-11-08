@@ -72,7 +72,6 @@ namespace Gameplay.UnitSystem.Controller
 
         private void OnDie()
         {
-            Debug.Log("POMER");
             StateController.ExitCurrent();
         }
     }

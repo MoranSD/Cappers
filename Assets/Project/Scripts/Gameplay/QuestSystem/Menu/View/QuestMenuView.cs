@@ -93,7 +93,7 @@ namespace Gameplay.QuestSystem.Menu.View
             widget.InteractButton.onClick.RemoveAllListeners();
             Destroy(widget.gameObject);
             activeWidgets.Remove(widget);
-            Debug.Log($"Selected: {questData.ToString()}");
+            //Debug.Log($"Selected: {questData.ToString()}");
         }
 
         public void DrawCompleteSuccess(QuestData questData)
@@ -102,7 +102,7 @@ namespace Gameplay.QuestSystem.Menu.View
             widget.InteractButton.onClick.RemoveAllListeners();
             Destroy(widget.gameObject);
             activeWidgets.Remove(widget);
-            Debug.Log($"Completed: {questData.ToString()}");
+            //Debug.Log($"Completed: {questData.ToString()}");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using Utils;
 
 namespace Gameplay.EnemySystem.Look
@@ -11,17 +12,13 @@ namespace Gameplay.EnemySystem.Look
         {
             var colliders = Physics.OverlapSphere(transform.position, range, targetMask);
 
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                if (colliders[i].TryGetComponent(out IAttackTargetView attackTargetView) && attackTargetView.Target.IsDead == false)
-                {
-                    attackTarget = attackTargetView.Target;
-                    return true;
-                }
-            }
+            attackTarget = colliders
+                .Where(x => x.TryGetComponent(out IAttackTargetView attackTargetView) && attackTargetView.Target.IsDead == false)
+                .Select(x => x.GetComponent<IAttackTargetView>().Target)
+                .OrderBy(x => Vector3.Distance(x.GetPosition(), transform.position))
+                .FirstOrDefault();
 
-            attackTarget = null;
-            return false;
+            return attackTarget != null;
         }
     }
 }

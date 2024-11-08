@@ -5,20 +5,19 @@ using Utils.StateMachine;
 
 namespace Gameplay.EnemySystem.Behaviour
 {
-    public class EnemyFollowTargetState : EnemyState<EnemyController>, IPayloadedEnterableState<IAttackTarget>, IUpdateableState, IExitableState
+    public class EnemyFollowTargetState : EnemyState<EnemyController>, IEnterableState, IUpdateableState, IExitableState
     {
-        private IAttackTarget target;
+        private IAttackTarget lastTarget;
         private float updateDestinationTime;
 
         public EnemyFollowTargetState(EnemyController enemyController) : base(enemyController)
         {
         }
 
-        public void Enter(IAttackTarget target)
+        public void Enter()
         {
-            this.target = target;
-            updateDestinationTime = 0;
-            UpdateDestination();
+            lastTarget = null;
+            updateDestinationTime = enemyController.Config.FollowConfig.UpdateDestinationRate;
         }
 
         public void Exit()
@@ -29,7 +28,28 @@ namespace Gameplay.EnemySystem.Behaviour
         public void Update(float deltaTime)
         {
             var ourPosition = enemyController.View.Movement.GetPosition();
-            var targetPosition = target.GetPosition();
+            var visionRange = enemyController.Config.LookConfig.VisionRange;
+
+            if (enemyController.View.Look.TryGetTargetAround(visionRange, out var currentTarget) == false)
+            {
+                if(lastTarget == null)
+                {
+                    enemyController.StateController.ChangeState<EnemyIdleState>();
+                    return;
+                }
+                else
+                {
+                    currentTarget = lastTarget;
+                }
+            }
+
+            var targetPosition = currentTarget.GetPosition();
+
+            if (lastTarget != null && lastTarget != currentTarget)
+            {
+                if (Vector3.Distance(ourPosition, lastTarget.GetPosition()) < Vector3.Distance(ourPosition, targetPosition))
+                    currentTarget = lastTarget;
+            }
 
             if (Vector3.Distance(ourPosition, targetPosition) >= enemyController.Config.FollowConfig.MaxFollowDistance)
             {
@@ -38,9 +58,11 @@ namespace Gameplay.EnemySystem.Behaviour
             }
             else if (Vector3.Distance(ourPosition, targetPosition) <= enemyController.Config.AttackConfig.AttackDistance)
             {
-                enemyController.StateController.ChangeState<EnemyAttackState, IAttackTarget>(target);
+                enemyController.StateController.ChangeState<EnemyAttackState, IAttackTarget>(currentTarget);
                 return;
             }
+
+            lastTarget = currentTarget;
 
             updateDestinationTime += deltaTime;
             if(updateDestinationTime >= enemyController.Config.FollowConfig.UpdateDestinationRate)
@@ -52,7 +74,7 @@ namespace Gameplay.EnemySystem.Behaviour
 
         private void UpdateDestination()
         {
-            var destinationPosition = target.GetPosition();
+            var destinationPosition = lastTarget.GetPosition();
             var moveSpeed = enemyController.Config.MovementConfig.Speed;
             enemyController.View.Movement.SetDestination(destinationPosition, moveSpeed);
         }
