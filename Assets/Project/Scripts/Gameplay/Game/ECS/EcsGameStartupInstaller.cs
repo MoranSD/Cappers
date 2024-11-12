@@ -7,7 +7,6 @@ using Voody.UniLeo;
 
 namespace Gameplay.Game.ECS
 {
-
     public class EcsGameStartupInstaller : Installer
     {
         private EcsWorld world;

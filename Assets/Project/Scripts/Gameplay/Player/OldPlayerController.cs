@@ -3,7 +3,6 @@ using Infrastructure.TickManagement;
 using Gameplay.Player.Data;
 using Gameplay.Player.View;
 using Infrastructure.GameInput;
-using Gameplay.Player.Movement;
 using Gameplay.Player.Interact;
 using Utils.StateMachine;
 using Gameplay.Player.Behaviour;
@@ -83,7 +82,7 @@ namespace Gameplay.Player
             else StateController.ChangeState<PlayerNormalState>();
         }
 
-        public Vector3 GetPosition() => View.Movement.GetPosition();
+        public Vector3 GetPosition() => Vector3.zero;//View.Movement.GetPosition();
 
         public void ApplyDamage(float damage) => Health.ApplyDamage(damage);
 

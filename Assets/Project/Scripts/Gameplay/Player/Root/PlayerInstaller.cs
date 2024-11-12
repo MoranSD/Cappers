@@ -30,8 +30,6 @@ namespace Gameplay.Player.Root
             //Ecs player creation and systems initialization
             var ecsSystems = ServiceLocator.Get<EcsSystems>();
 
-            ecsSystems.Inject(player);
-
             ecsSystems
                 .Add(new PlayerMovementInputSystem())
                 .Add(new PlayerInteractionInputSystem())
@@ -42,7 +40,8 @@ namespace Gameplay.Player.Root
             var playerEntity = ecsWorld.NewEntity();
             player.Initialize(playerEntity, gameCamera, input, playerConfig.MainConfig);
 
-            playerEntity.Get<TagPlayer>();
+            ref var tagPlayer = ref playerEntity.Get<TagPlayer>();
+            tagPlayer.PlayerController = player;
 
             ref var translation = ref playerEntity.Get<TranslationComponent>();
             translation.Transform = player.Pivot;

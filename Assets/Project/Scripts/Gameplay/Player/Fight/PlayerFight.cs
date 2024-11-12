@@ -67,7 +67,7 @@ namespace Gameplay.Player.Fight
             if (meleeDelayTime != 0) return;
             if (closestTarget == null) return;
 
-            var ourPosition = controller.View.Movement.GetPosition();
+            var ourPosition = Vector3.zero;// controller.View.Movement.GetPosition();
             var targetPosition = closestTarget.GetPosition();
             var attackDistance = controller.Config.FightConfig.MeleeAttackDistance;
 
@@ -85,7 +85,7 @@ namespace Gameplay.Player.Fight
             if (longDelayTime != 0) return;
             if (closestTarget == null) return;
 
-            var ourPosition = controller.View.Movement.GetPosition();
+            var ourPosition = Vector3.zero;// controller.View.Movement.GetPosition();
             var targetPosition = closestTarget.GetPosition();
             var attackDistance = controller.Config.FightConfig.LongAttackDistance;
 
@@ -99,7 +99,7 @@ namespace Gameplay.Player.Fight
 
         private IAttackTarget GetClosestTarget(IAttackTarget[] targets)
         {
-            var ourPosition = controller.View.Movement.GetPosition();
+            var ourPosition = Vector3.zero;// controller.View.Movement.GetPosition();
             var closestTarget = targets[0];
 
             foreach (var target in targets)
