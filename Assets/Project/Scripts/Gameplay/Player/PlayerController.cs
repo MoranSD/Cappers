@@ -1,95 +1,36 @@
 ﻿using Gameplay.CameraSystem;
-using Infrastructure.TickManagement;
+using Gameplay.Game.ECS.Features;
 using Gameplay.Player.Data;
-using Gameplay.Player.View;
 using Infrastructure.GameInput;
-using Gameplay.Player.Movement;
-using Gameplay.Player.Interact;
-using Utils.StateMachine;
-using Gameplay.Player.Behaviour;
-using Gameplay.Player.Fight;
-using Gameplay.Components.Health;
-using Utils;
+using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Gameplay.Player
 {
-    public class PlayerController : ITickable, IAttackTarget
+    public class PlayerController : MonoBehaviour, IPlayerController
     {
-        public bool IsFreezed { get; private set; }
-        public PlayerMovement Movement { get; private set; }
-        public PlayerInteraction Interaction { get; private set; }
-        public PlayerFight Fight { get; private set; }
-        public HealthComponent Health { get; private set; }
-        public bool IsDead => Health.Health <= 0;
+        public Transform Pivot => transform;
+        public EcsEntity EcsEntity { get; private set; }
+        public IGameCamera GameCamera { get; private set; }
+        public IInput Input { get; private set; }
+        public PlayerConfig Config { get; private set; }
 
-        public StateController StateController { get; private set; }
+        [field: SerializeField] public CharacterController CharacterController { get; private set; }
+        [field: SerializeField] public LayerMask InteractorLayer { get; private set; }
+        [field: SerializeField] public LayerMask EnemyLayer { get; private set; }
 
-        public readonly PlayerConfig Config;
-        public readonly IPlayerView View;
-        public readonly IInput Input;
-        public readonly IGameCamera GameCamera;
-
-        public PlayerController(PlayerConfig config, IPlayerView view, IInput input, IGameCamera gameCamera)
+        public void Initialize(EcsEntity entity, IGameCamera gameCamera, IInput input, PlayerConfig config)
         {
-            IsFreezed = false;
-
-            Config = config;
-            View = view;
-            Input = input;
+            EcsEntity = entity;
             GameCamera = gameCamera;
-
-            Movement = new(this);
-            Interaction = new(this);
-            Fight = new(this);
-            Health = new(view.Health, config.HealthConfig.StartHealth);
-
-            StateController = new(
-                new PlayerNormalState(this),
-                new PlayerFreezedState(this)
-                );
+            Config = config;
+            Input = input;
         }
 
-        public void Initialize()
+        public void SetFreeze(bool freeze)
         {
-            Interaction.Initialize();
-            Fight.Initialize();
-            Health.OnDie += OnDie;
-
-            StateController.ChangeState<PlayerNormalState>();
-        }
-
-        public void Dispose()
-        {
-            StateController.DisposeCurrent();
-            Interaction.Dispose();
-            Fight.Dispose();
-            Health.OnDie -= OnDie;
-        }
-
-        public void Update(float deltaTime)
-        {
-            StateController.UpdateCurrentState(deltaTime);
-        }
-
-        public void SetFreezee(bool freezee)
-        {
-            if(IsFreezed == freezee)
-                throw new System.Exception(freezee.ToString());
-
-            IsFreezed = freezee;
-
-            if (IsFreezed) StateController.ChangeState<PlayerFreezedState>();
-            else StateController.ChangeState<PlayerNormalState>();
-        }
-
-        public Vector3 GetPosition() => View.Movement.GetPosition();
-
-        public void ApplyDamage(float damage) => Health.ApplyDamage(damage);
-
-        private void OnDie()
-        {
-            StateController.ExitCurrent();
+            if (freeze) EcsEntity.Get<BlockFreezed>();
+            else EcsEntity.Del<BlockFreezed>();
         }
     }
 }

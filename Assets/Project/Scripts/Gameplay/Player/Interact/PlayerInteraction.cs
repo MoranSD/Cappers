@@ -9,11 +9,11 @@ namespace Gameplay.Player.Interact
     {
         public bool HandleInput;
 
-        private readonly PlayerController controller;
+        private readonly OldPlayerController controller;
 
         private List<UnitController> controlableUnits;
 
-        public PlayerInteraction(PlayerController controller)
+        public PlayerInteraction(OldPlayerController controller)
         {
             this.controller = controller;
             controlableUnits = new();

@@ -8,7 +8,7 @@ namespace Gameplay.Player.View
 {
     public interface IPlayerView
     {
-        PlayerController Controller { get; }
+        OldPlayerController Controller { get; }
         Transform UnitFollowPivot { get; }
         IPlayerMovement Movement { get; }
         IPlayerLookView Look { get; }

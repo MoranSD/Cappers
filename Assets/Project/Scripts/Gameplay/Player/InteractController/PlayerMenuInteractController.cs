@@ -11,7 +11,7 @@ namespace Gameplay.Player.InteractController
         public bool IsInteracting { get; private set; }
         public PanelType InteractPanelType { get; private set; }
 
-        private readonly PlayerController playerController;
+        private readonly IPlayerController playerController;
         private readonly PanelsManager panelsManager;
 
         private bool isCameraInteracting;
@@ -20,7 +20,7 @@ namespace Gameplay.Player.InteractController
 
         private CancellationTokenSource cancellationTokenSource;
 
-        public PlayerMenuInteractController(PlayerController playerController, PanelsManager panelsManager)
+        public PlayerMenuInteractController(IPlayerController playerController, PanelsManager panelsManager)
         {
             this.playerController = playerController;
             this.panelsManager = panelsManager;
@@ -45,7 +45,7 @@ namespace Gameplay.Player.InteractController
 
             IsInteracting = true;
             InteractPanelType = panelType;
-            playerController.SetFreezee(true);
+            playerController.SetFreeze(true);
 
             await EnterInteractStateProcess(panelType, followInteractor);
         }
@@ -57,7 +57,7 @@ namespace Gameplay.Player.InteractController
 
             IsInteracting = false;
             InteractPanelType = default;
-            playerController.SetFreezee(false);
+            playerController.SetFreeze(false);
 
             await ExitInteractStateProcess();
         }

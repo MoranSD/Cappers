@@ -7,14 +7,14 @@ namespace Gameplay.Player.Fight
     {
         public bool HandleInput = true;
 
-        private readonly PlayerController controller;
+        private readonly OldPlayerController controller;
 
         private float meleeDelayTime;
         private float longDelayTime;
 
         private IAttackTarget closestTarget;
 
-        public PlayerFight(PlayerController controller)
+        public PlayerFight(OldPlayerController controller)
         {
             this.controller = controller;
         }
@@ -22,7 +22,7 @@ namespace Gameplay.Player.Fight
         public void Initialize()
         {
             controller.Input.OnPressMeleeAttackButton += OnMeleeAttack;
-            controller.Input.OnPressLongAttackButton += OnLongAttack;
+            controller.Input.OnPressRangeAttackButton += OnLongAttack;
         }
 
         public void Update(float deltaTime)
@@ -45,20 +45,20 @@ namespace Gameplay.Player.Fight
             if(controller.View.Look.TryGetTargetsAround(controller.Config.FightConfig.AttackRange, out var targets))
             {
                 closestTarget = GetClosestTarget(targets);
-                controller.Movement.SetLookTarget(closestTarget);
+                //controller.Movement.SetLookTarget(closestTarget);
             }
             else
             {
                 closestTarget = null;
-                controller.Movement.ResetLookTarget();
+                //controller.Movement.ResetLookTarget();
             }
         }
 
         public void Dispose()
         {
             controller.Input.OnPressMeleeAttackButton -= OnMeleeAttack;
-            controller.Input.OnPressLongAttackButton -= OnLongAttack;
-            controller.Movement.ResetLookTarget();
+            controller.Input.OnPressRangeAttackButton -= OnLongAttack;
+            //controller.Movement.ResetLookTarget();
         }
 
         private void OnMeleeAttack()

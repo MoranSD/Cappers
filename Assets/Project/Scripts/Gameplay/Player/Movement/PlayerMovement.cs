@@ -1,8 +1,4 @@
-﻿using Gameplay.CameraSystem;
-using Gameplay.Player.Data;
-using Infrastructure.GameInput;
-using UnityEngine;
-using Utils;
+﻿using Utils;
 
 namespace Gameplay.Player.Movement
 {
@@ -10,11 +6,11 @@ namespace Gameplay.Player.Movement
     {
         public float SpeedFactor = 1;
 
-        private readonly PlayerController controller;
+        private readonly OldPlayerController controller;
 
         private IAttackTarget lookTarget;
 
-        public PlayerMovement(PlayerController controller)
+        public PlayerMovement(OldPlayerController controller)
         {
             this.controller = controller;
         }

@@ -4,7 +4,7 @@ namespace Gameplay.Player.Behaviour
 {
     public class PlayerFreezedState : PlayerState, IEnterableState
     {
-        public PlayerFreezedState(PlayerController controller) : base(controller)
+        public PlayerFreezedState(OldPlayerController controller) : base(controller)
         {
         }
 

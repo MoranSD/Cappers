@@ -10,11 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1083509634161557930}
   - component: {fileID: 1875696148630770663}
-  - component: {fileID: 5894073205163268952}
-  - component: {fileID: 4411704329067762269}
-  - component: {fileID: 199370763346389244}
-  - component: {fileID: 473430852983744841}
-  - component: {fileID: 8538826382001164051}
+  - component: {fileID: 4487235404996209235}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -64,7 +60,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &5894073205163268952
+--- !u!114 &4487235404996209235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,72 +69,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5519746214919137}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42295bfc2bea70843a77080f6a76851f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f3d5abe41824bc47a6c54f20e957472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 4411704329067762269}
-  look: {fileID: 199370763346389244}
-  fight: {fileID: 473430852983744841}
-  health: {fileID: 8538826382001164051}
-  bodyCollider: {fileID: 1875696148630770663}
---- !u!114 &4411704329067762269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5519746214919137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 487aed2704eb4364bbd7b74e1a05d45d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterController: {fileID: 1875696148630770663}
---- !u!114 &199370763346389244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5519746214919137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c914b01714339d0448416ec64620b7c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactorLayer:
+  <CharacterController>k__BackingField: {fileID: 1875696148630770663}
+  <InteractorLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
-  targetLayer:
+  <EnemyLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 512
-  unitLayer:
-    serializedVersion: 2
-    m_Bits: 1024
---- !u!114 &473430852983744841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5519746214919137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4c67dff81c71b84c9be51c4b3e2917f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8538826382001164051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5519746214919137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db8be6412833d4e4dba7791cd81944a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &19974463791187802
 GameObject:
   m_ObjectHideFlags: 0

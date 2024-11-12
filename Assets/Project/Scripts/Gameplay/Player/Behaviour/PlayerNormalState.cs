@@ -4,7 +4,7 @@ namespace Gameplay.Player.Behaviour
 {
     public class PlayerNormalState : PlayerState, IEnterableState, IUpdateableState
     {
-        public PlayerNormalState(PlayerController controller) : base(controller)
+        public PlayerNormalState(OldPlayerController controller) : base(controller)
         {
         }
 
@@ -16,7 +16,7 @@ namespace Gameplay.Player.Behaviour
 
         public void Update(float deltaTime)
         {
-            controller.Movement.Update(deltaTime);
+            //controller.Movement.Update(deltaTime);
             controller.Fight.Update(deltaTime);
         }
     }

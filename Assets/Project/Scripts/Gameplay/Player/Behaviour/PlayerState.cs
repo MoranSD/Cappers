@@ -4,9 +4,9 @@ namespace Gameplay.Player.Behaviour
 {
     public class PlayerState : IState
     {
-        protected readonly PlayerController controller;
+        protected readonly OldPlayerController controller;
 
-        public PlayerState(PlayerController controller)
+        public PlayerState(OldPlayerController controller)
         {
             this.controller = controller;
         }

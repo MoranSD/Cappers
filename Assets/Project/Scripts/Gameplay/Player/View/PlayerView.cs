@@ -9,7 +9,7 @@ namespace Gameplay.Player.View
 {
     public class PlayerView : MonoBehaviour, IPlayerView, IAttackTargetView
     {
-        public PlayerController Controller { get; private set; }
+        public OldPlayerController Controller { get; private set; }
         public Transform UnitFollowPivot => transform;
         public IPlayerMovement Movement => movement;
         public IPlayerLookView Look => look;
@@ -23,7 +23,7 @@ namespace Gameplay.Player.View
         [SerializeField] private HealthView health;
         [SerializeField] private Collider bodyCollider;
 
-        public void Initialize(PlayerController controller)
+        public void Initialize(OldPlayerController controller)
         {
             Controller = controller;
             health.Initialize(bodyCollider);
