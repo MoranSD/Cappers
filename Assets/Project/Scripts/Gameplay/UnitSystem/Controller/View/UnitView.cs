@@ -8,7 +8,7 @@ namespace Gameplay.UnitSystem.Controller.View
 {
     public class UnitView : MonoBehaviour, IUnitView, IAttackTargetView
     {
-        public UnitController Controller { get; private set; }
+        public OldUnitController Controller { get; private set; }
         public IUnitMovementView MovementView => movementView;
         public IHealthView HealthView => healthView;
         public IAttackTarget Target => Controller;
@@ -19,7 +19,7 @@ namespace Gameplay.UnitSystem.Controller.View
         [SerializeField] private UnitLookView lookView;
         [SerializeField] private Collider bodyCollider;
 
-        public void Initialize(UnitController controller)
+        public void Initialize(OldUnitController controller)
         {
             Controller = controller;
             healthView.Initialize(bodyCollider);

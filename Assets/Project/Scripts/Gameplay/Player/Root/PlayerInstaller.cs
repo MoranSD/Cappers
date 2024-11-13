@@ -32,16 +32,23 @@ namespace Gameplay.Player.Root
 
             ecsSystems
                 .Add(new PlayerMovementInputSystem())
-                .Add(new PlayerInteractionInputSystem())
+                .Add(new PlayerInteractionSystem())
+                .Add(new UnitFollowControlSystem())
                 .Add(new PlayerTurnSystem());
+
+            ecsSystems.Inject(input);
+            ecsSystems.Inject(gameCamera as IGameCamera);
+            ecsSystems.Inject(playerConfig);
 
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
 
             var playerEntity = ecsWorld.NewEntity();
-            player.Initialize(playerEntity, gameCamera, input, playerConfig.MainConfig);
+            player.Initialize(playerEntity, gameCamera);
 
-            ref var tagPlayer = ref playerEntity.Get<TagPlayer>();
-            tagPlayer.PlayerController = player;
+            playerEntity.Get<TagPlayer>();
+
+            ref var unitControl = ref playerEntity.Get<UnitFollowControlComponent>();
+            unitControl.UnitsInControl = new();
 
             ref var translation = ref playerEntity.Get<TranslationComponent>();
             translation.Transform = player.Pivot;

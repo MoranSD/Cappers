@@ -11,22 +11,22 @@ namespace Gameplay.UnitSystem.Factory
         private readonly TickManager tickManager;
         private readonly UnitFactoryConfig config;
 
-        private List<UnitController> createdUnits;
+        private List<OldUnitController> createdUnits;
 
         public UnitFactory(TickManager tickManager, UnitFactoryConfig config)
         {
             this.tickManager = tickManager;
             this.config = config;
 
-            createdUnits = new List<UnitController>();
+            createdUnits = new List<OldUnitController>();
         }
 
-        public UnitController Create(UnitData unitData, Vector3 position)
+        public OldUnitController Create(UnitData unitData, Vector3 position)
         {
             var bodyPrefab = config.GetBody(unitData.BodyType);
             var body = GameObject.Instantiate(bodyPrefab, position, Quaternion.identity);
 
-            var controller = new UnitController(unitData, body);
+            var controller = new OldUnitController(unitData, body);
             controller.Initialize();
 
             body.Initialize(controller);

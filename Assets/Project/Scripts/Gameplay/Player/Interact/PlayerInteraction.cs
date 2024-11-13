@@ -11,7 +11,7 @@ namespace Gameplay.Player.Interact
 
         private readonly OldPlayerController controller;
 
-        private List<UnitController> controlableUnits;
+        private List<OldUnitController> controlableUnits;
 
         public PlayerInteraction(OldPlayerController controller)
         {
@@ -85,7 +85,7 @@ namespace Gameplay.Player.Interact
             return false;
         }
 
-        private UnitController GetClosestUnit(UnitController[] units)
+        private OldUnitController GetClosestUnit(OldUnitController[] units)
         {
             var controllerPosition = controller.GetPosition();
             var closest = units[0];

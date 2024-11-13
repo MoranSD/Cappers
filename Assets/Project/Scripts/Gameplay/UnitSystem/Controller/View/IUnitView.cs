@@ -6,7 +6,7 @@ namespace Gameplay.UnitSystem.Controller.View
 {
     public interface IUnitView
     {
-        UnitController Controller { get; }
+        OldUnitController Controller { get; }
         IUnitMovementView MovementView { get; }
         IHealthView HealthView { get; }
         IUnitLookView LookView { get; }

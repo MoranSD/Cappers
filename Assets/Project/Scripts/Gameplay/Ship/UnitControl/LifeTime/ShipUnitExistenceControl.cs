@@ -11,13 +11,13 @@ namespace Gameplay.Ship.UnitControl.LifeTime
 {
     public class ShipUnitExistenceControl
     {
-        public IReadOnlyList<UnitController> ActiveUnits => units;
+        public IReadOnlyList<OldUnitController> ActiveUnits => units;
 
         private readonly GameState gameState;
         private readonly ShipUnitPlacement placement;
         private readonly IUnitFactory unitFactory;
 
-        private List<UnitController> units;
+        private List<OldUnitController> units;
 
         public ShipUnitExistenceControl(GameState gameState, ShipUnitPlacement placement, IUnitFactory unitFactory)
         {
@@ -28,7 +28,7 @@ namespace Gameplay.Ship.UnitControl.LifeTime
 
         public void Initialize()
         {
-            units = new List<UnitController>();
+            units = new List<OldUnitController>();
 
             for (int i = 0; i < gameState.Units.Count; i++)
             {

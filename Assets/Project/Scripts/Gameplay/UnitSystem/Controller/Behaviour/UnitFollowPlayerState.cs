@@ -9,7 +9,7 @@ namespace Gameplay.UnitSystem.Controller.Behaviour
         private const float updateDestinationRate = 1f;
         private float updateDestinationTime;
 
-        public UnitFollowPlayerState(UnitController controller) : base(controller)
+        public UnitFollowPlayerState(OldUnitController controller) : base(controller)
         {
         }
 

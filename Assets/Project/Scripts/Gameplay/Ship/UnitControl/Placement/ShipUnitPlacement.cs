@@ -52,7 +52,7 @@ namespace Gameplay.Ship.UnitControl.Placement
 
         public Vector3 GetUnitIdlePosition(int unitId) => view.GetUnitPositions()[unitId];
 
-        public void AddUnit(UnitController unitController)
+        public void AddUnit(OldUnitController unitController)
         {
             if (HasPlaceForUnit() == false)
                 throw new System.Exception();

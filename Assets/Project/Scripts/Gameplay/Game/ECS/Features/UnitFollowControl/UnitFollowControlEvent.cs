@@ -1,8 +1,7 @@
 ﻿namespace Gameplay.Game.ECS.Features
 {
-    public struct InteractionEvent
+    public struct UnitFollowControlEvent
     {
-        //Sender?
         public float Range;
     }
 }

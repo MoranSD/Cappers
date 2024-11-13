@@ -1,6 +1,7 @@
 ﻿using Gameplay.Game.ECS.Features;
 using Infrastructure;
 using Infrastructure.Composition;
+using Infrastructure.DataProviding;
 using Infrastructure.TickManagement;
 using Leopotam.Ecs;
 using Voody.UniLeo;
@@ -56,19 +57,25 @@ namespace Gameplay.Game.ECS
             systems
                 .Add(new ChMovementPhysicsSystem())
                 .Add(new ChMovementSystem())
+                .Add(new UnitFollowControlSystem())
                 .Add(new InteractionSystem())
                 .Add(new TFTurnSystem());
         }
 
         private void AddInjections()
         {
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
 
+            var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+
+            systems.Inject(gameConfig);
         }
 
         private void AddOneFrames()
         {
             systems
-                .OneFrame<InteractionEvent>();
+                .OneFrame<InteractionEvent>()
+                .OneFrame<UnitFollowControlEvent>();
         }
     }
 }

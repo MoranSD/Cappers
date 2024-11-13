@@ -4,9 +4,9 @@ namespace Gameplay.UnitSystem.Controller.Behaviour
 {
     public class UnitState : IState
     {
-        protected readonly UnitController controller;
+        protected readonly OldUnitController controller;
 
-        public UnitState(UnitController controller)
+        public UnitState(OldUnitController controller)
         {
             this.controller = controller;
         }

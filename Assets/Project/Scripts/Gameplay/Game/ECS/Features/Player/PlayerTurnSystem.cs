@@ -1,6 +1,5 @@
-﻿using Gameplay.Player;
+﻿using Gameplay.Player.Data;
 using Leopotam.Ecs;
-using System.Linq;
 using UnityEngine;
 using Utils;
 
@@ -8,11 +7,15 @@ namespace Gameplay.Game.ECS.Features
 {
     public class PlayerTurnSystem : IEcsRunSystem
     {
-        private readonly PlayerController playerController = null;
-        private readonly EcsFilter<TranslationComponent, TFTurnableComponent, ChMovableComponent, TagPlayer> filter = null;
+        private readonly PlayerConfigSO playerConfig = null;
+        private readonly EcsFilter<TranslationComponent, TFTurnableComponent, ChMovableComponent, TagPlayer>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {
+            float attackRange = playerConfig.MainConfig.FightConfig.AttackRange;
+            float targetLookSpeed = playerConfig.MainConfig.MovementConfig.TargetLookSpeed;
+            float lookSpeed = playerConfig.MainConfig.MovementConfig.LookSpeed;
+
             foreach (var i in filter)
             {
                 ref var translation = ref filter.Get1(i);
@@ -20,35 +23,21 @@ namespace Gameplay.Game.ECS.Features
                 ref var movable = ref filter.Get3(i);
                 ref var transform = ref translation.Transform;
 
-                if (TryGetTargetsAround(transform, out var targets))
+                if (EnvironmentProvider.TryGetEnemiesAround(transform, attackRange, out var targets))
                 {
                     var closestTarget = GetClosestTarget(transform.position, targets);
                     var directionToTarget = closestTarget.GetPosition() - transform.position;
                     directionToTarget.y = 0;
 
                     turnable.Direction = directionToTarget;
-                    turnable.Speed = playerController.Config.MovementConfig.TargetLookSpeed;
+                    turnable.Speed = targetLookSpeed;
                 }
                 else
                 {
                     turnable.Direction = movable.Direction;
-                    turnable.Speed = playerController.Config.MovementConfig.LookSpeed;
+                    turnable.Speed = lookSpeed;
                 }
             }
-        }
-
-        private bool TryGetTargetsAround(Transform transform, out IAttackTarget[] targets)
-        {
-            var lookRange = playerController.Config.FightConfig.AttackRange;
-            var enemyLayer = playerController.EnemyLayer;
-            var colliders = Physics.OverlapSphere(transform.position, lookRange, enemyLayer);
-
-            targets = colliders
-                .Where(x => x.TryGetComponent(out IAttackTargetView attackTargetView) && attackTargetView.Target.IsDead == false)
-                .Select(x => x.GetComponent<IAttackTargetView>().Target)
-                .ToArray();
-
-            return targets.Length > 0;
         }
 
         private IAttackTarget GetClosestTarget(Vector3 position, IAttackTarget[] targets)

@@ -7,7 +7,7 @@ namespace Gameplay.UnitSystem.Controller.Behaviour
     {
         private Vector3 idlePosition;
 
-        public UnitGoToIdlePositionState(UnitController controller) : base(controller)
+        public UnitGoToIdlePositionState(OldUnitController controller) : base(controller)
         {
         }
 

@@ -39,7 +39,7 @@ namespace Gameplay.Player.Look
             return targets.Length > 0;
         }
 
-        public bool TryGetUnitsAround(float range, out UnitController[] units)
+        public bool TryGetUnitsAround(float range, out OldUnitController[] units)
         {
             var colliders = Physics.OverlapSphere(transform.position, range, unitLayer);
 
