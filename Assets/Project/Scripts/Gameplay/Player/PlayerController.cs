@@ -1,7 +1,5 @@
 ﻿using Gameplay.CameraSystem;
 using Gameplay.Game.ECS.Features;
-using Gameplay.Player.Data;
-using Infrastructure.GameInput;
 using Leopotam.Ecs;
 using UnityEngine;
 

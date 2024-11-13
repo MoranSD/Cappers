@@ -1,7 +1,12 @@
-﻿namespace Gameplay.UnitSystem.Controller
+﻿using Gameplay.UnitSystem.Data;
+using UnityEngine;
+
+namespace Gameplay.UnitSystem.Controller
 {
     public interface IUnitController
     {
+        UnitData Data { get; }
 
+        void GoToIdlePosition(Vector3 position);
     }
 }

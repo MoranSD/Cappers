@@ -2,7 +2,7 @@
 using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
-using Infrastructure.TickManagement;
+using Leopotam.Ecs;
 
 namespace Gameplay.UnitSystem.Root
 {
@@ -13,17 +13,16 @@ namespace Gameplay.UnitSystem.Root
         public override void Initialize()
         {
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
-            var tickManager = ServiceLocator.Get<TickManager>();
+            var ecsWorld = ServiceLocator.Get<EcsWorld>();
 
             var factoryConfig = assetProvider.Load<UnitFactoryConfig>(Constants.UnitFactoryConfig);
-            unitFactory = new UnitFactory(tickManager, factoryConfig);
+            unitFactory = new UnitFactory(ecsWorld, factoryConfig);
             ServiceLocator.Register<IUnitFactory>(unitFactory);
         }
 
         public override void Dispose()
         {
             ServiceLocator.Remove<IUnitFactory>();
-            unitFactory.Dispose();
         }
     }
 }

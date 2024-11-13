@@ -71,6 +71,8 @@ namespace Gameplay.Ship.Root
 
             existenceControl = new ShipUnitExistenceControl(gameState, shipUnitPlacement, unitFactory);
             existenceControl.Initialize();
+
+            ServiceLocator.Register(existenceControl);
         }
 
         public override void Dispose()
@@ -83,9 +85,8 @@ namespace Gameplay.Ship.Root
 
             iconsHolder.Dispose();
 
-            existenceControl.Dispose();
-
             ServiceLocator.Remove<ShipUnitPlacement>();
+            ServiceLocator.Remove<ShipUnitExistenceControl>();
         }
     }
 

@@ -6,6 +6,6 @@ namespace Gameplay.UnitSystem.Factory
 {
     public interface IUnitFactory
     {
-        OldUnitController Create(UnitData unitData, Vector3 spawnPosition);
+        IUnitController Create(UnitData unitData, Vector3 spawnPosition);
     }
 }

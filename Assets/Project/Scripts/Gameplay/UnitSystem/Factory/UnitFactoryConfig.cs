@@ -1,4 +1,4 @@
-﻿using Gameplay.UnitSystem.Controller.View;
+﻿using Gameplay.UnitSystem.Controller;
 using Gameplay.UnitSystem.Data;
 using System;
 using System.Linq;
@@ -11,12 +11,12 @@ namespace Gameplay.UnitSystem.Factory
     {
         [SerializeField] private UnitBodyByType[] bodies;
 
-        public UnitView GetBody(UnitBodyType type) => bodies.First(x => x.Type == type).Body;
+        public UnitController GetBody(UnitBodyType type) => bodies.First(x => x.Type == type).Body;
 
         [Serializable]
         private struct UnitBodyByType
         {
-            public UnitView Body;
+            public UnitController Body;
             public UnitBodyType Type;
         }
     }
