@@ -45,7 +45,8 @@ namespace Gameplay.Ship.UnitControl.LifeTime
                 throw new System.Exception(unitData.ToString());
 
             gameState.Units.Remove(unitData);
-            //remove from ActiveUnits list
+            var deadUnit = units.First(x => x.Data.Id == unitData.Id);
+            units.Remove(deadUnit);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Gameplay.EnemySystem.Root
     {
         private EnemySpawner enemySpawner;
 
-        public override void Initialize()
+        public override void PostInitialize()
         {
             var tickManager = ServiceLocator.Get<TickManager>();
 

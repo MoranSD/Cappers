@@ -18,7 +18,7 @@ namespace Gameplay.Player.Root
         [Space]
         [SerializeField] private GameCamera gameCamera;
 
-        public override void Initialize()
+        public override void PostInitialize()
         {
             //Dependencies
             var input = ServiceLocator.Get<IInput>();
@@ -33,7 +33,6 @@ namespace Gameplay.Player.Root
             ecsSystems
                 .Add(new PlayerMovementInputSystem())
                 .Add(new PlayerInteractionSystem())
-                .Add(new UnitFollowControlSystem())
                 .Add(new PlayerTurnSystem());
 
             ecsSystems.Inject(input);

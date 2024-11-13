@@ -20,7 +20,7 @@ namespace Gameplay.QuestSystem.Root
         private QuestMenu questMenu;
         private PanelsManager panelsManager;
 
-        public override void Initialize()
+        public override void PostInitialize()
         {
             panelsManager = ServiceLocator.Get<PanelsManager>();
             panelsManager.RegisterPanel(questMenuView);

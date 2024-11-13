@@ -93,11 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4661340970264688301}
   - component: {fileID: 2259904079309364708}
-  - component: {fileID: 2451117084835489907}
-  - component: {fileID: 8174368849052409119}
-  - component: {fileID: 7998039975108070557}
   - component: {fileID: 7501708273484422041}
-  - component: {fileID: 1794027106000981674}
+  - component: {fileID: 387403661100909158}
   m_Layer: 10
   m_Name: Unit
   m_TagString: Untagged
@@ -143,47 +140,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2451117084835489907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5820145334879290944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 975aa40e78f006c45b4bd64e206faaa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementView: {fileID: 8174368849052409119}
-  healthView: {fileID: 7998039975108070557}
-  lookView: {fileID: 1794027106000981674}
-  bodyCollider: {fileID: 7501708273484422041}
---- !u!114 &8174368849052409119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5820145334879290944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee28a714cfc08754f8c3adcd69459ae9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 2259904079309364708}
---- !u!114 &7998039975108070557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5820145334879290944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db8be6412833d4e4dba7791cd81944a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &7501708273484422041
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -207,7 +163,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1794027106000981674
+--- !u!114 &387403661100909158
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,9 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5820145334879290944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a60df89f4fe898749b8f0ea7d43efb2c, type: 3}
+  m_Script: {fileID: 11500000, guid: cde5d08d8fe110a4fae968c6a1c7fc8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 512
+  <NavMeshAgent>k__BackingField: {fileID: 2259904079309364708}

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: UnitFactoryConfig
   m_EditorClassIdentifier: 
   bodies:
-  - Body: {fileID: 2451117084835489907, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
+  - Body: {fileID: 387403661100909158, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
     Type: 0
-  - Body: {fileID: 2451117084835489907, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
+  - Body: {fileID: 387403661100909158, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
     Type: 1
-  - Body: {fileID: 2451117084835489907, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
+  - Body: {fileID: 387403661100909158, guid: 04e5aad495640d744add3833c8c8f65b, type: 3}
     Type: 2

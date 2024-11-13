@@ -17,6 +17,7 @@ using Gameplay.Ship.Data;
 using System.Threading;
 using Gameplay.Ship.UnitControl.LifeTime;
 using Gameplay.UnitSystem.Factory;
+using Leopotam.Ecs;
 
 namespace Gameplay.Ship.Root
 {
@@ -33,7 +34,7 @@ namespace Gameplay.Ship.Root
         private ShipMap shipMap;
         private ShipUnitExistenceControl existenceControl;
 
-        public override void Initialize()
+        public override void PostInitialize()
         {
             var gameState = ServiceLocator.Get<GameState>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
@@ -62,9 +63,12 @@ namespace Gameplay.Ship.Root
 
             shipUnitPlacement = new ShipUnitPlacement(unitPlacementView, gameState, shipConfig.PlacementConfig);
             ServiceLocator.Register(shipUnitPlacement);
+
+            var ecsSystems = ServiceLocator.Get<EcsSystems>();
+            ecsSystems.Inject(shipUnitPlacement);
         }
 
-        public override void AfterInitialize()
+        public override void Initialize()
         {
             var gameState = ServiceLocator.Get<GameState>();
             var unitFactory = ServiceLocator.Get<IUnitFactory>();
@@ -73,6 +77,9 @@ namespace Gameplay.Ship.Root
             existenceControl.Initialize();
 
             ServiceLocator.Register(existenceControl);
+
+            var ecsSystems = ServiceLocator.Get<EcsSystems>();
+            ecsSystems.Inject(existenceControl);
         }
 
         public override void Dispose()

@@ -25,7 +25,11 @@ namespace Gameplay.UnitSystem.Factory
             var unitEntity = ecsWorld.NewEntity();
             controller.Initialize(unitEntity, unitData);
 
-            unitEntity.Get<TagUnit>();
+            ref var tag = ref unitEntity.Get<TagUnit>();
+            tag.Id = unitData.Id;
+
+            ref var movable = ref unitEntity.Get<AgentMovableComponent>();
+            movable.NavMeshAgent = controller.NavMeshAgent;
 
             return controller;
         }

@@ -16,7 +16,7 @@ namespace Gameplay.Game.ECS
         private TickManager tickManager;
         private EcsSystemsTickableProvider systemsTickableProvider;
 
-        public override void Initialize()
+        public override void PostInitialize()
         {
             tickManager = ServiceLocator.Get<TickManager>();
 
@@ -29,7 +29,7 @@ namespace Gameplay.Game.ECS
             ServiceLocator.Register(systems);
         }
 
-        public override void AfterInitialize()
+        public override void LateInitialize()
         {
             AddSystems();
             AddInjections();
@@ -59,7 +59,9 @@ namespace Gameplay.Game.ECS
                 .Add(new ChMovementSystem())
                 .Add(new UnitFollowControlSystem())
                 .Add(new InteractionSystem())
-                .Add(new TFTurnSystem());
+                .Add(new TFTurnSystem())
+                .Add (new AgentFollowSystem())
+                .Add(new AgentSetDestinationSystem());
         }
 
         private void AddInjections()
@@ -75,7 +77,8 @@ namespace Gameplay.Game.ECS
         {
             systems
                 .OneFrame<InteractionEvent>()
-                .OneFrame<UnitFollowControlEvent>();
+                .OneFrame<UnitFollowControlEvent>()
+                .OneFrame<AgentSetDestinationEvent>();
         }
     }
 }
