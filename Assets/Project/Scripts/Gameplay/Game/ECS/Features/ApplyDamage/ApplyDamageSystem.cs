@@ -1,4 +1,5 @@
 ﻿using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -11,6 +12,13 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var attackRequest = ref filter.Get1(i);
+
+                if(attackRequest.Target.Has<HealthComponent>() == false)
+                {
+                    Debug.Log("No health on target");
+                    continue;
+                }
+
                 ref var targetHealth = ref attackRequest.Target.Get<HealthComponent>();
                 
                 targetHealth.Health -= attackRequest.Damage;

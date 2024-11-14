@@ -345,13 +345,9 @@ GameObject:
   m_Component:
   - component: {fileID: 669587767042204786}
   - component: {fileID: 8722822460214621317}
-  - component: {fileID: 6091852834102599213}
-  - component: {fileID: 1326894668221733861}
-  - component: {fileID: 3018116163159586447}
   - component: {fileID: 8714382797078552445}
   - component: {fileID: 5360263891121931959}
-  - component: {fileID: 1296935335306235686}
-  - component: {fileID: 9059808667504231366}
+  - component: {fileID: 7386245243935313843}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
@@ -396,52 +392,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6091852834102599213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3628178914686106577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ca6e70f3c9fb2b489a96399f4bdb76e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: {fileID: 1326894668221733861}
-  look: {fileID: 3018116163159586447}
-  health: {fileID: 1296935335306235686}
-  fight: {fileID: 9059808667504231366}
-  bodyCollider: {fileID: 5360263891121931959}
---- !u!114 &1326894668221733861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3628178914686106577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be0894868748a7849b2c8d853db13be9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 8714382797078552445}
-  animator: {fileID: 8722822460214621317}
---- !u!114 &3018116163159586447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3628178914686106577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d390332f95ad0204eb8cb9f3b76f3153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 1088
 --- !u!195 &8714382797078552445
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -487,7 +437,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &1296935335306235686
+--- !u!114 &7386245243935313843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -496,22 +446,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3628178914686106577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db8be6412833d4e4dba7791cd81944a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 305381beaddcd46499ab8445a06c9aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9059808667504231366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3628178914686106577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b4247a40fa498742b6d6f22c6006f97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 8722822460214621317}
+  <NavMeshAgent>k__BackingField: {fileID: 8714382797078552445}
 --- !u!1 &4638168130589681979
 GameObject:
   m_ObjectHideFlags: 0

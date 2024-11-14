@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: New Enemy Config SO
   m_EditorClassIdentifier: 
   enemyType: 0
-  ViewPrefab: {fileID: 6091852834102599213, guid: 74e51bc25696b4d4292597473418db19,
+  ViewPrefab: {fileID: 7386245243935313843, guid: 74e51bc25696b4d4292597473418db19,
     type: 3}
   Config:
     MovementConfig:

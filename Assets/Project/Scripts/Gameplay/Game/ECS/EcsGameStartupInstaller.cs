@@ -60,6 +60,7 @@ namespace Gameplay.Game.ECS
                 .Add(new TFTurnSystem())
                 .Add(new FollowControlSystem())
                 .Add(new InteractionSystem())
+                .Add(new TargetLookSystem())
                 .Add(new UpdateAgroTargetSystem())
                 .Add(new TargetAgroSetFollowSystem())
                 .Add(new UpdateFollowAgroTargetSystem())
@@ -67,7 +68,8 @@ namespace Gameplay.Game.ECS
                 .Add(new AgentFollowSystem())
                 .Add(new AgentSetDestinationSystem())
                 .Add(new ApplyDamageSystem())
-                .Add(new UnitDieSystem());
+                .Add(new UnitDieSystem())
+                .Add(new EnemyDieSystem());
         }
 
         private void AddInjections()
