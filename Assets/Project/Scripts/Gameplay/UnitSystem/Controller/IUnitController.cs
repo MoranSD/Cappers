@@ -8,5 +8,6 @@ namespace Gameplay.UnitSystem.Controller
         UnitData Data { get; }
 
         void GoToIdlePosition(Vector3 position);
+        void Destroy();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Leopotam.Ecs;
 
-namespace Utils
+namespace Gameplay.Game.ECS
 {
     public interface IEcsEntityHolder
     {

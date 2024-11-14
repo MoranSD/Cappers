@@ -2,9 +2,10 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct UnitFollowControlRequest
+    public struct ApplyDamageRequest
     {
+        public EcsEntity Sender;
         public EcsEntity Target;
-        public float Range;
+        public float Damage;
     }
 }

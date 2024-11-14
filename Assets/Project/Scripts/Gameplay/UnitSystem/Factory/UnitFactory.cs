@@ -1,4 +1,5 @@
-﻿using Gameplay.Game.ECS.Features;
+﻿using Gameplay.Game;
+using Gameplay.Game.ECS.Features;
 using Gameplay.UnitSystem.Controller;
 using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
@@ -10,11 +11,13 @@ namespace Gameplay.UnitSystem.Factory
     {
         private readonly EcsWorld ecsWorld;
         private readonly UnitFactoryConfig config;
+        private readonly GameConfig gameConfig;
 
-        public UnitFactory(EcsWorld ecsWorld, UnitFactoryConfig config)
+        public UnitFactory(EcsWorld ecsWorld, UnitFactoryConfig config, GameConfig gameConfig)
         {
             this.ecsWorld = ecsWorld;
             this.config = config;
+            this.gameConfig = gameConfig;
         }
 
         public IUnitController Create(UnitData unitData, Vector3 position)
@@ -30,6 +33,21 @@ namespace Gameplay.UnitSystem.Factory
 
             ref var movable = ref unitEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
+            controller.NavMeshAgent.speed = unitData.Speed;
+
+            unitEntity.Get<AgentDestinationUpdateTime>();
+
+            ref var targetLook = ref unitEntity.Get<TargetLookComponent>();
+            targetLook.TargetLayer = gameConfig.PlayerTargetLayers;
+            targetLook.Range = 10;
+
+            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
+            agro.AttackDistance = 2;
+            agro.AttackRate = 2;
+            agro.Damage = unitData.Damage;
+
+            ref var health = ref unitEntity.Get<HealthComponent>();
+            health.Health = unitData.Health;
 
             return controller;
         }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct UnitFollowControlComponent
+    public struct FollowControlComponent
     {
-        public List<EcsEntity> UnitsInControl;
+        public List<EcsEntity> EntitiesInControl;
     }
 }

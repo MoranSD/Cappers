@@ -1,13 +1,13 @@
 ﻿using Gameplay.Player.Data;
 using Infrastructure.GameInput;
 using Leopotam.Ecs;
-using UnityEngine;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class PlayerInteractionSystem : IEcsRunSystem
     {
+        private readonly GameConfig gameConfig = null;
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
         private readonly EcsWorld _world = null;
@@ -35,9 +35,10 @@ namespace Gameplay.Game.ECS.Features
                 }
                 else
                 {
-                    ref var unitFollowControlRequest = ref requestEntity.Get<UnitFollowControlRequest>();
+                    ref var unitFollowControlRequest = ref requestEntity.Get<FollowControlRequest>();
 
-                    unitFollowControlRequest.Target = playerEntity;
+                    unitFollowControlRequest.Sender = playerEntity;
+                    unitFollowControlRequest.TargetLayer = gameConfig.UnitLayer;
                     unitFollowControlRequest.Range = interactRange;
                 }
             }

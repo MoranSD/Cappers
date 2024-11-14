@@ -57,11 +57,17 @@ namespace Gameplay.Game.ECS
             systems
                 .Add(new ChMovementPhysicsSystem())
                 .Add(new ChMovementSystem())
-                .Add(new UnitFollowControlSystem())
-                .Add(new InteractionSystem())
                 .Add(new TFTurnSystem())
-                .Add (new AgentFollowSystem())
-                .Add(new AgentSetDestinationSystem());
+                .Add(new FollowControlSystem())
+                .Add(new InteractionSystem())
+                .Add(new UpdateAgroTargetSystem())
+                .Add(new TargetAgroSetFollowSystem())
+                .Add(new UpdateFollowAgroTargetSystem())
+                .Add(new TargetAgroAttackSystem())
+                .Add(new AgentFollowSystem())
+                .Add(new AgentSetDestinationSystem())
+                .Add(new ApplyDamageSystem())
+                .Add(new UnitDieSystem());
         }
 
         private void AddInjections()
@@ -77,8 +83,9 @@ namespace Gameplay.Game.ECS
         {
             systems
                 .OneFrame<InteractionRequest>()
-                .OneFrame<UnitFollowControlRequest>()
-                .OneFrame<AgentSetDestinationRequest>();
+                .OneFrame<FollowControlRequest>()
+                .OneFrame<AgentSetDestinationRequest>()
+                .OneFrame<ApplyDamageRequest>();
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 using Utils.Interaction;
 using Leopotam.Ecs;
 using System.Linq;
+using Gameplay.Game.ECS;
 
 namespace Utils
 {

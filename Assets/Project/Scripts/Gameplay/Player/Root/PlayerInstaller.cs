@@ -36,7 +36,7 @@ namespace Gameplay.Player.Root
                 .Add(new PlayerTurnSystem());
 
             ecsSystems.Inject(input);
-            ecsSystems.Inject(gameCamera as IGameCamera);
+            ecsSystems.Inject(gameCamera, typeof(IGameCamera));
             ecsSystems.Inject(playerConfig);
 
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
@@ -46,8 +46,8 @@ namespace Gameplay.Player.Root
 
             playerEntity.Get<TagPlayer>();
 
-            ref var unitControl = ref playerEntity.Get<UnitFollowControlComponent>();
-            unitControl.UnitsInControl = new();
+            ref var unitControl = ref playerEntity.Get<FollowControlComponent>();
+            unitControl.EntitiesInControl = new();
 
             ref var translation = ref playerEntity.Get<TranslationComponent>();
             translation.Transform = player.Pivot;

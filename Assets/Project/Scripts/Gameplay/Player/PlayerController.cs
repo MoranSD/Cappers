@@ -1,11 +1,12 @@
 ﻿using Gameplay.CameraSystem;
+using Gameplay.Game.ECS;
 using Gameplay.Game.ECS.Features;
 using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Gameplay.Player
 {
-    public class PlayerController : MonoBehaviour, IPlayerController
+    public class PlayerController : MonoBehaviour, IPlayerController, IEcsEntityHolder
     {
         public Transform Pivot => transform;
         public EcsEntity EcsEntity { get; private set; }

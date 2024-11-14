@@ -6,7 +6,7 @@ namespace Gameplay.Game.ECS.Features
     public class AgentFollowSystem : IEcsRunSystem
     {
         private const float DestinationUpdateRate = 0.5f;
-        private readonly EcsFilter<AgentMovableComponent, AgentFollowComponent> filter = null;
+        private readonly EcsFilter<AgentMovableComponent, FollowComponent, AgentDestinationUpdateTime> filter = null;
 
         public void Run()
         {
@@ -15,14 +15,17 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var agent = ref filter.Get1(i).NavMeshAgent;
-                ref var follow = ref filter.Get2(i);
+                ref var followTarget = ref filter.Get2(i);
+                ref var destimationTime = ref filter.Get3(i);
 
-                follow.DestinationUpdateTime -= deltaTime;
+                destimationTime.DestinationUpdateTime -= deltaTime;
 
-                if (follow.DestinationUpdateTime <= 0)
+                if (destimationTime.DestinationUpdateTime <= 0)
                 {
-                    follow.DestinationUpdateTime = DestinationUpdateRate;
-                    agent.SetDestination(follow.Target.position);
+                    destimationTime.DestinationUpdateTime = DestinationUpdateRate;
+
+                    ref var targetTF = ref followTarget.Target.Get<TranslationComponent>().Transform;
+                    agent.SetDestination(targetTF.position);
                 }
             }
         }

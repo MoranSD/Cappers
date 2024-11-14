@@ -1,4 +1,5 @@
-﻿using Gameplay.UnitSystem.Factory;
+﻿using Gameplay.Game;
+using Gameplay.UnitSystem.Factory;
 using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
@@ -16,7 +17,8 @@ namespace Gameplay.UnitSystem.Root
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
 
             var factoryConfig = assetProvider.Load<UnitFactoryConfig>(Constants.UnitFactoryConfig);
-            unitFactory = new UnitFactory(ecsWorld, factoryConfig);
+            var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+            unitFactory = new UnitFactory(ecsWorld, factoryConfig, gameConfig);
             ServiceLocator.Register<IUnitFactory>(unitFactory);
         }
 

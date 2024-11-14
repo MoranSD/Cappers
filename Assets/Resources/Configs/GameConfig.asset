@@ -24,3 +24,9 @@ MonoBehaviour:
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 64
+  PlayerTargetLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  EnemyTargetLayers:
+    serializedVersion: 2
+    m_Bits: 1088

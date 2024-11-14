@@ -39,13 +39,13 @@ namespace Gameplay.Ship.UnitControl.LifeTime
             }
         }
 
-        public void RemoveUnit(UnitData unitData)
+        public void RemoveUnit(int unitId)
         {
-            if (gameState.Units.Any(x => x.Id == unitData.Id) == false)
-                throw new System.Exception(unitData.ToString());
+            if (gameState.Units.Any(x => x.Id == unitId) == false)
+                throw new System.Exception(unitId.ToString());
 
-            gameState.Units.Remove(unitData);
-            var deadUnit = units.First(x => x.Data.Id == unitData.Id);
+            var deadUnit = units.First(x => x.Data.Id == unitId);
+            gameState.Units.Remove(deadUnit.Data);
             units.Remove(deadUnit);
         }
     }
