@@ -5,29 +5,46 @@ using UnityEngine;
 using Utils.Interaction;
 using Leopotam.Ecs;
 using System.Linq;
-using Gameplay.UnitSystem.Controller;
 
 namespace Utils
 {
     public static class EnvironmentProvider
     {
-        public static bool TryGetEnemiesAround(Transform transform, float range, out IAttackTarget[] targets)
+        public static bool TryGetEnemyHoldersAround(Transform transform, float range, out IEcsEntityHolder[] enemyHolders)
         {
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
-            return TryGetTargetsAround(transform, range, gameConfig.EnemyLayer, out targets);
+            return TryGetEntityHoldersAround(transform, range, gameConfig.EnemyLayer, out enemyHolders);
         }
 
-        private static bool TryGetTargetsAround(Transform transform, float range, LayerMask targetLayer, out IAttackTarget[] targets)
+        public static bool TryGetUnitHoldersAround(Transform transform, float range, out IEcsEntityHolder[] unitHolders)
+        {
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
+            var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+            return TryGetEntityHoldersAround(transform, range, gameConfig.UnitLayer, out unitHolders);
+        }
+
+        public static bool TryGetEntitiesAround(Transform transform, float range, LayerMask targetLayer, out EcsEntity[] entities)
+        {
+            bool hasEntitiesAround = TryGetEntityHoldersAround(transform, range, targetLayer, out var holders);
+
+            entities = holders
+                .Select(x => x.EcsEntity)
+                .ToArray();
+
+            return hasEntitiesAround;
+        }
+
+        public static bool TryGetEntityHoldersAround(Transform transform, float range, LayerMask targetLayer, out IEcsEntityHolder[] holders)
         {
             var colliders = Physics.OverlapSphere(transform.position, range, targetLayer);
 
-            targets = colliders
-                .Where(x => x.TryGetComponent(out IAttackTargetView attackTargetView) && attackTargetView.Target.IsDead == false)
-                .Select(x => x.GetComponent<IAttackTargetView>().Target)
+            holders = colliders
+                .Where(x => x.GetComponent<IEcsEntityHolder>() != null)
+                .Select(x => x.GetComponent<IEcsEntityHolder>())
                 .ToArray();
 
-            return targets.Length > 0;
+            return holders.Length > 0;
         }
 
         public static bool HasInteractorAround(Transform transform, float range)
@@ -55,30 +72,18 @@ namespace Utils
             return false;
         }
 
-        public static bool TryGetUnitAround(Transform transform, float interactRange, out EcsEntity unit)
+        public static IEcsEntityHolder GetClosestHolder(Vector3 position, IEcsEntityHolder[] holders)
         {
-            var assetProvider = ServiceLocator.Get<IAssetProvider>();
-            var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+            var closestTarget = holders[0];
 
-            LayerMask unitLayer = gameConfig.UnitLayer;
-            var colliders = Physics.OverlapSphere(transform.position, interactRange, unitLayer);
-
-            var units = colliders
-                .Where(x => x.GetComponent<UnitController>() != null)
-                .OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
-                .Select(x => x.GetComponent<UnitController>().EcsEntity)
-                .ToArray();
-
-            if (units.Length > 0)
+            foreach (var target in holders)
             {
-                unit = units[0];
-                return true;
+                if (Vector3.Distance(position, target.transform.position) <
+                    Vector3.Distance(position, closestTarget.transform.position))
+                    closestTarget = target;
             }
-            else
-            {
-                unit = default;
-                return false;
-            }
+
+            return closestTarget;
         }
     }
 }

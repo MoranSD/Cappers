@@ -1,6 +1,5 @@
 ﻿using Gameplay.Player.Data;
 using Leopotam.Ecs;
-using UnityEngine;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
@@ -23,10 +22,10 @@ namespace Gameplay.Game.ECS.Features
                 ref var movable = ref filter.Get3(i);
                 ref var transform = ref translation.Transform;
 
-                if (EnvironmentProvider.TryGetEnemiesAround(transform, attackRange, out var targets))
+                if (EnvironmentProvider.TryGetEnemyHoldersAround(transform, attackRange, out var enemyHolders))
                 {
-                    var closestTarget = GetClosestTarget(transform.position, targets);
-                    var directionToTarget = closestTarget.GetPosition() - transform.position;
+                    var closestTargetHolder = EnvironmentProvider.GetClosestHolder(transform.position, enemyHolders);
+                    var directionToTarget = closestTargetHolder.transform.position - transform.position;
                     directionToTarget.y = 0;
 
                     turnable.Direction = directionToTarget;
@@ -38,20 +37,6 @@ namespace Gameplay.Game.ECS.Features
                     turnable.Speed = lookSpeed;
                 }
             }
-        }
-
-        private IAttackTarget GetClosestTarget(Vector3 position, IAttackTarget[] targets)
-        {
-            var closestTarget = targets[0];
-
-            foreach (var target in targets)
-            {
-                if (Vector3.Distance(position, target.GetPosition()) <
-                    Vector3.Distance(position, closestTarget.GetPosition()))
-                    closestTarget = target;
-            }
-
-            return closestTarget;
         }
     }
 }

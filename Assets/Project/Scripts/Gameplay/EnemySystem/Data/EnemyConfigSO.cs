@@ -1,5 +1,4 @@
-﻿using Gameplay.EnemySystem.View;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gameplay.EnemySystem.Data
 {
@@ -7,7 +6,7 @@ namespace Gameplay.EnemySystem.Data
     public class EnemyConfigSO : ScriptableObject
     {
         public EnemyType enemyType;
-        public EnemyView ViewPrefab;
+        public EnemyController ViewPrefab;
         public EnemyConfig Config;
     }
 }

@@ -13,13 +13,8 @@ namespace Gameplay.EnemySystem.Root
         {
             var tickManager = ServiceLocator.Get<TickManager>();
 
-            enemySpawner = new EnemySpawner(tickManager);
+            enemySpawner = new EnemySpawner();
             enemySpawner.Initialize();
-        }
-
-        public override void Dispose()
-        {
-            enemySpawner.Dispose();
         }
     }
 }

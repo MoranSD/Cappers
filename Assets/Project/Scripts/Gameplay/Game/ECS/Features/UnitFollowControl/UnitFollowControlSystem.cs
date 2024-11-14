@@ -18,27 +18,29 @@ namespace Gameplay.Game.ECS.Features
                 ref var transform = ref followControlRequest.Target.Get<TranslationComponent>().Transform;
                 ref var unitControl = ref followControlRequest.Target.Get<UnitFollowControlComponent>();
 
-                if(EnvironmentProvider.TryGetUnitAround(transform, followControlRequest.Range, out EcsEntity unitAround))
+                if (EnvironmentProvider.TryGetUnitHoldersAround(transform, followControlRequest.Range, out var holdersAround) == false)
+                    continue;
+
+                var unitAround = EnvironmentProvider.GetClosestHolder(transform.position, holdersAround).EcsEntity;
+
+                if (unitControl.UnitsInControl.Contains(unitAround))
                 {
-                    if (unitControl.UnitsInControl.Contains(unitAround))
-                    {
-                        unitControl.UnitsInControl.Remove(unitAround);
-                        unitAround.Del<AgentFollowComponent>();
+                    unitControl.UnitsInControl.Remove(unitAround);
+                    unitAround.Del<AgentFollowComponent>();
 
-                        var entityRequest = _world.NewEntity();
-                        ref var destinationRequest = ref entityRequest.Get<AgentSetDestinationRequest>();
+                    var entityRequest = _world.NewEntity();
+                    ref var destinationRequest = ref entityRequest.Get<AgentSetDestinationRequest>();
 
-                        destinationRequest.Target = unitAround;
+                    destinationRequest.Target = unitAround;
 
-                        ref var unitTag = ref unitAround.Get<TagUnit>();
-                        destinationRequest.Destination = placement.GetUnitIdlePosition(unitTag.Id);
-                    }
-                    else
-                    {
-                        unitControl.UnitsInControl.Add(unitAround);
-                        ref var followComponent = ref unitAround.Get<AgentFollowComponent>();
-                        followComponent.Target = transform;
-                    }
+                    ref var unitTag = ref unitAround.Get<TagUnit>();
+                    destinationRequest.Destination = placement.GetUnitIdlePosition(unitTag.Id);
+                }
+                else
+                {
+                    unitControl.UnitsInControl.Add(unitAround);
+                    ref var followComponent = ref unitAround.Get<AgentFollowComponent>();
+                    followComponent.Target = transform;
                 }
             }
         }

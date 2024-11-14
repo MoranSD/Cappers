@@ -9,5 +9,8 @@ namespace Gameplay.Game
         public LayerMask EnemyLayer;
         public LayerMask UnitLayer;
         public LayerMask PlayerLayer;
+
+        public LayerMask PlayerTargetLayers;
+        public LayerMask EnemyTargetLayers;
     }
 }
