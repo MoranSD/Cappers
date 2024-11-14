@@ -20,9 +20,9 @@ namespace Gameplay.UnitSystem.Root
 
         private PanelsManager panelsManager;
 
-        public override void PostInitialize()
+        public override void PreInitialize()
         {
-            base.PostInitialize();
+            base.PreInitialize();
 
             var unitPlacement = ServiceLocator.Get<ShipUnitPlacement>();
             var playerMenuInteract = ServiceLocator.Get<PlayerMenuInteractController>();

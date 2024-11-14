@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct FollowControlRequest
+    public struct TryFindAndUpdateFollowControlTargetStateRequest
     {
         public EcsEntity Sender;
         public LayerMask TargetLayer;

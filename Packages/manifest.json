@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.leopotam.ecs": "https://github.com/Leopotam/ecs.git",
+    "com.leopotam.ecs-unityintegration": "https://github.com/Leopotam/ecs-unityintegration.git",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.cinemachine": "2.10.1",
     "com.unity.collab-proxy": "2.5.1",

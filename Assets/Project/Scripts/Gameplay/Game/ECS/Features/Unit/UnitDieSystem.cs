@@ -1,7 +1,6 @@
 ﻿using Gameplay.Ship.UnitControl.LifeTime;
 using Leopotam.Ecs;
 using System.Linq;
-
 namespace Gameplay.Game.ECS.Features
 {
     public class UnitDieSystem : IEcsRunSystem

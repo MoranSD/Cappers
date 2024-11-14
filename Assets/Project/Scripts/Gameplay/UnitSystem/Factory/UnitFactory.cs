@@ -31,6 +31,9 @@ namespace Gameplay.UnitSystem.Factory
             ref var tag = ref unitEntity.Get<TagUnit>();
             tag.Id = unitData.Id;
 
+            ref var translation = ref unitEntity.Get<TranslationComponent>();
+            translation.Transform = controller.transform;
+
             ref var movable = ref unitEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
             controller.NavMeshAgent.speed = unitData.Speed;

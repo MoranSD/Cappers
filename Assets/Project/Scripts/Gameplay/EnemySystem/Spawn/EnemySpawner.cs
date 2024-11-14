@@ -9,7 +9,7 @@ namespace Gameplay.EnemySystem.Spawn
 {
     public class EnemySpawner
     {
-        public IReadOnlyList<IEnemyController> ActiveEnemies => ActiveEnemies;
+        public IReadOnlyList<IEnemyController> ActiveEnemies => spawnedEnemies;
 
         private readonly EnemyFactory factory;
 

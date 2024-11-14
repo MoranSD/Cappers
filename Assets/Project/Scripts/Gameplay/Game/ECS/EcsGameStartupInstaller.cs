@@ -16,12 +16,16 @@ namespace Gameplay.Game.ECS
         private TickManager tickManager;
         private EcsSystemsTickableProvider systemsTickableProvider;
 
-        public override void PostInitialize()
+        public override void PreInitialize()
         {
             tickManager = ServiceLocator.Get<TickManager>();
 
             world = new EcsWorld();
             systems = new EcsSystems(world);
+
+#if UNITY_EDITOR
+            Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
+#endif  
 
             systems.ConvertScene();
 
@@ -29,7 +33,7 @@ namespace Gameplay.Game.ECS
             ServiceLocator.Register(systems);
         }
 
-        public override void LateInitialize()
+        public override void PostInitialize()
         {
             AddSystems();
             AddInjections();
@@ -57,17 +61,27 @@ namespace Gameplay.Game.ECS
             systems
                 .Add(new ChMovementPhysicsSystem())
                 .Add(new ChMovementSystem())
+
                 .Add(new TFTurnSystem())
-                .Add(new FollowControlSystem())
-                .Add(new InteractionSystem())
-                .Add(new TargetLookSystem())
-                .Add(new UpdateAgroTargetSystem())
-                .Add(new TargetAgroSetFollowSystem())
-                .Add(new UpdateFollowAgroTargetSystem())
-                .Add(new TargetAgroAttackSystem())
+
+                .Add(new ComebackToFollowAfterFightSystem())
+                .Add(new AddFollowControlSystem())
+                .Add(new RemoveFollowControlSystem())
+                .Add(new UnitGoToIdleAfterFollowControlSystem())
+                .Add(new UnitGoToIdleAfterFightSystem())
+
+                .Add(new TargetLookSystem())//finds targets around
+
+                .Add(new UpdateAgroTargetSystem())//from look to agro
+                .Add(new TargetAgroSetFollowSystem())//set follow
+                .Add(new UpdateFollowAgroTargetSystem())//set closest target to follow
+                .Add(new TargetAgroAttackSystem())//attack target in attack range
+
                 .Add(new AgentFollowSystem())
                 .Add(new AgentSetDestinationSystem())
+
                 .Add(new ApplyDamageSystem())
+
                 .Add(new UnitDieSystem())
                 .Add(new EnemyDieSystem());
         }
@@ -84,8 +98,10 @@ namespace Gameplay.Game.ECS
         private void AddOneFrames()
         {
             systems
-                .OneFrame<InteractionRequest>()
-                .OneFrame<FollowControlRequest>()
+                .OneFrame<TryFindAndUpdateFollowControlTargetStateRequest>()
+                .OneFrame<RemoveFollowControlRequest>()
+                .OneFrame<RemovedFollowControlEvent>()
+                .OneFrame<AddFollowControlRequest>()
                 .OneFrame<AgentSetDestinationRequest>()
                 .OneFrame<ApplyDamageRequest>();
         }

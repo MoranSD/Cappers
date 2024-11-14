@@ -11,7 +11,7 @@ namespace Gameplay.UnitSystem.Root
     {
         protected UnitFactory unitFactory;
 
-        public override void PostInitialize()
+        public override void PreInitialize()
         {
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             var ecsWorld = ServiceLocator.Get<EcsWorld>();

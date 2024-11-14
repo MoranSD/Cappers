@@ -12,6 +12,7 @@ namespace Gameplay.Game.ECS.Features
             {
                 ref var agroComponent = ref filter.Get1(i);
                 ref var followComponent = ref filter.Get2(i);
+                ref var entity = ref filter.GetEntity(i);
 
                 if (agroComponent.HasTarget == false) continue;
 

@@ -30,5 +30,5 @@ MonoBehaviour:
       AttackRate: 2
       Damage: 1
     HealthConfig:
-      StartHealthCount: 5
+      StartHealthCount: 1
       MaxHealthCount: 5

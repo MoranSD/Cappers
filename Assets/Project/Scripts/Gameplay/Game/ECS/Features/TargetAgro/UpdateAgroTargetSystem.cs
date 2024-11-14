@@ -16,7 +16,8 @@ namespace Gameplay.Game.ECS.Features
                 ref var lookComponent = ref filter.Get3(i);
 
                 agroComponent.HasTarget = lookComponent.HasTargetsInRange;
-                agroComponent.Target = EntityUtil.GetClosestEntity(transform, lookComponent.Targets);
+                agroComponent.Target = lookComponent.HasTargetsInRange ? 
+                    EntityUtil.GetClosestEntity(transform, lookComponent.Targets) : default;
             }
         }
     }

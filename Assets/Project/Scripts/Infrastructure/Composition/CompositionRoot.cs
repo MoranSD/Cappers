@@ -15,13 +15,13 @@ namespace Infrastructure.Composition
             initializers = GetComponentsInChildren<Installer>();
 
             foreach (var initializer in initializers)
-                initializer.PostInitialize();
+                initializer.PreInitialize();
 
             foreach (var initializer in initializers)
                 initializer.Initialize();
 
             foreach (var initializer in initializers)
-                initializer.LateInitialize();
+                initializer.PostInitialize();
         }
 
         public void Dispose()

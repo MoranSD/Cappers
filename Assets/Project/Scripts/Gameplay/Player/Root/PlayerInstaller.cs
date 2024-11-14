@@ -18,7 +18,7 @@ namespace Gameplay.Player.Root
         [Space]
         [SerializeField] private GameCamera gameCamera;
 
-        public override void PostInitialize()
+        public override void PreInitialize()
         {
             //Dependencies
             var input = ServiceLocator.Get<IInput>();

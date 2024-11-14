@@ -21,27 +21,30 @@ namespace Gameplay.EnemySystem.Factory
         {
             var controller = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
 
-            var unitEntity = ecsWorld.NewEntity();
-            controller.Initialize(id, unitEntity);
+            var enemyEntity = ecsWorld.NewEntity();
+            controller.Initialize(id, enemyEntity);
 
-            ref var tag = ref unitEntity.Get<TagEnemy>();
+            ref var tag = ref enemyEntity.Get<TagEnemy>();
             tag.Id = id;
 
-            ref var movable = ref unitEntity.Get<AgentMovableComponent>();
+            ref var translation = ref enemyEntity.Get<TranslationComponent>();
+            translation.Transform = controller.transform;
+
+            ref var movable = ref enemyEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
 
-            unitEntity.Get<AgentDestinationUpdateTime>();
+            enemyEntity.Get<AgentDestinationUpdateTime>();
 
-            ref var targetLook = ref unitEntity.Get<TargetLookComponent>();
+            ref var targetLook = ref enemyEntity.Get<TargetLookComponent>();
             targetLook.TargetLayer = gameConfig.EnemyTargetLayers;
             targetLook.Range = enemyConfigSO.Config.LookConfig.VisionRange;
 
-            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
+            ref var agro = ref enemyEntity.Get<TargetAgroComponent>();
             agro.AttackDistance = enemyConfigSO.Config.AttackConfig.AttackDistance;
             agro.AttackRate = enemyConfigSO.Config.AttackConfig.AttackRate;
             agro.Damage = enemyConfigSO.Config.AttackConfig.Damage;
 
-            ref var health = ref unitEntity.Get<HealthComponent>();
+            ref var health = ref enemyEntity.Get<HealthComponent>();
             health.Health = enemyConfigSO.Config.HealthConfig.StartHealthCount;
 
             return controller;

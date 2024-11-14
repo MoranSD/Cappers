@@ -12,8 +12,11 @@ namespace Gameplay.Game.ECS.Features
         {
             foreach (var i in filter)
             {
-                ref var tranform = ref filter.Get1(i).Transform;
                 ref var agroComponent = ref filter.Get2(i);
+
+                if (agroComponent.HasTarget == false) continue;
+
+                ref var tranform = ref filter.Get1(i).Transform;
 
                 ref var targetTF = ref agroComponent.Target.Get<TranslationComponent>().Transform;
 

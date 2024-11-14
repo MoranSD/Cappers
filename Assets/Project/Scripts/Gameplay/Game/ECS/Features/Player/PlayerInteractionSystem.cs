@@ -1,7 +1,9 @@
 ﻿using Gameplay.Player.Data;
 using Infrastructure.GameInput;
 using Leopotam.Ecs;
+using System.Linq;
 using Utils;
+using Utils.Interaction;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -11,7 +13,7 @@ namespace Gameplay.Game.ECS.Features
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TagPlayer, TranslationComponent>.Exclude<BlockFreezed> filter = null;
+        private readonly EcsFilter<TagPlayer, TranslationComponent, FollowControlComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {
@@ -22,24 +24,47 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var transform = ref filter.Get2(i).Transform;
-
+                ref var followControlComponent = ref filter.Get3(i);
                 ref var playerEntity = ref filter.GetEntity(i);
-                var requestEntity = _world.NewEntity();
 
-                if (EnvironmentProvider.HasInteractorAround(transform, interactRange))
+                if (EnvironmentProvider.TryGetInteractor(transform, interactRange, out IInteractor interactor) && 
+                    interactor.IsInteractable)
                 {
-                    ref var interactionRequest = ref requestEntity.Get<InteractionRequest>();
-
-                    interactionRequest.Target = playerEntity;
-                    interactionRequest.Range = interactRange;
+                    if (followControlComponent.EntitiesInControl.Count > 0 && interactor is IUnitInteractable)
+                    {
+                        var requestEntity = _world.NewEntity();
+                        ref var removeFollowRequest = ref requestEntity.Get<RemoveFollowControlRequest>();
+                        removeFollowRequest.Sender = playerEntity;
+                        removeFollowRequest.Target = followControlComponent.EntitiesInControl.First();
+                        //unit interacts with interactor
+                        interactor.Interact();
+                    }
+                    else
+                    {
+                        interactor.Interact();
+                    }
                 }
                 else
                 {
-                    ref var unitFollowControlRequest = ref requestEntity.Get<FollowControlRequest>();
+                    if (EnvironmentProvider.TryGetEntityHoldersAround
+                    (transform, interactRange, gameConfig.UnitLayer, out var holdersAround) == false)
+                        continue;
 
-                    unitFollowControlRequest.Sender = playerEntity;
-                    unitFollowControlRequest.TargetLayer = gameConfig.UnitLayer;
-                    unitFollowControlRequest.Range = interactRange;
+                    var entityAround = EnvironmentProvider.GetClosestHolder(transform.position, holdersAround).EcsEntity;
+                    var entityRequest = _world.NewEntity();
+
+                    if (followControlComponent.EntitiesInControl.Contains(entityAround))
+                    {
+                        ref var removeFollowRequest = ref entityRequest.Get<RemoveFollowControlRequest>();
+                        removeFollowRequest.Sender = playerEntity;
+                        removeFollowRequest.Target = entityAround;
+                    }
+                    else
+                    {
+                        ref var followRequest = ref entityRequest.Get<AddFollowControlRequest>();
+                        followRequest.Sender = playerEntity;
+                        followRequest.Target = entityAround;
+                    }
                 }
             }
         }

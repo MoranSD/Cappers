@@ -14,8 +14,16 @@ namespace Gameplay.Game.ECS.Features
 
             foreach (var i in filter)
             {
-                ref var agent = ref filter.Get1(i).NavMeshAgent;
                 ref var followTarget = ref filter.Get2(i);
+
+                if (followTarget.Target.IsAlive() == false)
+                {
+                    ref var entity = ref filter.GetEntity(i);
+                    entity.Del<FollowComponent>();
+                    continue;
+                }
+
+                ref var agent = ref filter.Get1(i).NavMeshAgent;
                 ref var destimationTime = ref filter.Get3(i);
 
                 destimationTime.DestinationUpdateTime -= deltaTime;

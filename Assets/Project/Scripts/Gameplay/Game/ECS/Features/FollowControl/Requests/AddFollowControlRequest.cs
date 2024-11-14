@@ -2,9 +2,9 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct InteractionRequest
+    public struct AddFollowControlRequest
     {
+        public EcsEntity Sender;
         public EcsEntity Target;
-        public float Range;
     }
 }

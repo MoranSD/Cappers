@@ -34,7 +34,7 @@ namespace Gameplay.Ship.Root
         private ShipMap shipMap;
         private ShipUnitExistenceControl existenceControl;
 
-        public override void PostInitialize()
+        public override void PreInitialize()
         {
             var gameState = ServiceLocator.Get<GameState>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
