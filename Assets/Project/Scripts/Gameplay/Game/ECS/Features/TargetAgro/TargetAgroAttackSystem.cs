@@ -1,5 +1,6 @@
 ﻿using Leopotam.Ecs;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -30,11 +31,11 @@ namespace Gameplay.Game.ECS.Features
                 {
                     agroComponent.NextAttackTime = agroComponent.AttackRate;
 
-                    var requestEntity = _world.NewEntity();
-
-                    ref var attackRequest = ref requestEntity.Get<ApplyDamageRequest>();
-                    attackRequest.Target = agroComponent.Target;
-                    attackRequest.Damage = agroComponent.Damage;
+                    _world.NewEntityWithComponent<ApplyDamageRequest>(new()
+                    {
+                        Target = agroComponent.Target,
+                        Damage = agroComponent.Damage
+                    });
                 }
             }
         }

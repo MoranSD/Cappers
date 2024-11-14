@@ -1,6 +1,7 @@
 ﻿using Gameplay.Ship.UnitControl.Placement;
 using Leopotam.Ecs;
 using System.Linq;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -29,13 +30,14 @@ namespace Gameplay.Game.ECS.Features
                 ref var look = ref filter.Get2(i);
                 if (look.Targets.Any(x => x.IsAlive())) continue;
 
-                var requestEntity = _world.NewEntity();
                 ref var entity = ref filter.GetEntity(i);
-                ref var destinationRequest = ref requestEntity.Get<AgentSetDestinationRequest>();
-
-                destinationRequest.Target = entity;
                 int unitId = filter.Get3(i).Id;
-                destinationRequest.Destination = unitPlacement.GetUnitIdlePosition(unitId);
+
+                _world.NewEntityWithComponent<AgentSetDestinationRequest>(new()
+                {
+                    Target = entity,
+                    Destination = unitPlacement.GetUnitIdlePosition(unitId)
+                });
             }
         }
     }

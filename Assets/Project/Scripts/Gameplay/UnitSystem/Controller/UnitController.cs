@@ -4,6 +4,7 @@ using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AI;
+using Utils;
 
 namespace Gameplay.UnitSystem.Controller
 {
@@ -24,10 +25,11 @@ namespace Gameplay.UnitSystem.Controller
 
         public void GoToIdlePosition(Vector3 position)
         {
-            var requestEntity = EcsWorld.NewEntity();
-            ref var setRequest = ref requestEntity.Get<AgentSetDestinationRequest>();
-            setRequest.Target = EcsEntity;
-            setRequest.Destination = position;
+            EcsWorld.NewEntityWithComponent<AgentSetDestinationRequest>(new()
+            {
+                Target = EcsEntity,
+                Destination = position
+            });
         }
 
         public void Destroy()

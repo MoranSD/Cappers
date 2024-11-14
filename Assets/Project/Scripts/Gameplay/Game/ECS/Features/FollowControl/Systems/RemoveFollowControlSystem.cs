@@ -1,4 +1,5 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -19,9 +20,10 @@ namespace Gameplay.Game.ECS.Features
                 controlTarget.Del<FollowComponent>();
                 controlTarget.Del<TagUnderFollowControl>();
 
-                var requestEntity = _world.NewEntity();
-                ref var removedEvent = ref requestEntity.Get<RemovedFollowControlEvent>();
-                removedEvent.Target = controlTarget;
+                _world.NewEntityWithComponent<RemovedFollowControlEvent>(new()
+                {
+                    Target = controlTarget,
+                });
             }
         }
     }

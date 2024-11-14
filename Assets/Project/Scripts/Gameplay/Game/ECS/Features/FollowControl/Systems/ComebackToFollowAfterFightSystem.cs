@@ -1,5 +1,6 @@
 ﻿using Leopotam.Ecs;
 using System.Linq;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -29,11 +30,12 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var followOwner = ref filter.Get1(i).Owner;
                 ref var entity = ref filter.GetEntity(i);
-                var requestEntity = _world.NewEntity();
-                ref var addFollowControlRequest = ref requestEntity.Get<AddFollowControlRequest>();
 
-                addFollowControlRequest.Sender = followOwner;
-                addFollowControlRequest.Target = entity;
+                _world.NewEntityWithComponent<AddFollowControlRequest>(new()
+                {
+                    Sender = followOwner,
+                    Target = entity,
+                });
             }
         }
     }

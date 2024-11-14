@@ -32,10 +32,11 @@ namespace Gameplay.Game.ECS.Features
                 {
                     if (followControlComponent.EntitiesInControl.Count > 0 && interactor is IUnitInteractable)
                     {
-                        var requestEntity = _world.NewEntity();
-                        ref var removeFollowRequest = ref requestEntity.Get<RemoveFollowControlRequest>();
-                        removeFollowRequest.Sender = playerEntity;
-                        removeFollowRequest.Target = followControlComponent.EntitiesInControl.First();
+                        _world.NewEntityWithComponent<RemoveFollowControlRequest>(new()
+                        {
+                            Sender = playerEntity,
+                            Target = followControlComponent.EntitiesInControl.First(),
+                        });
                         //unit interacts with interactor
                         interactor.Interact();
                     }
@@ -51,19 +52,22 @@ namespace Gameplay.Game.ECS.Features
                         continue;
 
                     var entityAround = EnvironmentProvider.GetClosestHolder(transform.position, holdersAround).EcsEntity;
-                    var entityRequest = _world.NewEntity();
 
                     if (followControlComponent.EntitiesInControl.Contains(entityAround))
                     {
-                        ref var removeFollowRequest = ref entityRequest.Get<RemoveFollowControlRequest>();
-                        removeFollowRequest.Sender = playerEntity;
-                        removeFollowRequest.Target = entityAround;
+                        _world.NewEntityWithComponent<RemoveFollowControlRequest>(new()
+                        {
+                            Sender = playerEntity,
+                            Target = entityAround,
+                        });
                     }
                     else
                     {
-                        ref var followRequest = ref entityRequest.Get<AddFollowControlRequest>();
-                        followRequest.Sender = playerEntity;
-                        followRequest.Target = entityAround;
+                        _world.NewEntityWithComponent<AddFollowControlRequest>(new()
+                        {
+                            Sender = playerEntity,
+                            Target = entityAround,
+                        });
                     }
                 }
             }
