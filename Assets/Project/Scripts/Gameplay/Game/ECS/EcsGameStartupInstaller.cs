@@ -76,9 +76,9 @@ namespace Gameplay.Game.ECS
         private void AddOneFrames()
         {
             systems
-                .OneFrame<InteractionEvent>()
-                .OneFrame<UnitFollowControlEvent>()
-                .OneFrame<AgentSetDestinationEvent>();
+                .OneFrame<InteractionRequest>()
+                .OneFrame<UnitFollowControlRequest>()
+                .OneFrame<AgentSetDestinationRequest>();
         }
     }
 }

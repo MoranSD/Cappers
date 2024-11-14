@@ -23,7 +23,7 @@ namespace Gameplay.UnitSystem.Factory
             var controller = GameObject.Instantiate(bodyPrefab, position, Quaternion.identity);
 
             var unitEntity = ecsWorld.NewEntity();
-            controller.Initialize(unitEntity, unitData);
+            controller.Initialize(ecsWorld, unitEntity, unitData);
 
             ref var tag = ref unitEntity.Get<TagUnit>();
             tag.Id = unitData.Id;

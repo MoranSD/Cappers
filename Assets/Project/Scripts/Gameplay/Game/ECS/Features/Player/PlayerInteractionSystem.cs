@@ -10,6 +10,7 @@ namespace Gameplay.Game.ECS.Features
     {
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
+        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TagPlayer, TranslationComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
@@ -22,17 +23,22 @@ namespace Gameplay.Game.ECS.Features
             {
                 ref var transform = ref filter.Get2(i).Transform;
 
-                ref var entity = ref filter.GetEntity(i);
-                
-                if(EnvironmentProvider.HasInteractorAround(transform, interactRange))
+                ref var playerEntity = ref filter.GetEntity(i);
+                var requestEntity = _world.NewEntity();
+
+                if (EnvironmentProvider.HasInteractorAround(transform, interactRange))
                 {
-                    ref var interactionEvent = ref entity.Get<InteractionEvent>();
-                    interactionEvent.Range = interactRange;
+                    ref var interactionRequest = ref requestEntity.Get<InteractionRequest>();
+
+                    interactionRequest.Target = playerEntity;
+                    interactionRequest.Range = interactRange;
                 }
                 else
                 {
-                    ref var unitFollowControlEvent = ref entity.Get<UnitFollowControlEvent>();
-                    unitFollowControlEvent.Range = interactRange;
+                    ref var unitFollowControlRequest = ref requestEntity.Get<UnitFollowControlRequest>();
+
+                    unitFollowControlRequest.Target = playerEntity;
+                    unitFollowControlRequest.Range = interactRange;
                 }
             }
         }

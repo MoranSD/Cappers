@@ -8,21 +8,25 @@ namespace Gameplay.UnitSystem.Controller
 {
     public class UnitController : MonoBehaviour, IUnitController
     {
+        public EcsWorld EcsWorld { get; private set; }
         public EcsEntity EcsEntity { get; private set; }
         public UnitData Data { get; private set; }
 
         [field: SerializeField] public NavMeshAgent NavMeshAgent { get; private set; }
 
-        public void Initialize(EcsEntity ecsEntity, UnitData data)
+        public void Initialize(EcsWorld ecsWorld, EcsEntity ecsEntity, UnitData data)
         {
+            EcsWorld = ecsWorld;
             EcsEntity = ecsEntity;
             Data = data;
         }
 
         public void GoToIdlePosition(Vector3 position)
         {
-            ref var setEvent = ref EcsEntity.Get<AgentSetDestinationEvent>();
-            setEvent.Destination = position;
+            var requestEntity = EcsWorld.NewEntity();
+            ref var setRequest = ref requestEntity.Get<AgentSetDestinationRequest>();
+            setRequest.Target = EcsEntity;
+            setRequest.Destination = position;
         }
     }
 }

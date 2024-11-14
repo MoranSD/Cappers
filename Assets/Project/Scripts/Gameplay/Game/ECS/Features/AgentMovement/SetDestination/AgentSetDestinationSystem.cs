@@ -4,14 +4,14 @@ namespace Gameplay.Game.ECS.Features
 {
     public class AgentSetDestinationSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<AgentMovableComponent, AgentSetDestinationEvent> filter = null;
+        private readonly EcsFilter<AgentSetDestinationRequest> filter = null;
 
         public void Run()
         {
             foreach (var i in filter)
             {
-                ref var agent = ref filter.Get1(i).NavMeshAgent;
-                ref var setDestinationEvent = ref filter.Get2(i);
+                ref var setDestinationEvent = ref filter.Get1(i);
+                ref var agent = ref setDestinationEvent.Target.Get<AgentMovableComponent>().NavMeshAgent;
 
                 agent.SetDestination(setDestinationEvent.Destination);
             }

@@ -6,16 +6,16 @@ namespace Gameplay.Game.ECS.Features
 {
     public class InteractionSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<TranslationComponent, InteractionEvent> filter = null;
+        private readonly EcsFilter<InteractionRequest> filter = null;
 
         public void Run()
         {
             foreach (var i in filter)
             {
-                ref var transform = ref filter.Get1(i).Transform;
-                ref var interactionEvent = ref filter.Get2(i);
+                ref var interactionRequest = ref filter.Get1(i);
+                ref var transform = ref interactionRequest.Target.Get<TranslationComponent>().Transform;
 
-                if (EnvironmentProvider.TryGetInteractor(transform, interactionEvent.Range, out IInteractor interactor))
+                if (EnvironmentProvider.TryGetInteractor(transform, interactionRequest.Range, out IInteractor interactor))
                 {
                     if(interactor.IsInteractable)
                         interactor.Interact();
