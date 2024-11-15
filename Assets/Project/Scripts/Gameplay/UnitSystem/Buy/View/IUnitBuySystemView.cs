@@ -4,6 +4,6 @@ namespace Gameplay.UnitSystem.Buy.View
 {
     public interface IUnitBuySystemView
     {
-        Vector3 GetUnitStatsPosition();
+        Vector3 GetUnitSpawnPosition();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Gameplay.Ship.UnitControl.Placement;
+﻿using Gameplay.Ship.UnitControl;
 using Gameplay.UnitSystem.Buy.Data;
 using Gameplay.UnitSystem.Buy.View;
 using Gameplay.UnitSystem.Data;
@@ -11,14 +11,14 @@ namespace Gameplay.UnitSystem.BuyMenu
 {
     public class UnitBuySystem
     {
-        private readonly ShipUnitPlacement unitPlacement;
+        private readonly ShipUnitExistenceControl unitExistenceControl;
         private readonly IUnitFactory unitFactory;
         private readonly IUnitBuySystemView view;
         private List<UnitToBuyData> unitsInStock;
 
-        public UnitBuySystem(ShipUnitPlacement unitPlacement, IUnitFactory unitFactory, IUnitBuySystemView view)
+        public UnitBuySystem(ShipUnitExistenceControl unitExistenceControl, IUnitFactory unitFactory, IUnitBuySystemView view)
         {
-            this.unitPlacement = unitPlacement;
+            this.unitExistenceControl = unitExistenceControl;
             this.unitFactory = unitFactory;
             this.view = view;
             unitsInStock = new List<UnitToBuyData>();
@@ -45,7 +45,7 @@ namespace Gameplay.UnitSystem.BuyMenu
             if (unitsInStock.Any(x => x.Id == unitId) == false)
                 throw new Exception(unitId.ToString());
 
-            if(unitPlacement.HasPlaceForUnit() == false)
+            if(unitExistenceControl.HasPlaceForUnit() == false)
                 return false;
 
             //проверить, есть ли деньги в кошельке
@@ -55,12 +55,7 @@ namespace Gameplay.UnitSystem.BuyMenu
             //взять деньги из кошелька
 
             unitsInStock.Remove(unitToBuyData);
-
-            var nextUnitId = unitPlacement.GetNextUnitId();
-            var unitData = unitToBuyData.ToUnitData(nextUnitId);
-            var unitController = unitFactory.Create(unitData, view.GetUnitStatsPosition());
-
-            unitPlacement.AddUnit(unitController);
+            unitExistenceControl.AddBoughtUnit(unitToBuyData, view.GetUnitSpawnPosition());
 
             return true;
         }

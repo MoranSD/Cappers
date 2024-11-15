@@ -2350,7 +2350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapView: {fileID: 214780173}
-  unitPlacementView: {fileID: 7650780708403437789}
+  unitExistenceView: {fileID: 7650780708403437789}
 --- !u!1 &1766614454
 GameObject:
   m_ObjectHideFlags: 0

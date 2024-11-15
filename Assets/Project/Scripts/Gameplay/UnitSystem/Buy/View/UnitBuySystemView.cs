@@ -6,6 +6,6 @@ namespace Gameplay.UnitSystem.Buy.View
     {
         [SerializeField] private Transform unitStartPivot;
 
-        public Vector3 GetUnitStatsPosition() => unitStartPivot.position;
+        public Vector3 GetUnitSpawnPosition() => unitStartPivot.position;
     }
 }

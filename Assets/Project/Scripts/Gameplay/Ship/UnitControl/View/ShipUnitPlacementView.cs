@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using Gameplay.Ship.UnitControl.View;
+using System.Linq;
 using UnityEngine;
 
 namespace Gameplay.Ship.UnitControl.Placement.View
 {
-    public class ShipUnitPlacementView : MonoBehaviour, IShipUnitPlacementView
+    public class ShipUnitPlacementView : MonoBehaviour, IShipUnitExistenceView
     {
         [SerializeField] private Transform[] unitPositions;
 

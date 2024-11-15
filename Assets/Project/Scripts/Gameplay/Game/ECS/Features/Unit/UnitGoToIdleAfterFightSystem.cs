@@ -1,4 +1,4 @@
-﻿using Gameplay.Ship.UnitControl.Placement;
+﻿using Gameplay.Ship.UnitControl;
 using Leopotam.Ecs;
 using System.Linq;
 using Utils;
@@ -7,7 +7,7 @@ namespace Gameplay.Game.ECS.Features
 {
     public class UnitGoToIdleAfterFightSystem : IEcsRunSystem
     {
-        private readonly ShipUnitPlacement unitPlacement = null;
+        private readonly ShipUnitExistenceControl unitExistence = null;
         private readonly EcsWorld _world = null;
         private readonly EcsFilter<TargetAgroComponent, TargetLookComponent, TagUnit>.Exclude<TagUnderFollowControl> filter = null;
 
@@ -36,7 +36,7 @@ namespace Gameplay.Game.ECS.Features
                 _world.NewEntityWithComponent<AgentSetDestinationRequest>(new()
                 {
                     Target = entity,
-                    Destination = unitPlacement.GetUnitIdlePosition(unitId)
+                    Destination = unitExistence.GetUnitIdlePosition(unitId)
                 });
             }
         }

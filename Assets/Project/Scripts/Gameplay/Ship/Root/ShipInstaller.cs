@@ -11,26 +11,24 @@ using UnityEngine;
 using Gameplay.World.Data;
 using System.Threading.Tasks;
 using Gameplay.Ship.Map;
-using Gameplay.Ship.UnitControl.Placement;
 using Gameplay.Ship.UnitControl.Placement.View;
 using Gameplay.Ship.Data;
 using System.Threading;
-using Gameplay.Ship.UnitControl.LifeTime;
 using Gameplay.UnitSystem.Factory;
 using Leopotam.Ecs;
+using Gameplay.Ship.UnitControl;
 
 namespace Gameplay.Ship.Root
 {
     public class ShipInstaller : Installer
     {
         [SerializeField] private ShipMapView mapView;
-        [SerializeField] private ShipUnitPlacementView unitPlacementView;
+        [SerializeField] private ShipUnitPlacementView unitExistenceView;
 
         private PanelsManager panelsManager;
         private TemporaryGameplayPanel gameplayTemporary;
         private MapIconsHolder iconsHolder;
 
-        private ShipUnitPlacement shipUnitPlacement;
         private ShipMap shipMap;
         private ShipUnitExistenceControl existenceControl;
 
@@ -60,20 +58,16 @@ namespace Gameplay.Ship.Root
             shipMap = new ShipMap(gameState, travelSystem, mapView, playerInteractor);
 
             shipMap.Initialize();
-
-            shipUnitPlacement = new ShipUnitPlacement(unitPlacementView, gameState, shipConfig.PlacementConfig);
-            ServiceLocator.Register(shipUnitPlacement);
-
-            var ecsSystems = ServiceLocator.Get<EcsSystems>();
-            ecsSystems.Inject(shipUnitPlacement);
         }
 
         public override void Initialize()
         {
             var gameState = ServiceLocator.Get<GameState>();
             var unitFactory = ServiceLocator.Get<IUnitFactory>();
+            var assetProvider = ServiceLocator.Get<IAssetProvider>();
+            var shipConfig = assetProvider.Load<ShipConfig>(Constants.ShipConfig);
 
-            existenceControl = new ShipUnitExistenceControl(gameState, shipUnitPlacement, unitFactory);
+            existenceControl = new ShipUnitExistenceControl(gameState, shipConfig.PlacementConfig, unitExistenceView, unitFactory);
             existenceControl.Initialize();
 
             ServiceLocator.Register(existenceControl);
@@ -92,7 +86,6 @@ namespace Gameplay.Ship.Root
 
             iconsHolder.Dispose();
 
-            ServiceLocator.Remove<ShipUnitPlacement>();
             ServiceLocator.Remove<ShipUnitExistenceControl>();
         }
     }

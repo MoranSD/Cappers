@@ -1,6 +1,6 @@
 ﻿using Gameplay.Panels;
 using Gameplay.Player.InteractController;
-using Gameplay.Ship.UnitControl.Placement;
+using Gameplay.Ship.UnitControl;
 using Gameplay.UnitSystem.Buy.Menu;
 using Gameplay.UnitSystem.Buy.Menu.View;
 using Gameplay.UnitSystem.Buy.View;
@@ -20,17 +20,17 @@ namespace Gameplay.UnitSystem.Root
 
         private PanelsManager panelsManager;
 
-        public override void PreInitialize()
+        public override void PostInitialize()
         {
-            base.PreInitialize();
+            base.PostInitialize();
 
-            var unitPlacement = ServiceLocator.Get<ShipUnitPlacement>();
+            var unitExistenceControl = ServiceLocator.Get<ShipUnitExistenceControl>();
             var playerMenuInteract = ServiceLocator.Get<PlayerMenuInteractController>();
 
             panelsManager = ServiceLocator.Get<PanelsManager>();
             panelsManager.RegisterPanel(unitBuyMenuView);
 
-            unitBuySystem = new(unitPlacement, unitFactory, buySystemView);
+            unitBuySystem = new(unitExistenceControl, unitFactory, buySystemView);
             unitBuyMenu = new(unitBuySystem, playerMenuInteract, unitBuyMenuView);
 
             unitBuyMenuView.Initialize();

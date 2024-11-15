@@ -2884,7 +2884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapView: {fileID: 214780173}
-  unitPlacementView: {fileID: 217353952}
+  unitExistenceView: {fileID: 217353952}
 --- !u!114 &1677863531 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9018165373556485439, guid: 2f0f32018bf30fa48bee8bf6032b1b6a,
