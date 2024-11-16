@@ -1,10 +1,12 @@
 ﻿using Leopotam.Ecs;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class ApplyDamageSystem : IEcsRunSystem
     {
+        private readonly EcsWorld _world = null;
         private readonly EcsFilter<ApplyDamageRequest> filter = null;
 
         public void Run()
@@ -22,6 +24,13 @@ namespace Gameplay.Game.ECS.Features
                 ref var targetHealth = ref attackRequest.Target.Get<HealthComponent>();
                 
                 targetHealth.Health -= attackRequest.Damage;
+
+                _world.NewEntityWithComponent<ApplyDamageEvent>(new()
+                {
+                    Sender = attackRequest.Sender,
+                    Target = attackRequest.Target,
+                    Damage = attackRequest.Damage,
+                });
             }
         }
     }

@@ -7,25 +7,25 @@ namespace Gameplay.Game.ECS.Features
     public class PlayerTurnSystem : IEcsRunSystem
     {
         private readonly PlayerConfigSO playerConfig = null;
-        private readonly EcsFilter<TranslationComponent, TFTurnableComponent, ChMovableComponent, TagPlayer>.Exclude<BlockFreezed> filter = null;
+        private readonly EcsFilter<TranslationComponent, TFTurnableComponent, ChMovableComponent, TagPlayer, TargetLookComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {
-            float attackRange = playerConfig.MainConfig.FightConfig.AttackRange;
             float targetLookSpeed = playerConfig.MainConfig.MovementConfig.TargetLookSpeed;
             float lookSpeed = playerConfig.MainConfig.MovementConfig.LookSpeed;
 
             foreach (var i in filter)
             {
-                ref var translation = ref filter.Get1(i);
+                ref var transform = ref filter.Get1(i).Transform;
                 ref var turnable = ref filter.Get2(i);
                 ref var movable = ref filter.Get3(i);
-                ref var transform = ref translation.Transform;
+                ref var targetLook = ref filter.Get5(i);
 
-                if (EnvironmentProvider.TryGetEnemyHoldersAround(transform, attackRange, out var enemyHolders))
+                if (targetLook.HasTargetsInRange)
                 {
-                    var closestTargetHolder = EnvironmentProvider.GetClosestHolder(transform.position, enemyHolders);
-                    var directionToTarget = closestTargetHolder.transform.position - transform.position;
+                    var closestTarget = EntityUtil.GetClosestEntity(transform, targetLook.Targets);
+                    ref var closestTargetTF = ref closestTarget.Get<TranslationComponent>().Transform;
+                    var directionToTarget = closestTargetTF.position - transform.position;
                     directionToTarget.y = 0;
 
                     turnable.Direction = directionToTarget;

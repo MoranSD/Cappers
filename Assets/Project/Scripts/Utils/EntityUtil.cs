@@ -27,5 +27,17 @@ namespace Utils
 
             return closestEntity;
         }
+        public static float GetDistance(Transform transform, EcsEntity entity)
+        {
+            if(entity.Has<TranslationComponent>() == false)
+            {
+                return 0f;
+            }
+            else
+            {
+                ref var targetTF = ref entity.Get<TranslationComponent>().Transform;
+                return Vector3.Distance(transform.position, targetTF.position);
+            }
+        }
     }
 }

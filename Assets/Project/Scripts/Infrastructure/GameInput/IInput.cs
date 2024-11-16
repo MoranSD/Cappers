@@ -6,6 +6,8 @@ namespace Infrastructure.GameInput
     public interface IInput
     {
         bool IsInteractButtonPressed { get; }
+        bool MeleeAttackButtonPressed { get; }
+        bool RangeAttackButtonPressed { get; }
 
         event Action OnPressInteractButton;
 

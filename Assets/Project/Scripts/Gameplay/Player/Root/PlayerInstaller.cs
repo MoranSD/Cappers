@@ -9,6 +9,7 @@ using Gameplay.Panels;
 using UnityEngine;
 using Leopotam.Ecs;
 using Gameplay.Game.ECS.Features;
+using Gameplay.Game;
 
 namespace Gameplay.Player.Root
 {
@@ -24,27 +25,22 @@ namespace Gameplay.Player.Root
             var input = ServiceLocator.Get<IInput>();
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
+            var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
 
             gameCamera.Initialize();
+            ServiceLocator.Register<IGameCamera>(gameCamera);
 
-            //Ecs player creation and systems initialization
-            var ecsSystems = ServiceLocator.Get<EcsSystems>();
-
-            ecsSystems
-                .Add(new PlayerMovementInputSystem())
-                .Add(new PlayerInteractionSystem())
-                .Add(new PlayerTurnSystem());
-
-            ecsSystems.Inject(input);
-            ecsSystems.Inject(gameCamera, typeof(IGameCamera));
-            ecsSystems.Inject(playerConfig);
-
+            //Ecs player creation
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
 
             var playerEntity = ecsWorld.NewEntity();
             player.Initialize(playerEntity, gameCamera);
 
             playerEntity.Get<TagPlayer>();
+
+            ref var targetLook = ref playerEntity.Get<TargetLookComponent>();
+            targetLook.Range = playerConfig.MainConfig.FightConfig.AttackRange;
+            targetLook.TargetLayer = gameConfig.PlayerTargetLayers;
 
             ref var unitControl = ref playerEntity.Get<FollowControlComponent>();
             unitControl.EntitiesInControl = new();
@@ -65,6 +61,8 @@ namespace Gameplay.Player.Root
 
         public override void Dispose()
         {
+            ServiceLocator.Remove<IGameCamera>();
+
             var interactController = ServiceLocator.Remove<PlayerMenuInteractController>();
             interactController.Dispose();
         }

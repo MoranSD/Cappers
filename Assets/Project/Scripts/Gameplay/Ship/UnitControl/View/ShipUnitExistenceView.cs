@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay.Ship.UnitControl.Placement.View
 {
-    public class ShipUnitPlacementView : MonoBehaviour, IShipUnitExistenceView
+    public class ShipUnitExistenceView : MonoBehaviour, IShipUnitExistenceView
     {
         [SerializeField] private Transform[] unitPositions;
 

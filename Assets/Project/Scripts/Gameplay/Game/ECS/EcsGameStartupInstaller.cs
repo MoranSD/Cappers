@@ -1,7 +1,10 @@
-﻿using Gameplay.Game.ECS.Features;
+﻿using Gameplay.CameraSystem;
+using Gameplay.Game.ECS.Features;
+using Gameplay.Player.Data;
 using Infrastructure;
 using Infrastructure.Composition;
 using Infrastructure.DataProviding;
+using Infrastructure.GameInput;
 using Infrastructure.TickManagement;
 using Leopotam.Ecs;
 using Voody.UniLeo;
@@ -59,22 +62,26 @@ namespace Gameplay.Game.ECS
         private void AddSystems()
         {
             systems
+                .Add(new PlayerMovementInputSystem())
+                .Add(new PlayerInteractionSystem())
+
                 .Add(new ChMovementPhysicsSystem())
                 .Add(new ChMovementSystem())
 
                 .Add(new TFTurnSystem())
-
+                //follow
                 .Add(new ComebackToFollowAfterFightSystem())
                 .Add(new AddFollowControlSystem())
                 .Add(new RemoveFollowControlSystem())
                 .Add(new UnitGoToIdleAfterFollowControlSystem())
                 .Add(new UnitGoToIdleAfterFightSystem())
+                //finds targets around
+                .Add(new TargetLookSystem())
 
-                .Add(new TargetLookSystem())//finds targets around
+                .Add(new PlayerTurnSystem())
+                .Add(new PlayerAttackSystem())
 
-                .Add(new UpdateAgroTargetSystem())//from look to agro
-                .Add(new TargetAgroSetFollowSystem())//set follow
-                .Add(new UpdateFollowAgroTargetSystem())//set closest target to follow
+                .Add(new UpdateAgroFollowTargetSystem())//from look to agro than set closest target to follow
                 .Add(new TargetAgroAttackSystem())//attack target in attack range
 
                 .Add(new AgentFollowSystem())
@@ -88,11 +95,17 @@ namespace Gameplay.Game.ECS
 
         private void AddInjections()
         {
+            var input = ServiceLocator.Get<IInput>();
+            var gameCamera = ServiceLocator.Get<IGameCamera>();
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
-
             var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+            var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
 
-            systems.Inject(gameConfig);
+            systems
+                .Inject(gameCamera)
+                .Inject(gameConfig)
+                .Inject(input)
+                .Inject(playerConfig);
         }
 
         private void AddOneFrames()
@@ -103,7 +116,8 @@ namespace Gameplay.Game.ECS
                 .OneFrame<RemovedFollowControlEvent>()
                 .OneFrame<AddFollowControlRequest>()
                 .OneFrame<AgentSetDestinationRequest>()
-                .OneFrame<ApplyDamageRequest>();
+                .OneFrame<ApplyDamageRequest>()
+                .OneFrame<ApplyDamageEvent>();
         }
     }
 }

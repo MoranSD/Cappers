@@ -9,14 +9,14 @@ namespace Infrastructure.GameInput
         public Vector2 MoveInput => new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         public bool IsInteractButtonPressed => Input.GetKeyDown(interactButton);
+        public bool MeleeAttackButtonPressed => Input.GetKeyDown(meleeAttackButton);
+        public bool RangeAttackButtonPressed => Input.GetKeyDown(rangeAttackButton);
 
         public event Action OnPressInteractButton;
-        public event Action OnPressFightButton;
         public event Action OnPressMeleeAttackButton;
         public event Action OnPressRangeAttackButton;
 
         private const KeyCode interactButton = KeyCode.E;
-        private const KeyCode fightButton = KeyCode.F;
         private const KeyCode meleeAttackButton = KeyCode.Mouse0;
         private const KeyCode rangeAttackButton = KeyCode.Mouse1;
 
@@ -24,9 +24,6 @@ namespace Infrastructure.GameInput
         {
             if(Input.GetKeyDown(interactButton))
                 OnPressInteractButton?.Invoke();
-
-            if (Input.GetKeyDown(fightButton))
-                OnPressFightButton?.Invoke();
 
             if (Input.GetKeyDown(meleeAttackButton))
                 OnPressMeleeAttackButton?.Invoke();

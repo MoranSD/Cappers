@@ -3,7 +3,7 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UpdateAgroTargetSystem : IEcsRunSystem
+    public class UpdateAgroFollowTargetSystem : IEcsRunSystem
     {
         private readonly EcsFilter<TranslationComponent, TargetAgroComponent, TargetLookComponent> filter = null;
 
@@ -18,6 +18,12 @@ namespace Gameplay.Game.ECS.Features
                 agroComponent.HasTarget = lookComponent.HasTargetsInRange;
                 agroComponent.Target = lookComponent.HasTargetsInRange ? 
                     EntityUtil.GetClosestEntity(transform, lookComponent.Targets) : default;
+
+                if (agroComponent.HasTarget == false) continue;
+
+                ref var entity = ref filter.GetEntity(i);
+                ref var followComponent = ref entity.Get<FollowComponent>();
+                followComponent.Target = agroComponent.Target;
             }
         }
     }

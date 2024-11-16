@@ -23,7 +23,7 @@ namespace Gameplay.Ship.Root
     public class ShipInstaller : Installer
     {
         [SerializeField] private ShipMapView mapView;
-        [SerializeField] private ShipUnitPlacementView unitExistenceView;
+        [SerializeField] private ShipUnitExistenceView unitExistenceView;
 
         private PanelsManager panelsManager;
         private TemporaryGameplayPanel gameplayTemporary;
