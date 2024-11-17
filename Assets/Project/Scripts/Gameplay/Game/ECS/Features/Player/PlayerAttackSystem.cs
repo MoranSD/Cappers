@@ -1,56 +1,42 @@
-﻿using Gameplay.Player.Data;
-using Infrastructure.GameInput;
+﻿using Infrastructure.GameInput;
 using Leopotam.Ecs;
+using UnityEngine;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class PlayerAttackSystem : IEcsRunSystem
     {
-        private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TagPlayer, TranslationComponent, TargetLookComponent> filter = null;
+        private readonly EcsFilter<TagPlayer, TranslationComponent, TargetLookComponent, PlayerWeaponLinkComponent>.Exclude<BlockFreezed> filter = null;
         public void Run()
-        {
-            if (input.MeleeAttackButtonPressed)
-            {
-                var meleeAttackDistance = playerConfig.MainConfig.FightConfig.MeleeAttackDistance;
-                var meleeDamage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage;
-                PerformAttacks(meleeAttackDistance, meleeDamage);
-            }
-
-            if (input.RangeAttackButtonPressed)
-            {
-                var rangeAttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance;
-                var rangeDamage = playerConfig.MainConfig.FightConfig.BaseLongDamage;
-                PerformAttacks(rangeAttackDistance, rangeDamage);
-            }
-        }
-
-        private void PerformAttacks(float attackDistance, float damage)
         {
             foreach (var i in filter)
             {
-                ref var playerEntity = ref filter.GetEntity(i);
                 ref var transform = ref filter.Get2(i).Transform;
                 ref var targetLook = ref filter.Get3(i);
+                ref var weaponsLink = ref filter.Get4(i);
 
-                if (targetLook.HasTargetsInRange)
-                {
-                    var closestTarget = EntityUtil.GetClosestEntity(transform, targetLook.Targets);
+                if (targetLook.HasTargetsInRange == false)
+                    continue;
 
-                    if (EntityUtil.GetDistance(transform, closestTarget) > attackDistance)
-                        continue;
+                if (input.MeleeAttackButtonPressed)
+                    PerformAttack(transform, ref targetLook.Targets, ref weaponsLink.MeleeWeapon);
 
-                    _world.NewEntityWithComponent<ApplyDamageRequest>(new()
-                    {
-                        Sender = playerEntity,
-                        Target = closestTarget,
-                        Damage = damage,
-                    });
-                }
+                if (input.RangeAttackButtonPressed)
+                    PerformAttack(transform, ref targetLook.Targets, ref weaponsLink.RangeWeapon);
             }
+        }
+        private void PerformAttack(Transform transform, ref EcsEntity[] targets, ref EcsEntity weapon)
+        {
+            var closestTarget = EntityUtil.GetClosestEntity(transform, targets);
+
+            _world.NewEntityWithComponent<WeaponAttackRequest>(new()
+            {
+                WeaponSender = weapon,
+                Target = closestTarget,
+            });
         }
     }
 }

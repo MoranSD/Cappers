@@ -81,6 +81,10 @@ namespace Gameplay.Game.ECS
                 .Add(new PlayerTurnSystem())
                 .Add(new PlayerAttackSystem())
 
+                .Add(new WeaponPreventAttackByCoolDownSystem())
+                .Add(new WeaponReloadCoolDownSystem())
+                .Add(new DistanceWeaponAttackSystem())
+
                 .Add(new UpdateAgroFollowTargetSystem())//from look to agro than set closest target to follow
                 .Add(new TargetAgroAttackSystem())//attack target in attack range
 
@@ -117,7 +121,8 @@ namespace Gameplay.Game.ECS
                 .OneFrame<AddFollowControlRequest>()
                 .OneFrame<AgentSetDestinationRequest>()
                 .OneFrame<ApplyDamageRequest>()
-                .OneFrame<ApplyDamageEvent>();
+                .OneFrame<ApplyDamageEvent>()
+                .OneFrame<WeaponAttackRequest>();
         }
     }
 }

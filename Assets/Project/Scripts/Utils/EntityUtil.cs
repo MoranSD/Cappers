@@ -27,10 +27,30 @@ namespace Utils
 
             return closestEntity;
         }
+        public static float GetDistance(EcsEntity from, EcsEntity to)
+        {
+            if (from.Has<TranslationComponent>() == false)
+            {
+                Debug.Log($"No TranslationComponent 'from' {from.GetInternalId()}");
+                return 0f;
+            }
+            else if (to.Has<TranslationComponent>() == false)
+            {
+                Debug.Log($"No TranslationComponent 'to' {to.GetInternalId()}");
+                return 0f;
+            }
+            else
+            {
+                ref var ourTF = ref from.Get<TranslationComponent>().Transform;
+                ref var targetTF = ref to.Get<TranslationComponent>().Transform;
+                return Vector3.Distance(ourTF.position, targetTF.position);
+            }
+        }
         public static float GetDistance(Transform transform, EcsEntity entity)
         {
-            if(entity.Has<TranslationComponent>() == false)
+            if (entity.Has<TranslationComponent>() == false)
             {
+                Debug.Log($"No TranslationComponent {entity.GetInternalId()}");
                 return 0f;
             }
             else

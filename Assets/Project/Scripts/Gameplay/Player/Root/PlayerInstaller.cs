@@ -10,6 +10,7 @@ using UnityEngine;
 using Leopotam.Ecs;
 using Gameplay.Game.ECS.Features;
 using Gameplay.Game;
+using Utils;
 
 namespace Gameplay.Player.Root
 {
@@ -54,9 +55,54 @@ namespace Gameplay.Player.Root
 
             ref var turnable = ref playerEntity.Get<TFTurnableComponent>();
 
+            CreatePlayerWeapons(playerConfig, ecsWorld, ref playerEntity);
+
             //InteractController
             var panelsManager = ServiceLocator.Get<PanelsManager>();
             ServiceLocator.Register(new PlayerMenuInteractController(player, panelsManager));
+        }
+
+        private void CreatePlayerWeapons(PlayerConfigSO playerConfig, EcsWorld ecsWorld, ref EcsEntity playerEntity)
+        {
+            var meleeWeapon = CreateWeaponEntity(ecsWorld, ref playerEntity,
+            new()
+            {
+                AttackDistance = playerConfig.MainConfig.FightConfig.MeleeAttackDistance,
+                Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage,
+            },
+            new()
+            {
+                AttackRate = playerConfig.MainConfig.FightConfig.MeleeAttackDelay,
+                AttackCoolDown = 0
+            });
+
+            var rangeWeapon = CreateWeaponEntity(ecsWorld, ref playerEntity,
+            new()
+            {
+                AttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance,
+                Damage = playerConfig.MainConfig.FightConfig.BaseLongDamage,
+            },
+            new()
+            {
+                AttackRate = playerConfig.MainConfig.FightConfig.LongAttackDelay,
+                AttackCoolDown = 0
+            });
+
+            ref var weaponLink = ref playerEntity.Get<PlayerWeaponLinkComponent>();
+            weaponLink.MeleeWeapon = meleeWeapon;
+            weaponLink.RangeWeapon = rangeWeapon;
+        }
+        private EcsEntity CreateWeaponEntity(EcsWorld ecsWorld, ref EcsEntity playerEntity, DistanceWeaponComponent distanceComponent, WeaponCoolDownComponent coolDownComponent)
+        {
+            var weapon = ecsWorld.NewEntity();
+
+            weapon.Replace(distanceComponent);
+            weapon.Replace(coolDownComponent);
+
+            ref var ownerComponent = ref weapon.Get<WeaponOwnerComponent>();
+            ownerComponent.Owner = playerEntity;
+
+            return weapon;
         }
 
         public override void Dispose()
