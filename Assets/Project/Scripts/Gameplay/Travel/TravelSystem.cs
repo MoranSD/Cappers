@@ -15,6 +15,8 @@ namespace Gameplay.Travel
         public bool IsTraveling { get; private set; }
         public int TravelTimer { get; private set; }
 
+        private const int TravelHalfDurationInSeconds = 1;
+
         private readonly GameState gameState;
         private readonly ILevelLoadService levelLoadService;
 
@@ -56,7 +58,7 @@ namespace Gameplay.Travel
 
             if (gameState.IsInSea == false)
             {
-                await TimerProcess(3);
+                await TimerProcess(TravelHalfDurationInSeconds);
                 await levelLoadService.LoadLocationAsync(GameConstants.SeaLocationId, cancellationTokenSource.Token);
 
                 if (cancellationTokenSource.Token.IsCancellationRequested) return;
@@ -64,7 +66,7 @@ namespace Gameplay.Travel
                 OnLeaveLocation?.Invoke();
             }
 
-            await TimerProcess(3);
+            await TimerProcess(TravelHalfDurationInSeconds);
 
             if (cancellationTokenSource.Token.IsCancellationRequested) return;
 

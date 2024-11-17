@@ -69,20 +69,22 @@ namespace Gameplay.Game.ECS
                 .Add(new ChMovementSystem())
 
                 .Add(new TFTurnSystem())
-                //follow
-                .Add(new ComebackToFollowAfterFightSystem())
-                .Add(new AddFollowControlSystem())
-                .Add(new RemoveFollowControlSystem())
-                .Add(new UnitGoToIdleAfterFollowControlSystem())
-                .Add(new UnitGoToIdleAfterFightSystem())
                 //finds targets around
                 .Add(new TargetLookSystem())
 
                 .Add(new PlayerTurnSystem())
                 .Add(new PlayerAttackSystem())
+
                 //agro system
                 .Add(new SetAgroTargetFromTargetLookSystem())
                 .Add(new AgroTargetSystem())
+
+                .Add(new UnitGoToIdleAfterFightSystem())
+                //follow
+                .Add(new ComebackToFollowAfterFightSystem())
+                .Add(new AddFollowControlSystem())
+                .Add(new RemoveFollowControlSystem())
+                .Add(new UnitGoToIdleAfterFollowControlSystem())
 
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
@@ -124,7 +126,8 @@ namespace Gameplay.Game.ECS
                 .OneFrame<AgentSetDestinationRequest>()
                 .OneFrame<ApplyDamageRequest>()
                 .OneFrame<ApplyDamageEvent>()
-                .OneFrame<AttackRequest>();
+                .OneFrame<AttackRequest>()
+                .OneFrame<EndsAgroEvent>();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Gameplay.Game.ECS.Features
 {
     public class AgroTargetSystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world;
+        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TargetAgroComponent, WeaponLink> filter = null;
 
         public void Run()
