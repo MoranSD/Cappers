@@ -88,11 +88,11 @@ namespace Gameplay.Player.Root
                 AttackCoolDown = 0
             });
 
-            ref var weaponLink = ref playerEntity.Get<PlayerWeaponLinkComponent>();
+            ref var weaponLink = ref playerEntity.Get<PlayerWeaponLink>();
             weaponLink.MeleeWeapon = meleeWeapon;
             weaponLink.RangeWeapon = rangeWeapon;
         }
-        private EcsEntity CreateWeaponEntity(EcsWorld ecsWorld, ref EcsEntity playerEntity, DistanceWeaponComponent distanceComponent, WeaponCoolDownComponent coolDownComponent)
+        private EcsEntity CreateWeaponEntity(EcsWorld ecsWorld, ref EcsEntity playerEntity, DistanceWeaponComponent distanceComponent, AttackCoolDownComponent coolDownComponent)
         {
             var weapon = ecsWorld.NewEntity();
 

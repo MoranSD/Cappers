@@ -1,6 +1,6 @@
 ﻿namespace Gameplay.Game.ECS.Features
 {
-    public struct WeaponCoolDownComponent
+    public struct AttackCoolDownComponent
     {
         public float AttackCoolDown;
         public float AttackRate;

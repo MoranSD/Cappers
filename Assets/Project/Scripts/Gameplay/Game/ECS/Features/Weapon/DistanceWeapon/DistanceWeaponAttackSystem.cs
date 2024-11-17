@@ -6,14 +6,14 @@ namespace Gameplay.Game.ECS.Features
     public class DistanceWeaponAttackSystem : IEcsRunSystem
     {
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<WeaponAttackRequest> filter = null;
+        private readonly EcsFilter<AttackRequest> filter = null;
 
         public void Run()
         {
             foreach (var i in filter)
             {
                 ref var request = ref filter.Get1(i);
-                ref var weaponEntity = ref request.WeaponSender;
+                ref var weaponEntity = ref request.Sender;
 
                 if(weaponEntity.Has<DistanceWeaponComponent>() == false)
                     continue;
@@ -24,9 +24,9 @@ namespace Gameplay.Game.ECS.Features
                 if (EntityUtil.GetDistance(weaponOwner, request.Target) > distanceWeapon.AttackDistance)
                     continue;
 
-                if (weaponEntity.Has<WeaponCoolDownComponent>())
+                if (weaponEntity.Has<AttackCoolDownComponent>())
                 {
-                    ref var coolDownComponent = ref weaponEntity.Get<WeaponCoolDownComponent>();
+                    ref var coolDownComponent = ref weaponEntity.Get<AttackCoolDownComponent>();
                     coolDownComponent.AttackCoolDown += coolDownComponent.AttackRate;
                 }
 

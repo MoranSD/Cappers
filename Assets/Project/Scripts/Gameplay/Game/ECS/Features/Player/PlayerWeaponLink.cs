@@ -2,7 +2,7 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct PlayerWeaponLinkComponent
+    public struct PlayerWeaponLink
     {
         public EcsEntity MeleeWeapon;
         public EcsEntity RangeWeapon;

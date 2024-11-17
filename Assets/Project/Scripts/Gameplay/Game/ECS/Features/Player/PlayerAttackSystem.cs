@@ -9,7 +9,7 @@ namespace Gameplay.Game.ECS.Features
     {
         private readonly IInput input = null;
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TagPlayer, TranslationComponent, TargetLookComponent, PlayerWeaponLinkComponent>.Exclude<BlockFreezed> filter = null;
+        private readonly EcsFilter<TagPlayer, TranslationComponent, TargetLookComponent, PlayerWeaponLink>.Exclude<BlockFreezed> filter = null;
         public void Run()
         {
             foreach (var i in filter)
@@ -32,9 +32,9 @@ namespace Gameplay.Game.ECS.Features
         {
             var closestTarget = EntityUtil.GetClosestEntity(transform, targets);
 
-            _world.NewEntityWithComponent<WeaponAttackRequest>(new()
+            _world.NewEntityWithComponent<AttackRequest>(new()
             {
-                WeaponSender = weapon,
+                Sender = weapon,
                 Target = closestTarget,
             });
         }

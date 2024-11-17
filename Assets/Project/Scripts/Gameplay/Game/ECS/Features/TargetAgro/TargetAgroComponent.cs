@@ -6,9 +6,5 @@ namespace Gameplay.Game.ECS.Features
     {
         public bool HasTarget;
         public EcsEntity Target;
-        public float Damage;
-        public float AttackDistance;
-        public float AttackRate;
-        public float NextAttackTime;
     }
 }

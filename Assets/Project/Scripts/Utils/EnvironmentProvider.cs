@@ -31,6 +31,7 @@ namespace Utils
 
             entities = holders
                 .Select(x => x.EcsEntity)
+                .Where(x => x.IsAlive())
                 .ToArray();
 
             return hasEntitiesAround;
@@ -43,6 +44,7 @@ namespace Utils
             holders = colliders
                 .Where(x => x.GetComponent<IEcsEntityHolder>() != null)
                 .Select(x => x.GetComponent<IEcsEntityHolder>())
+                .Where(x => x.EcsEntity.IsAlive())
                 .ToArray();
 
             return holders.Length > 0;

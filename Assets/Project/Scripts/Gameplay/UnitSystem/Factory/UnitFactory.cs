@@ -45,12 +45,25 @@ namespace Gameplay.UnitSystem.Factory
             targetLook.Range = 10;
 
             ref var agro = ref unitEntity.Get<TargetAgroComponent>();
-            agro.AttackDistance = 2;
-            agro.AttackRate = 2;
-            agro.Damage = unitData.Damage;
 
             ref var health = ref unitEntity.Get<HealthComponent>();
             health.Health = unitData.Health;
+
+            var weaponEntity = ecsWorld.NewEntity();
+
+            ref var distanceComponent = ref weaponEntity.Get<DistanceWeaponComponent>();
+            distanceComponent.AttackDistance = 2;
+            distanceComponent.Damage = unitData.Damage;
+
+            ref var coolDownComponent = ref weaponEntity.Get<AttackCoolDownComponent>();
+            coolDownComponent.AttackRate = 2;
+            coolDownComponent.AttackCoolDown = 0;
+
+            ref var ownerComponent = ref weaponEntity.Get<WeaponOwnerComponent>();
+            ownerComponent.Owner = unitEntity;
+
+            ref var weaponLink = ref unitEntity.Get<WeaponLink>();
+            weaponLink.Weapon = weaponEntity;
 
             return controller;
         }

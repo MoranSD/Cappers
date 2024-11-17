@@ -2,9 +2,9 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct WeaponAttackRequest
+    public struct AttackRequest
     {
-        public EcsEntity WeaponSender;
+        public EcsEntity Sender;
         public EcsEntity Target;
     }
 }

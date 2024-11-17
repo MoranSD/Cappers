@@ -3,10 +3,9 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UpdateAgroFollowTargetSystem : IEcsRunSystem
+    public class SetAgroTargetFromTargetLookSystem : IEcsRunSystem
     {
         private readonly EcsFilter<TranslationComponent, TargetAgroComponent, TargetLookComponent> filter = null;
-
         public void Run()
         {
             foreach (var i in filter)
@@ -16,14 +15,8 @@ namespace Gameplay.Game.ECS.Features
                 ref var lookComponent = ref filter.Get3(i);
 
                 agroComponent.HasTarget = lookComponent.HasTargetsInRange;
-                agroComponent.Target = lookComponent.HasTargetsInRange ? 
+                agroComponent.Target = lookComponent.HasTargetsInRange ?
                     EntityUtil.GetClosestEntity(transform, lookComponent.Targets) : default;
-
-                if (agroComponent.HasTarget == false) continue;
-
-                ref var entity = ref filter.GetEntity(i);
-                ref var followComponent = ref entity.Get<FollowComponent>();
-                followComponent.Target = agroComponent.Target;
             }
         }
     }

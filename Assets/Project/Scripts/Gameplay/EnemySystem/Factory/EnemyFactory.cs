@@ -1,6 +1,7 @@
 ﻿using Gameplay.EnemySystem.Data;
 using Gameplay.Game;
 using Gameplay.Game.ECS.Features;
+using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -40,12 +41,28 @@ namespace Gameplay.EnemySystem.Factory
             targetLook.Range = enemyConfigSO.Config.LookConfig.VisionRange;
 
             ref var agro = ref enemyEntity.Get<TargetAgroComponent>();
-            agro.AttackDistance = enemyConfigSO.Config.AttackConfig.AttackDistance;
-            agro.AttackRate = enemyConfigSO.Config.AttackConfig.AttackRate;
-            agro.Damage = enemyConfigSO.Config.AttackConfig.Damage;
+            //agro.AttackDistance = enemyConfigSO.Config.AttackConfig.AttackDistance;
+            //agro.AttackRate = enemyConfigSO.Config.AttackConfig.AttackRate;
+            //agro.Damage = enemyConfigSO.Config.AttackConfig.Damage;
 
             ref var health = ref enemyEntity.Get<HealthComponent>();
             health.Health = enemyConfigSO.Config.HealthConfig.StartHealthCount;
+
+            var weaponEntity = ecsWorld.NewEntity();
+
+            ref var distanceComponent = ref weaponEntity.Get<DistanceWeaponComponent>();
+            distanceComponent.AttackDistance = enemyConfigSO.Config.AttackConfig.AttackDistance;
+            distanceComponent.Damage = enemyConfigSO.Config.AttackConfig.Damage;
+
+            ref var coolDownComponent = ref weaponEntity.Get<AttackCoolDownComponent>();
+            coolDownComponent.AttackRate = enemyConfigSO.Config.AttackConfig.AttackRate;
+            coolDownComponent.AttackCoolDown = 0;
+
+            ref var ownerComponent = ref weaponEntity.Get<WeaponOwnerComponent>();
+            ownerComponent.Owner = enemyEntity;
+
+            ref var weaponLink = ref enemyEntity.Get<WeaponLink>();
+            weaponLink.Weapon = weaponEntity;
 
             return controller;
         }
