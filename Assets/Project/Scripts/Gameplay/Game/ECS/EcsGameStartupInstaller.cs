@@ -98,7 +98,9 @@ namespace Gameplay.Game.ECS
                 .Add(new ApplyDamageSystem())
 
                 .Add(new UnitDieSystem())
-                .Add(new EnemyDieSystem());
+                .Add(new EnemyDieSystem())
+                
+                .Add(new ChangeStateSystem());
         }
 
         private void AddInjections()
@@ -127,7 +129,8 @@ namespace Gameplay.Game.ECS
                 .OneFrame<ApplyDamageRequest>()
                 .OneFrame<ApplyDamageEvent>()
                 .OneFrame<AttackRequest>()
-                .OneFrame<EndsAgroEvent>();
+                .OneFrame<EndsAgroEvent>()
+                .OneFrame<ChangeStateRequest>();
         }
     }
 }
