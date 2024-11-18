@@ -1,4 +1,5 @@
 ﻿using Leopotam.Ecs;
+using UnityEngine;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
@@ -15,6 +16,12 @@ namespace Gameplay.Game.ECS.Features
                 ref var removeFollowControlRequest = ref filter.Get1(i);
                 ref var senderControlComponent = ref removeFollowControlRequest.Sender.Get<FollowControlComponent>();
                 ref var controlTarget = ref removeFollowControlRequest.Target;
+
+                if (controlTarget.Has<TagUnderFollowControl>() == false)
+                {
+                    Debug.Log("Cant remove control from not controlled target");
+                    continue;
+                }
 
                 senderControlComponent.EntitiesInControl.Remove(controlTarget);
                 controlTarget.Del<FollowComponent>();

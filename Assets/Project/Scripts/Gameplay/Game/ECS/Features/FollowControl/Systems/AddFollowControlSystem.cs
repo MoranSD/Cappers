@@ -1,4 +1,5 @@
 ﻿using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
@@ -13,6 +14,12 @@ namespace Gameplay.Game.ECS.Features
                 ref var followControlRequest = ref filter.Get1(i);
                 ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControlComponent>();
                 ref var controlTarget = ref followControlRequest.Target;
+
+                if(controlTarget.Has<TagAvailableForFollowControlInteraction>() == false)
+                {
+                    Debug.Log("Cant control uncontrollable target");
+                    continue;
+                }
 
                 if(senderControlComponent.EntitiesInControl.Contains(controlTarget) == false)
                     senderControlComponent.EntitiesInControl.Add(controlTarget);
