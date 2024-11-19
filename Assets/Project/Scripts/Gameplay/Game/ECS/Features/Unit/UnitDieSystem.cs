@@ -17,7 +17,7 @@ namespace Gameplay.Game.ECS.Features
 
                 if (healthComponent.Health > 0) continue;
 
-                int unitId = unit.Id;
+                int unitId = unit.Controller.Data.Id;
                 var unitController = existenceControl.ActiveUnits.First(x => x.Data.Id == unitId);
                 existenceControl.RemoveUnit(unitId);
 

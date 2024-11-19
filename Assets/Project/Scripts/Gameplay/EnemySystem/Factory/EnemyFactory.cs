@@ -1,7 +1,6 @@
 ﻿using Gameplay.EnemySystem.Data;
 using Gameplay.Game;
 using Gameplay.Game.ECS.Features;
-using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -26,7 +25,7 @@ namespace Gameplay.EnemySystem.Factory
             controller.Initialize(id, enemyEntity);
 
             ref var tag = ref enemyEntity.Get<TagEnemy>();
-            tag.Id = id;
+            tag.Controller = controller;
 
             ref var translation = ref enemyEntity.Get<TranslationComponent>();
             translation.Transform = controller.transform;

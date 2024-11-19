@@ -14,7 +14,7 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var removeFollowControlRequest = ref filter.Get1(i);
-                ref var senderControlComponent = ref removeFollowControlRequest.Sender.Get<FollowControlComponent>();
+                ref var senderControlComponent = ref removeFollowControlRequest.Sender.Get<FollowControllerComponent>();
                 ref var controlTarget = ref removeFollowControlRequest.Target;
 
                 if (controlTarget.Has<TagUnderFollowControl>() == false)

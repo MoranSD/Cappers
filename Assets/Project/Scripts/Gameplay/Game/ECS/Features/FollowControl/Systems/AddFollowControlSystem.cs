@@ -12,7 +12,7 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var followControlRequest = ref filter.Get1(i);
-                ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControlComponent>();
+                ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControllerComponent>();
                 ref var controlTarget = ref followControlRequest.Target;
 
                 if(controlTarget.Has<TagAvailableForFollowControlInteraction>() == false)

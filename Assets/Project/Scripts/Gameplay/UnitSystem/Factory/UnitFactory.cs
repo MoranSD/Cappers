@@ -29,25 +29,26 @@ namespace Gameplay.UnitSystem.Factory
             controller.Initialize(ecsWorld, unitEntity, unitData);
 
             ref var tag = ref unitEntity.Get<TagUnit>();
-            tag.Id = unitData.Id;
+            tag.Controller = controller;
 
             ref var translation = ref unitEntity.Get<TranslationComponent>();
             translation.Transform = controller.transform;
 
+            unitEntity.Get<AgentDestinationUpdateTime>();
             ref var movable = ref unitEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
             controller.NavMeshAgent.speed = unitData.Speed;
 
-            unitEntity.Get<AgentDestinationUpdateTime>();
+            unitEntity.Get<TagAvailableForFollowControlInteraction>();
 
             ref var targetLook = ref unitEntity.Get<TargetLookComponent>();
             targetLook.TargetLayer = gameConfig.PlayerTargetLayers;
             targetLook.Range = 10;
 
-            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
-
             ref var health = ref unitEntity.Get<HealthComponent>();
             health.Health = unitData.Health;
+
+            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
 
             var weaponEntity = ecsWorld.NewEntity();
 

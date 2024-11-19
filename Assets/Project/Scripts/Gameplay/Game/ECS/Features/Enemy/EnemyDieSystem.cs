@@ -18,7 +18,7 @@ namespace Gameplay.Game.ECS.Features
 
                 if (healthComponent.Health > 0) continue;
 
-                int enemyId = enemy.Id;
+                int enemyId = enemy.Controller.Id;
                 var enemyController = enemySpawner.ActiveEnemies.First(x => x.Id == enemyId);
                 enemySpawner.RemoveEnemy(enemyId);
 

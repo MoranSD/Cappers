@@ -7,6 +7,6 @@ namespace Gameplay.Game.ECS.Features
         public delegate void ChangeStateDelegate(ref EcsEntity entity);
 
         public EcsEntity Target;
-        public ChangeStateDelegate Delegate;
+        public ChangeStateDelegate ChangeState;
     }
 }

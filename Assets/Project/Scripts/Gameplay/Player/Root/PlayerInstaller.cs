@@ -37,13 +37,14 @@ namespace Gameplay.Player.Root
             var playerEntity = ecsWorld.NewEntity();
             player.Initialize(playerEntity, gameCamera);
 
-            playerEntity.Get<TagPlayer>();
+            ref var tagPlayer = ref playerEntity.Get<TagPlayer>();
+            tagPlayer.Controller = player;
 
             ref var targetLook = ref playerEntity.Get<TargetLookComponent>();
             targetLook.Range = playerConfig.MainConfig.FightConfig.AttackRange;
             targetLook.TargetLayer = gameConfig.PlayerTargetLayers;
 
-            ref var unitControl = ref playerEntity.Get<FollowControlComponent>();
+            ref var unitControl = ref playerEntity.Get<FollowControllerComponent>();
             unitControl.EntitiesInControl = new();
 
             ref var translation = ref playerEntity.Get<TranslationComponent>();

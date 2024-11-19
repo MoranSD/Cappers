@@ -13,7 +13,7 @@ namespace Gameplay.Game.ECS.Features
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TagPlayer, TranslationComponent, FollowControlComponent>.Exclude<BlockFreezed> filter = null;
+        private readonly EcsFilter<TagPlayer, TranslationComponent, FollowControllerComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {

@@ -3,10 +3,10 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ComebackToFollowAfterFightSystem : IEcsRunSystem
+    public class ComebackToFollowAfterAgroSystem : IEcsRunSystem
     {
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<EndsAgroEvent> filter = null;
+        private readonly EcsFilter<EndAgroEvent> filter = null;
 
         public void Run()
         {

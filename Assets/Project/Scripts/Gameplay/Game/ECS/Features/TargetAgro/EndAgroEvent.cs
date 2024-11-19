@@ -2,7 +2,7 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct EndsAgroEvent
+    public struct EndAgroEvent
     {
         public EcsEntity Entity;
     }

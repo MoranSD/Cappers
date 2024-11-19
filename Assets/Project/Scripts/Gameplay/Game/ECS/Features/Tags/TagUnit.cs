@@ -1,7 +1,9 @@
-﻿namespace Gameplay.Game.ECS.Features
+﻿using Gameplay.UnitSystem.Controller;
+
+namespace Gameplay.Game.ECS.Features
 {
     public struct TagUnit
     {
-        public int Id;
+        public UnitController Controller;
     }
 }

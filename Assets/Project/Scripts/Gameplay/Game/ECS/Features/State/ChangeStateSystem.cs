@@ -15,7 +15,7 @@ namespace Gameplay.Game.ECS.Features
                 if(targetEntity.IsAlive() == false)
                     continue;
 
-                request.Delegate.Invoke(ref targetEntity);
+                request.ChangeState.Invoke(ref targetEntity);
             }
         }
     }

@@ -24,7 +24,14 @@ namespace Gameplay.Game.ECS.Features
 
                 if (hadTarget && agroComponent.HasTarget == false)
                 {
-                    _world.NewEntityWithComponent<EndsAgroEvent>(new()
+                    _world.NewEntityWithComponent<EndAgroEvent>(new()
+                    {
+                        Entity = entity
+                    });
+                }
+                else if (hadTarget == false && agroComponent.HasTarget)
+                {
+                    _world.NewEntityWithComponent<BeginAgroEvent>(new()
                     {
                         Entity = entity
                     });
