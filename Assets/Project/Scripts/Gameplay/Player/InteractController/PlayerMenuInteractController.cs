@@ -32,7 +32,6 @@ namespace Gameplay.Player.InteractController
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
         }
 
@@ -69,19 +68,19 @@ namespace Gameplay.Player.InteractController
 
             await TaskUtils.WaitWhile(() => isExiting, cancellationTokenSource.Token);
 
-            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             if (followInteractor != null)
             {
                 isCameraInteracting = true;
                 await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot(), cancellationTokenSource.Token);
 
-                if (cancellationTokenSource.Token.IsCancellationRequested) return;
+                if (cancellationTokenSource.IsCancellationRequested) return;
             }
 
             await panelsManager.ShowPanelAsync(panelType, cancellationTokenSource.Token);
 
-            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
@@ -94,11 +93,11 @@ namespace Gameplay.Player.InteractController
 
             await TaskUtils.WaitWhile(() => isEntering, cancellationTokenSource.Token);
 
-            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             await panelsManager.ShowDefaultAsync(cancellationTokenSource.Token);
 
-            if (cancellationTokenSource.Token.IsCancellationRequested) return;
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             if (isCameraInteracting)
             {

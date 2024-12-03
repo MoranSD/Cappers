@@ -15,7 +15,6 @@ namespace Infrastructure.SceneLoad
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
         }
 
@@ -23,6 +22,7 @@ namespace Infrastructure.SceneLoad
         {
             cancellationTokenSource = new CancellationTokenSource();
             await LoadProcess(sceneType, cancellationTokenSource.Token, onLoaded);
+            if (cancellationTokenSource == null) return;
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }

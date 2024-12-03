@@ -1319,6 +1319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2771761083211585687}
   - component: {fileID: 1580715210134557997}
+  - component: {fileID: 2601788211157344691}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -1363,6 +1364,20 @@ MonoBehaviour:
   - {fileID: 3717388810144202909}
   - {fileID: 6730790358632275379}
   - {fileID: 1376413127223676071}
+--- !u!114 &2601788211157344691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8351228711258555194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e12ce6f025038a543bf4e5872cd97918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cannonAttackZones: []
+  boardingPivots: []
 --- !u!1 &9171504498289297374
 GameObject:
   m_ObjectHideFlags: 0

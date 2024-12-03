@@ -19,6 +19,8 @@ namespace Gameplay.Game
         //ship inventory
         public List<int> QuestItems;
         public List<UnitData> Units;
+        //Ship stats
+        public float ShipHealth;
 
         public GameState()
         {

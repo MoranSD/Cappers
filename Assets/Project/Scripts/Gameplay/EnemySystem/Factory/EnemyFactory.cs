@@ -6,23 +6,34 @@ using UnityEngine;
 
 namespace Gameplay.EnemySystem.Factory
 {
-    public class EnemyFactory
+    public class EnemyFactory : IEnemyFactory
     {
         private readonly EcsWorld ecsWorld;
         private readonly GameConfig gameConfig;
+        private readonly EnemyFactoryConfig config;
 
-        public EnemyFactory(EcsWorld ecsWorld, GameConfig gameConfig)
+        private int globalSpawnId = 0;
+
+        public EnemyFactory(EcsWorld ecsWorld, GameConfig gameConfig, EnemyFactoryConfig config)
         {
             this.ecsWorld = ecsWorld;
             this.gameConfig = gameConfig;
+            this.config = config;
         }
 
-        public EnemyController Create(Transform spawnPoint, EnemyConfigSO enemyConfigSO, int id)
+        public EnemyController Create(Transform spawnPoint, EnemyType type)
+        {
+            EnemyConfigSO typeConfig = config.GetDefaultConfig(type);
+            return Create(spawnPoint, typeConfig);
+        }
+
+        public EnemyController Create(Transform spawnPoint, EnemyConfigSO enemyConfigSO)
         {
             var controller = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
 
             var enemyEntity = ecsWorld.NewEntity();
-            controller.Initialize(id, enemyEntity);
+            controller.Initialize(globalSpawnId, enemyEntity);
+            globalSpawnId++;
 
             ref var tag = ref enemyEntity.Get<TagEnemy>();
             tag.Controller = controller;
@@ -65,5 +76,7 @@ namespace Gameplay.EnemySystem.Factory
 
             return controller;
         }
+
+        public EnemyController CreateBoardingEnemy(Transform spawnPoint) => Create(spawnPoint, EnemyType.melee);
     }
 }

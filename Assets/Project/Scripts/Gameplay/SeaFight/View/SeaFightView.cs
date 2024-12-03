@@ -1,21 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using Gameplay.SeaFight.Ship.View;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.SeaFight.View
 {
     public class SeaFightView : MonoBehaviour, ISeaFightView
     {
-        public Task ShowNewShip()
+        public void HideShip()
         {
             throw new System.NotImplementedException();
         }
 
-        public object GetCurrentShipView()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void HideCurrentShip()
+        public Task<IEnemyShipView> ShowShip(CancellationToken token)
         {
             throw new System.NotImplementedException();
         }

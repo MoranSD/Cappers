@@ -37,7 +37,6 @@ namespace Gameplay.Travel
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
         }
 
@@ -95,6 +94,9 @@ namespace Gameplay.Travel
             await levelLoadService.LoadLocationAsync(locationId, cancellationTokenSource.Token);
 
             if (isCancellationRequested) return;
+
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
 
             gameState.CurrentLocationId = locationId; 
             IsTraveling = false;

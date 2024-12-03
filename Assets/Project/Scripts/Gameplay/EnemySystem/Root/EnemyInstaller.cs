@@ -1,4 +1,5 @@
-﻿using Gameplay.EnemySystem.Spawn;
+﻿using Gameplay.EnemySystem.Factory;
+using Gameplay.EnemySystem.Spawn;
 using Gameplay.Game;
 using Infrastructure;
 using Infrastructure.Composition;
@@ -10,8 +11,6 @@ namespace Gameplay.EnemySystem.Root
 {
     public class EnemyInstaller : Installer
     {
-        private EnemySpawner enemySpawner;
-
         public override void PreInitialize()
         {
             var tickManager = ServiceLocator.Get<TickManager>();
@@ -19,12 +18,20 @@ namespace Gameplay.EnemySystem.Root
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
 
             var gameConfig = assetProvider.Load<GameConfig>(Constants.GameConfigPath);
+            var factoryConfig = assetProvider.Load<EnemyFactoryConfig>(Constants.EnemyFactoryConfig);
 
-            enemySpawner = new EnemySpawner(ecsWorld, gameConfig);
-            enemySpawner.Initialize();
+            var factory = new EnemyFactory(ecsWorld, gameConfig, factoryConfig);
+            ServiceLocator.Register<IEnemyFactory>(factory);
 
-            var ecsSystems = ServiceLocator.Get<EcsSystems>();
-            ecsSystems.Inject(enemySpawner);
+            //spawn by spawnPoints
+            var spawnPoints = FindObjectsOfType<EnemySpawnPoint>();
+            for (int i = 0; i < spawnPoints.Length; i++)
+                factory.Create(spawnPoints[i].SpawnPoint, spawnPoints[i].ConfigSO);
+        }
+
+        public override void Dispose()
+        {
+            ServiceLocator.Remove<IEnemyFactory>();
         }
     }
 }

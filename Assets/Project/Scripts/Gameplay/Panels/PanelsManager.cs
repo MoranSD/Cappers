@@ -28,7 +28,6 @@ namespace Gameplay.Panels
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
         }
 
@@ -54,6 +53,9 @@ namespace Gameplay.Panels
         {
             cancellationTokenSource = new();
             await ShowPanelAsync(defaultPanelType, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource == null) return;
+
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }
@@ -62,6 +64,9 @@ namespace Gameplay.Panels
         {
             cancellationTokenSource = new();
             await ShowPanelAsync(panelType, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource == null) return;
+
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }

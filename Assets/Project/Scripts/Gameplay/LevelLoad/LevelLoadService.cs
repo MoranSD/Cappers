@@ -41,14 +41,17 @@ namespace Gameplay.LevelLoad
             { 
                 cancellationTokenSource.Cancel(); 
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
         }
 
         public async void LoadLocation(int locationId)
         {
             cancellationTokenSource = new CancellationTokenSource();
+
             await LoadLocationAsync(locationId, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource == null) return;
+
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }

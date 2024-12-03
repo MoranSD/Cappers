@@ -1,12 +1,9 @@
-﻿using Gameplay.EnemySystem.Spawn;
-using Leopotam.Ecs;
-using System.Linq;
+﻿using Leopotam.Ecs;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class EnemyDieSystem : IEcsRunSystem
     {
-        private readonly EnemySpawner enemySpawner = null;
         private readonly EcsFilter<TagEnemy, HealthComponent> filter = null;
 
         public void Run()
@@ -18,11 +15,7 @@ namespace Gameplay.Game.ECS.Features
 
                 if (healthComponent.Health > 0) continue;
 
-                int enemyId = enemy.Controller.Id;
-                var enemyController = enemySpawner.ActiveEnemies.First(x => x.Id == enemyId);
-                enemySpawner.RemoveEnemy(enemyId);
-
-                enemyController.Destroy();
+                enemy.Controller.Destroy();
                 ref var enemyEntity = ref filter.GetEntity(i);
                 enemyEntity.Destroy();
             }
