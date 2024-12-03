@@ -9,6 +9,6 @@
         public const string WorldQuestItemsConfigPathFormat = "Configs/World/{0}/WorldQuestItemsConfig";
         public const string ShipConfig = "Configs/Ship/ShipConfig";
         public const string UnitFactoryConfig = "Configs/Unit/Factory/UnitFactoryConfig";
-        public const string EnemyFactoryConfig = "Configs/Unit/Factory/UnitFactoryConfig";//todo
+        public const string EnemyFactoryConfig = "Configs/Enemy/EnemyFactoryConfig";
     }
 }

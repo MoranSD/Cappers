@@ -2,7 +2,7 @@
 
 namespace Gameplay.EnemySystem.Data
 {
-    [CreateAssetMenu(menuName = "Enemy/EnemyConfig")]
+    [CreateAssetMenu(menuName = "EnemySystem/EnemyConfig")]
     public class EnemyConfigSO : ScriptableObject
     {
         public EnemyType enemyType;
