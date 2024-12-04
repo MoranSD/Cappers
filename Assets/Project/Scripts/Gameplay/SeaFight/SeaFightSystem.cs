@@ -35,6 +35,7 @@ namespace Gameplay.SeaFight
 
         public void Initialize()
         {
+            travelSystem.OnLeaveLocation += OnTravelBegin;
         }
 
         public void Dispose()

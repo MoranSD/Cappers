@@ -1,6 +1,9 @@
-﻿using System.Threading;
+﻿using Gameplay.Game.ECS.Features;
+using Leopotam.Ecs;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Ship.Fight.View
 {
@@ -12,11 +15,23 @@ namespace Gameplay.Ship.Fight.View
         [SerializeField] private CannonAttackZone[] cannonAttackZones;
         [SerializeField] private Transform[] boardingPivots;
 
+        private EcsWorld world;
+
+        public void Initialize(EcsWorld world)
+        {
+            this.world = world;
+        }
+
         public void ApplyDamageInZone(int zoneId, float damage)
         {
-            /*
-             * создать дамаг зону в ецс
-             */
+            var zone = cannonAttackZones[zoneId];
+            world.NewEntityWithComponent<OneFrameDamageZone>(new()
+            {
+                Center = zone.transform.position,
+                Border = zone.Border,
+                Orientation = zone.transform.rotation,
+                Damage = damage,
+            });
         }
 
         public Task DrawCannonZoneDanger(int zoneId, CancellationToken token) => cannonAttackZones[zoneId].DrawDanger(token);

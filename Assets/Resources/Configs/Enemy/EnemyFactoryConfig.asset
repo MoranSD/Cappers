@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d0e5c7bd5db07449290779569e3986, type: 3}
   m_Name: EnemyFactoryConfig
   m_EditorClassIdentifier: 
-  defaultConfigs: []
+  defaultConfigs:
+  - Type: 0
+    Config: {fileID: 11400000, guid: f6e92fd540ae5ee4a8b733034a5f3f0c, type: 2}

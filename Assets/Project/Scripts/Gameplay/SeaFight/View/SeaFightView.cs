@@ -7,14 +7,21 @@ namespace Gameplay.SeaFight.View
 {
     public class SeaFightView : MonoBehaviour, ISeaFightView
     {
+        [SerializeField] private EnemyShipView enemyShipViewPrefab;
+
+        private EnemyShipView currentShip;
+
         public void HideShip()
         {
-            throw new System.NotImplementedException();
+            Destroy(currentShip.gameObject);
         }
 
-        public Task<IEnemyShipView> ShowShip(CancellationToken token)
+        public async Task<IEnemyShipView> ShowShip(CancellationToken token)
         {
-            throw new System.NotImplementedException();
+            currentShip = Instantiate(enemyShipViewPrefab);
+            await Task.Delay(0, token);
+            if (token.IsCancellationRequested) return null;
+            return currentShip;
         }
     }
 }

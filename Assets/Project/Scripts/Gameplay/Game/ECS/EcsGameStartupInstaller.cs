@@ -98,6 +98,8 @@ namespace Gameplay.Game.ECS
                 .Add(new AgentFollowSystem())
                 .Add(new AgentSetDestinationSystem())
 
+                .Add(new DamageZoneSystem())
+
                 .Add(new ApplyDamageSystem())
 
                 .Add(new UnitDieSystem())
@@ -134,8 +136,10 @@ namespace Gameplay.Game.ECS
                 .OneFrame<ApplyDamageRequest>()
                 .OneFrame<ApplyDamageEvent>()
                 .OneFrame<AttackRequest>()
+                .OneFrame<BeginAgroEvent>()
                 .OneFrame<EndAgroEvent>()
-                .OneFrame<ChangeStateRequest>();
+                .OneFrame<ChangeStateRequest>()
+                .OneFrame<OneFrameDamageZone>();
         }
     }
 }

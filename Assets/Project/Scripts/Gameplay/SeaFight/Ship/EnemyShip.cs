@@ -51,6 +51,7 @@ namespace Gameplay.SeaFight.Ship
                 if (cancellationTokenSource.IsCancellationRequested) return;
 
                 //check for win
+                //todo
                 if (shipFight.IsDead)
                 {
                     OnFightEnd?.Invoke();
@@ -95,14 +96,14 @@ namespace Gameplay.SeaFight.Ship
         private int[] GenerateIds(int N, int count)
         {
             // Проверяем, достаточно ли уникальных чисел
-            if (count > N + 1)
+            if (count > N)
             {
                 throw new ArgumentException("Запрашиваемое количество чисел превышает доступные уникальные числа от 0 до N.");
             }
 
             // Генерируем уникальные числа от 0 до N
             Random random = new Random();
-            return Enumerable.Range(0, N + 1)
+            return Enumerable.Range(0, N)
                              .OrderBy(x => random.Next())
                              .Take(count)
                              .ToArray();

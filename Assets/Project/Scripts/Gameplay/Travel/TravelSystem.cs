@@ -17,7 +17,7 @@ namespace Gameplay.Travel
         public bool IsPaused { get; private set; }
         public int TravelTimer { get; private set; }
 
-        private const int TravelHalfDurationInSeconds = 1;
+        private const int TravelHalfDurationInSeconds = 3;
 
         private readonly GameState gameState;
         private readonly ILevelLoadService levelLoadService;
@@ -113,7 +113,7 @@ namespace Gameplay.Travel
                 try
                 {
                     await Task.Delay(timerWaiter, cancellationTokenSource.Token);
-                    await TaskUtils.WaitWhile(() => IsTraveling, cancellationTokenSource.Token);
+                    await TaskUtils.WaitWhile(() => IsPaused, cancellationTokenSource.Token);
 
                     if (isCancellationRequested) return;
 

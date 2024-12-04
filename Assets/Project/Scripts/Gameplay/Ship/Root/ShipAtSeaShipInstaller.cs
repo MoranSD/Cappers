@@ -3,6 +3,7 @@ using Infrastructure;
 using UnityEngine;
 using Gameplay.Ship.Fight;
 using Gameplay.Ship.Fight.View;
+using Leopotam.Ecs;
 
 namespace Gameplay.Ship.Root
 {
@@ -15,7 +16,11 @@ namespace Gameplay.Ship.Root
             base.PostInitialize();
 
             var gameState = ServiceLocator.Get<GameState>();
+            var ecsWorld = ServiceLocator.Get<EcsWorld>();
+
+            shipFightView.Initialize(ecsWorld);
             var shipFight = new ShipFight(shipFightView, gameState);
+
             ServiceLocator.Register(shipFight);
         }
 
