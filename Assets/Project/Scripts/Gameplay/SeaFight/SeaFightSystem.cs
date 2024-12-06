@@ -12,6 +12,7 @@ namespace Gameplay.SeaFight
     public class SeaFightSystem
     {
         public bool IsInFight { get; private set; }
+        public EnemyShip EnemyShip { get; private set; }
 
         private readonly TravelSystem travelSystem;
         private readonly QuestManager questManager;
@@ -21,7 +22,6 @@ namespace Gameplay.SeaFight
         private readonly ISeaFightView view;
 
         private CancellationTokenSource cancellationTokenSource;
-        private EnemyShip enemyShip;
 
         public SeaFightSystem(TravelSystem travelSystem, QuestManager questManager, ISeaFightView view, ShipFight shipFight, IEnemyFactory enemyFactory)
         {
@@ -49,8 +49,8 @@ namespace Gameplay.SeaFight
             }
             if(IsInFight)
             {
-                enemyShip.OnFightEnd -= OnFightEnd;
-                enemyShip.Dispose();
+                EnemyShip.OnFightEnd -= OnFightEnd;
+                EnemyShip.Dispose();
             }
         }
 
@@ -66,9 +66,9 @@ namespace Gameplay.SeaFight
 
             if (cancellationTokenSource.IsCancellationRequested) return;
 
-            enemyShip = new(newShipView, enemyFactory, shipFight);
-            enemyShip.OnFightEnd += OnFightEnd;
-            enemyShip.BeginFight();
+            EnemyShip = new(newShipView, enemyFactory, shipFight);
+            EnemyShip.OnFightEnd += OnFightEnd;
+            EnemyShip.BeginFight();
 
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
@@ -92,9 +92,9 @@ namespace Gameplay.SeaFight
             IsInFight = false;
             view.HideShip();
 
-            enemyShip.OnFightEnd -= OnFightEnd;
-            enemyShip.Dispose();
-            enemyShip = null;
+            EnemyShip.OnFightEnd -= OnFightEnd;
+            EnemyShip.Dispose();
+            EnemyShip = null;
 
             //TODO: if player is dead so do nothing
             if (travelSystem.IsTraveling && travelSystem.IsPaused)

@@ -1,6 +1,7 @@
 ﻿using Gameplay.Player;
 using Gameplay.SeaFight.Ship;
 using Infrastructure.GameInput;
+using Infrastructure.TickManagement;
 using Leopotam.Ecs;
 using System;
 using System.Collections;
@@ -36,73 +37,151 @@ namespace Gameplay.Ship.Fight.Cannon
             Destroy(gameObject);
         }
     }
-    public class Cannon : MonoBehaviour, IInteractor
+    public interface ICannonView
     {
-        public bool IsInteractable => reloadTime <= 0 || !isAiming || !isShooting;
+        event Action OnPlayerInteract;
+        event Action OnUnitInteract;
 
-        public event Action OnInteracted;
+        Transform AimPivot { get; }
 
-        [SerializeField] private Transform barrelTF;
-        [SerializeField] private Transform aimTF;
+        void SetAvailable(bool available);
+        void BeginAim();
+        void EndAim();
+        void DrawCannonFly(Action callBack);
+    }
+    public class CannonView : MonoBehaviour, ICannonView
+    {
+        public event Action OnPlayerInteract;
+        public event Action OnUnitInteract;
+
+        [field: SerializeField] public Transform AimPivot { get; private set; }
+
+        [SerializeField] private TriggerInteractor interactor;
         [SerializeField] private CannonBall cannonBallPrefab;
+        [SerializeField] private Transform ballStartPivot;
         [SerializeField] private Transform aimStartPivot;
-        [SerializeField] private float reloadDuration = 10;
+
+        public void Initialize()
+        {
+            interactor.OnInteracted += OnPlayerInteracted;
+        }
+
+        public void Dispose()
+        {
+            interactor.OnInteracted -= OnPlayerInteracted;
+        }
+
+        public void SetAvailable(bool available) => interactor.IsInteractable = available;
+
+        private void OnPlayerInteracted() => OnPlayerInteract?.Invoke();
+        private void OnUnitInteracted() => OnUnitInteract?.Invoke();
+
+        public void BeginAim()
+        {
+            //show and activate aim object
+        }
+
+        public void EndAim()
+        {
+            //hide and deactivate aim object
+        }
+
+        public void DrawCannonFly(Action callBack)
+        {
+            var ball = Instantiate(cannonBallPrefab, ballStartPivot.position, Quaternion.identity);
+            ball.Fly(ballStartPivot, AimPivot, callBack);
+        }
+    }
+
+    public class Cannon : ITickable
+    {
+        public bool IsAvailable => reloadTime <= 0 && !isAiming && !isShooting;
 
         private float reloadTime;
         private bool isAiming;
         private bool isShooting;
 
-        private EcsWorld world;
-        private PlayerController player;
-        private IInput input;
-        private EnemyShip enemyShip;
+        private readonly PlayerController player;
+        private readonly IInput input;
+        private readonly EnemyShip enemyShip;
+        private readonly ICannonView view;
+        private float reloadDuration;
 
-        public void Initialize(EcsWorld world, PlayerController player, IInput input, EnemyShip enemyShip)
+        public Cannon(PlayerController player, IInput input, EnemyShip enemyShip, ICannonView view)
         {
-            this.world = world;
             this.player = player;
             this.input = input;
             this.enemyShip = enemyShip;
+            this.view = view;
+            reloadDuration = 10;
         }
 
-        private void Update()
+        public void Initialize()
+        {
+            view.OnPlayerInteract += OnPlayerInteract;
+            view.SetAvailable(true);
+        }
+
+        public void Dispose()
+        {
+            view.OnPlayerInteract -= OnPlayerInteract;
+        }
+
+        public void Update(float deltaTime)
         {
             if(reloadTime > 0)
-                reloadTime -= Time.deltaTime;
+            {
+                reloadTime -= deltaTime;
+
+                if(reloadTime <= 0)
+                    view.SetAvailable(true);
+            }
 
             if (!isAiming) return;
 
             if (input.IsExitButtonPressed)
             {
-                isAiming = false;
-                player.SetFreeze(false);
-                player.GameCamera.ExitFollowState();
+                ExitInteraction();
                 return;
             }
 
             if (input.IsInteractButtonPressed)
             {
                 reloadDuration += reloadTime;
-                //удалить сущность "прицел"
-                var ball = Instantiate(cannonBallPrefab, barrelTF.position, Quaternion.identity);
-                ball.Fly(barrelTF, aimTF, () =>
+                view.SetAvailable(false);
+
+                ExitInteraction();
+                isShooting = true;
+                view.EndAim();
+
+                view.DrawCannonFly(() =>
                 {
-                    //todo: check for critical zones (just check for collisions)
-                    enemyShip.ApplyDamage(10, false);
+                    isShooting = false;
+                    enemyShip.ApplyDamage(view.AimPivot, 10);
                 });
             }
         }
 
-        public void Interact()
+        private void OnPlayerInteract()
         {
-            OnInteracted?.Invoke();
+            if (isAiming)
+                throw new System.Exception();
 
-            player.SetFreeze(true);
-            player.GameCamera.EnterFollowState(aimTF);
+            if (reloadTime > 0)
+                return;
 
             isAiming = true;
+            view.BeginAim();
 
-            //создать сущность "прицел"
+            player.SetFreeze(true);
+            player.GameCamera.EnterFollowState(view.AimPivot);
+        }
+
+        private void ExitInteraction()
+        {
+            isAiming = false;
+            player.SetFreeze(false);
+            player.GameCamera.ExitFollowState();
         }
     }
 }

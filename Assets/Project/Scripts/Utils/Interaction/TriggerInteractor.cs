@@ -6,7 +6,7 @@ namespace Utils.Interaction
     public class TriggerInteractor : MonoBehaviour, IInteractor
     {
         public event Action OnInteracted;
-        public bool IsInteractable => true;
+        public bool IsInteractable { get; set; } = true;
 
         public void Interact() => OnInteracted?.Invoke();
     }

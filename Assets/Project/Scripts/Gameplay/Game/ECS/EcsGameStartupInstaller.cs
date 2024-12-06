@@ -68,6 +68,8 @@ namespace Gameplay.Game.ECS
                 .Add(new ChMovementPhysicsSystem())
                 .Add(new ChMovementSystem())
 
+                .Add(new ArcMovementSystem())
+
                 .Add(new TFTurnSystem())
 
                 //finds targets around
@@ -139,7 +141,8 @@ namespace Gameplay.Game.ECS
                 .OneFrame<BeginAgroEvent>()
                 .OneFrame<EndAgroEvent>()
                 .OneFrame<ChangeStateRequest>()
-                .OneFrame<OneFrameDamageZone>();
+                .OneFrame<OneFrameDamageZone>()
+                .OneFrame<ReachArcEndEvent>();
         }
     }
 }

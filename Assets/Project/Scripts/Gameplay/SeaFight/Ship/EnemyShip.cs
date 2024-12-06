@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 using Utils;
 
 namespace Gameplay.SeaFight.Ship
@@ -40,9 +41,10 @@ namespace Gameplay.SeaFight.Ship
             }
         }
 
-        public void ApplyDamage(float damage, bool isCritical)
+        public void ApplyDamage(Transform hitPoint, float damage)
         {
-            health -= damage * (isCritical ? 2 : 1);
+            health -= damage;
+            //todo: ask view for critical hit
         }
 
         public void SetCriticalZonesActive(bool active) => view.SetCriticalZonesActive(active);
@@ -53,7 +55,7 @@ namespace Gameplay.SeaFight.Ship
 
             while (true)
             {
-                if(new Random().Next(0, 10) >= 5) await CannonAttackProcess();
+                if(new System.Random().Next(0, 10) >= 5) await CannonAttackProcess();
                 else await BoardingAttackProcess();
 
                 if(cancellationTokenSource.IsCancellationRequested) return;
@@ -116,7 +118,7 @@ namespace Gameplay.SeaFight.Ship
             }
 
             // Генерируем уникальные числа от 0 до N
-            Random random = new Random();
+            System.Random random = new System.Random();
             return Enumerable.Range(0, N)
                              .OrderBy(x => random.Next())
                              .Take(count)
