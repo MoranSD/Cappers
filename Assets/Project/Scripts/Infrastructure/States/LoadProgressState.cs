@@ -11,24 +11,25 @@ namespace Infrastructure.States
     {
         private readonly ILevelLoadService levelLoadService;
         private readonly Game game;
-        private readonly GameState gameData;
+        private readonly GameState gameState;
         private readonly IAssetProvider assetProvider;
 
-        public LoadProgressState(ILevelLoadService levelLoadService, Game game, GameState gameData, IAssetProvider assetProvider)
+        public LoadProgressState(ILevelLoadService levelLoadService, Game game, GameState gameState, IAssetProvider assetProvider)
         {
             this.levelLoadService = levelLoadService;
             this.game = game;
-            this.gameData = gameData;
+            this.gameState = gameState;
             this.assetProvider = assetProvider;
         }
 
         public void Enter()
         {
-            gameData.World = CreateWorld(0);
-            gameData.CurrentLocationId = 0;// GameConstants.SeaLocationId;
-            gameData.OpenLocation(0);//0 is "Port 0" location id, depends on index in config
+            gameState.World = CreateWorld(0);
+            gameState.CurrentLocationId = 0;// GameConstants.SeaLocationId;
+            gameState.ShipHealth = 100;
+            gameState.OpenLocation(0);//0 is "Port 0" location id, depends on index in config
 
-            levelLoadService.LoadLocation(gameData.CurrentLocationId);
+            levelLoadService.LoadLocation(gameState.CurrentLocationId);
         }
 
         public void Exit()

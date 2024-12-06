@@ -1,4 +1,5 @@
-﻿using Gameplay.EnemySystem.Factory;
+﻿using Gameplay.EnemySystem;
+using Gameplay.EnemySystem.Factory;
 using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Utils;
 
 namespace Gameplay.SeaFight.Ship
 {
@@ -17,6 +19,8 @@ namespace Gameplay.SeaFight.Ship
         private readonly IEnemyFactory enemyFactory;
         private readonly ShipFight shipFight;
 
+        private float health;
+
         private CancellationTokenSource cancellationTokenSource;
 
         public EnemyShip(IEnemyShipView view, IEnemyFactory enemyFactory, ShipFight shipFight)
@@ -24,6 +28,7 @@ namespace Gameplay.SeaFight.Ship
             this.view = view;
             this.enemyFactory = enemyFactory;
             this.shipFight = shipFight;
+            health = 10;
         }
 
         public void Dispose()
@@ -34,6 +39,13 @@ namespace Gameplay.SeaFight.Ship
                 cancellationTokenSource.Dispose();
             }
         }
+
+        public void ApplyDamage(float damage, bool isCritical)
+        {
+            health -= damage * (isCritical ? 2 : 1);
+        }
+
+        public void SetCriticalZonesActive(bool active) => view.SetCriticalZonesActive(active);
 
         public async void BeginFight()
         {
@@ -50,9 +62,7 @@ namespace Gameplay.SeaFight.Ship
 
                 if (cancellationTokenSource.IsCancellationRequested) return;
 
-                //check for win
-                //todo
-                if (shipFight.IsDead)
+                if (shipFight.IsDead || health <= 0)
                 {
                     OnFightEnd?.Invoke();
                     return;
@@ -81,16 +91,20 @@ namespace Gameplay.SeaFight.Ship
         private async Task BoardingAttackProcess()
         {
             var targetPivots = GenerateIds(shipFight.BoardingPivotsCount, 3);
+            var enemies = new List<IEnemyController>(targetPivots.Length);
 
             foreach(var pivotId in targetPivots)
             {
                 var pivot = shipFight.GetBoardingPivot(pivotId);
-                enemyFactory.CreateBoardingEnemy(pivot);
+                var enemy = enemyFactory.CreateBoardingEnemy(pivot);
+                enemies.Add(enemy);
 
                 await Task.Delay(1000, cancellationTokenSource.Token);
 
                 if (cancellationTokenSource.IsCancellationRequested) return;
             }
+
+            await TaskUtils.WaitWhile(() => enemies.All(x => x.IsAlive == false), cancellationTokenSource.Token);
         }
 
         private int[] GenerateIds(int N, int count)

@@ -2,6 +2,7 @@
 {
     public interface IEnemyShipView
     {
+        void SetCriticalZonesActive(bool active);
         void DrawCannonAttack();
     }
 }

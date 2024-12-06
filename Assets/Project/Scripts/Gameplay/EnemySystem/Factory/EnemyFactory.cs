@@ -21,13 +21,13 @@ namespace Gameplay.EnemySystem.Factory
             this.config = config;
         }
 
-        public EnemyController Create(Transform spawnPoint, EnemyType type)
+        public IEnemyController Create(Transform spawnPoint, EnemyType type)
         {
             EnemyConfigSO typeConfig = config.GetDefaultConfig(type);
             return Create(spawnPoint, typeConfig);
         }
 
-        public EnemyController Create(Transform spawnPoint, EnemyConfigSO enemyConfigSO)
+        public IEnemyController Create(Transform spawnPoint, EnemyConfigSO enemyConfigSO)
         {
             var controller = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
 
@@ -77,6 +77,6 @@ namespace Gameplay.EnemySystem.Factory
             return controller;
         }
 
-        public EnemyController CreateBoardingEnemy(Transform spawnPoint) => Create(spawnPoint, EnemyType.melee);
+        public IEnemyController CreateBoardingEnemy(Transform spawnPoint) => Create(spawnPoint, EnemyType.melee);
     }
 }

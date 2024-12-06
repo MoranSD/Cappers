@@ -31,8 +31,9 @@ namespace Gameplay.Ship.Fight
 
             view.ApplyDamageInZone(zoneId, damage);
 
+            gameState.ShipHealth -= damage;
             //todo
-            //тут можно посчитать шанс пробоины и нанести урон по хп корабля
+            //тут можно посчитать шанс пробоины
             //пробоину можно показать во вьюхе и вызвать ивент, чтобы другая система знала че да как
         }
     }

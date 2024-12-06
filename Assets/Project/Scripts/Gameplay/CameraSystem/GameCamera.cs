@@ -13,24 +13,47 @@ namespace Gameplay.CameraSystem
 
         [SerializeField] private CinemachineVirtualCamera playerFollowCamera;
         [SerializeField] private CinemachineVirtualCamera interactFollowCamera;
+        [SerializeField] private CinemachineVirtualCamera targetFollowCamera;
         [SerializeField] private float changeCameraDuration = 0.75f;
 
         public void Initialize()
         {
             playerFollowCamera.Priority = 1;
             interactFollowCamera.Priority = 0;
+            targetFollowCamera.Priority = 0;
+        }
+
+        public void EnterFollowState(Transform target)
+        {
+            targetFollowCamera.Follow = target;
+            targetFollowCamera.Priority = 1;
+
+            playerFollowCamera.Priority = 0;
+            interactFollowCamera.Priority = 0;
+        }
+
+        public void ExitFollowState()
+        {
+            playerFollowCamera.Priority = 1;
+
+            targetFollowCamera.Priority = 0;
+            interactFollowCamera.Priority = 0;
         }
 
         public void EnterInteractState(Vector3 followPosition)
         {
             interactFollowCamera.Follow.position = followPosition;
-            playerFollowCamera.Priority = 0;
             interactFollowCamera.Priority = 1;
+
+            playerFollowCamera.Priority = 0;
+            targetFollowCamera.Priority = 0;
         }
 
         public void ExitInteractState()
         {
             playerFollowCamera.Priority = 1;
+
+            targetFollowCamera.Priority = 0;
             interactFollowCamera.Priority = 0;
         }
 

@@ -30,15 +30,18 @@ namespace Gameplay.Game.ECS.Features
                 if (EnvironmentProvider.TryGetInteractor(transform, interactRange, out IInteractor interactor) && 
                     interactor.IsInteractable)
                 {
-                    if (followControlComponent.EntitiesInControl.Count > 0 && interactor is IUnitInteractable)
+                    if (followControlComponent.EntitiesInControl.Count > 0 && interactor is IUnitInteractable unitInteractable)
                     {
+                        var unitInteract = followControlComponent.EntitiesInControl.First();
+
                         _world.NewEntityWithComponent<RemoveFollowControlRequest>(new()
                         {
                             Sender = playerEntity,
-                            Target = followControlComponent.EntitiesInControl.First(),
+                            Target = unitInteract,
                         });
-                        //unit interacts with interactor
-                        interactor.Interact();
+
+                        ref var unit = ref unitInteract.Get<TagUnit>().Controller;
+                        unitInteractable.Interact(unit);
                     }
                     else
                     {
