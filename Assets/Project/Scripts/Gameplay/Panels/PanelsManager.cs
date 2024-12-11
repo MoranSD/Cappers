@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
-using System.Threading.Tasks;
-using Utils;
-using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Gameplay.Panels
 {
@@ -14,7 +12,6 @@ namespace Gameplay.Panels
         private Dictionary<PanelType, IPanel> activePanels;
 
         private bool IsChanging = false;
-        private CancellationTokenSource cancellationTokenSource;
 
         public PanelsManager(PanelType defaultPanelType)
         {
@@ -24,11 +21,6 @@ namespace Gameplay.Panels
 
         public void Dispose()
         {
-            if (cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
         }
 
         public void RegisterPanel(IPanel panel)
@@ -51,48 +43,30 @@ namespace Gameplay.Panels
 
         public async void ShowDefault()
         {
-            cancellationTokenSource = new();
-            await ShowPanelAsync(defaultPanelType, cancellationTokenSource.Token);
-
-            if (cancellationTokenSource == null) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
+            await ShowPanelAsync(defaultPanelType);
         }
-        public async Task ShowDefaultAsync(CancellationToken token) => await ShowPanelAsync(defaultPanelType, token);
+        public async UniTask ShowDefaultAsync() => await ShowPanelAsync(defaultPanelType);
         public async void ShowPanel(PanelType panelType)
         {
-            cancellationTokenSource = new();
-            await ShowPanelAsync(panelType, cancellationTokenSource.Token);
-
-            if (cancellationTokenSource == null) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
+            await ShowPanelAsync(panelType);
         }
-        public async Task ShowPanelAsync(PanelType panelType, CancellationToken token)
+        public async UniTask ShowPanelAsync(PanelType panelType)
         {
             if (activePanels.ContainsKey(panelType) == false)
                 throw new Exception(panelType.ToString());
 
-            await TaskUtils.WaitWhile(() => IsChanging, token);
+            await UniTask.WaitWhile(() => IsChanging);
 
-            if (token.IsCancellationRequested) return;
-
-            await ChangePanelProcess(panelType, token);
+            await ChangePanelProcess(panelType);
         }
-        private async Task ChangePanelProcess(PanelType panelType, CancellationToken token)
+        private async UniTask ChangePanelProcess(PanelType panelType)
         {
             IsChanging = true;
 
             if (ActivePanel != null)
-                await activePanels[ActivePanel.Value].Hide(token);
+                await activePanels[ActivePanel.Value].Hide();
 
-            if(token.IsCancellationRequested) return;
-
-            await activePanels[panelType].Show(token);
-
-            if (token.IsCancellationRequested) return;
+            await activePanels[panelType].Show();
 
             ActivePanel = panelType;
             IsChanging = false;

@@ -1,12 +1,11 @@
-﻿using Gameplay.EnemySystem;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.EnemySystem;
 using Gameplay.EnemySystem.Factory;
 using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using Utils;
 
@@ -22,8 +21,6 @@ namespace Gameplay.SeaFight.Ship
 
         private float health;
 
-        private CancellationTokenSource cancellationTokenSource;
-
         public EnemyShip(IEnemyShipView view, IEnemyFactory enemyFactory, ShipFight shipFight)
         {
             this.view = view;
@@ -34,11 +31,6 @@ namespace Gameplay.SeaFight.Ship
 
         public void Dispose()
         {
-            if(cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
         }
 
         public void ApplyDamage(Transform hitPoint, float damage)
@@ -51,18 +43,12 @@ namespace Gameplay.SeaFight.Ship
 
         public async void BeginFight()
         {
-            cancellationTokenSource = new();
-
             while (true)
             {
                 if(new System.Random().Next(0, 10) >= 5) await CannonAttackProcess();
                 else await BoardingAttackProcess();
 
-                if(cancellationTokenSource.IsCancellationRequested) return;
-
-                await Task.Delay(3000, cancellationTokenSource.Token);
-
-                if (cancellationTokenSource.IsCancellationRequested) return;
+                await UniTask.Delay(3000);
 
                 if (shipFight.IsDead || health <= 0)
                 {
@@ -72,25 +58,23 @@ namespace Gameplay.SeaFight.Ship
             }
         }
 
-        private async Task CannonAttackProcess()
+        private async UniTask CannonAttackProcess()
         {
             var targetsZones = GenerateIds(shipFight.CannonAttackZonesCount, 3);
-            var attackTasks = new List<Task>();
+            var attackTasks = new List<UniTask>();
 
             foreach(var zone in targetsZones)
             {
-                var attackTask = shipFight.ApplyDamageInZone(zone, 5, cancellationTokenSource.Token);
+                var attackTask = shipFight.ApplyDamageInZone(zone, 5);
                 attackTasks.Add(attackTask);
             }
 
-            await Task.WhenAll(attackTasks);
-
-            if (cancellationTokenSource.IsCancellationRequested) return;
+            await UniTask.WhenAll(attackTasks);
 
             view.DrawCannonAttack();
         }
 
-        private async Task BoardingAttackProcess()
+        private async UniTask BoardingAttackProcess()
         {
             var targetPivots = GenerateIds(shipFight.BoardingPivotsCount, 3);
             var enemies = new List<IEnemyController>(targetPivots.Length);
@@ -101,12 +85,10 @@ namespace Gameplay.SeaFight.Ship
                 var enemy = enemyFactory.CreateBoardingEnemy(pivot);
                 enemies.Add(enemy);
 
-                await Task.Delay(1000, cancellationTokenSource.Token);
-
-                if (cancellationTokenSource.IsCancellationRequested) return;
+                await UniTask.Delay(1000);
             }
 
-            await TaskUtils.WaitWhile(() => enemies.All(x => x.IsAlive == false), cancellationTokenSource.Token);
+            await UniTask.WaitUntil(() => enemies.All(x => x.IsAlive == false));
         }
 
         private int[] GenerateIds(int N, int count)

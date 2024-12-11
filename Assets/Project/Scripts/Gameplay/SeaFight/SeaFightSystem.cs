@@ -5,7 +5,6 @@ using Gameplay.SeaFight.View;
 using Gameplay.Ship.Fight;
 using Gameplay.Travel;
 using System.Linq;
-using System.Threading;
 
 namespace Gameplay.SeaFight
 {
@@ -20,8 +19,6 @@ namespace Gameplay.SeaFight
         private readonly ShipFight shipFight;
 
         private readonly ISeaFightView view;
-
-        private CancellationTokenSource cancellationTokenSource;
 
         public SeaFightSystem(TravelSystem travelSystem, QuestManager questManager, ISeaFightView view, ShipFight shipFight, IEnemyFactory enemyFactory)
         {
@@ -42,11 +39,6 @@ namespace Gameplay.SeaFight
         {
             travelSystem.OnLeaveLocation -= OnTravelBegin;
 
-            if(cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
             if(IsInFight)
             {
                 EnemyShip.OnFightEnd -= OnFightEnd;
@@ -60,18 +52,12 @@ namespace Gameplay.SeaFight
                 throw new System.Exception();
 
             IsInFight = true;
-            cancellationTokenSource = new();
 
-            var newShipView = await view.ShowShip(cancellationTokenSource.Token);
-
-            if (cancellationTokenSource.IsCancellationRequested) return;
+            var newShipView = await view.ShowShip();
 
             EnemyShip = new(newShipView, enemyFactory, shipFight);
             EnemyShip.OnFightEnd += OnFightEnd;
             EnemyShip.BeginFight();
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
         }
 
         private void OnTravelBegin()

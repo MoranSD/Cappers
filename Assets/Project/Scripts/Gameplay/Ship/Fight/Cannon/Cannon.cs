@@ -2,7 +2,6 @@
 using Gameplay.SeaFight.Ship;
 using Infrastructure.GameInput;
 using Infrastructure.TickManagement;
-using Leopotam.Ecs;
 using System;
 using System.Collections;
 using UnityEngine;

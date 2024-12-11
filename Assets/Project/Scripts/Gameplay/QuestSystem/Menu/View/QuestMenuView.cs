@@ -1,11 +1,10 @@
-﻿using Gameplay.Panels;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Panels;
 using Gameplay.QuestSystem.Menu.Factory;
 using Gameplay.QuestSystem.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Interaction;
@@ -47,15 +46,15 @@ namespace Gameplay.QuestSystem.Menu.View
             triggerInteractor.OnInteracted -= OnInteract;
         }
 
-        public async Task Show(CancellationToken token)
+        public async UniTask Show()
         {
             panel.SetActive(true);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
-        public async Task Hide(CancellationToken token)
+        public async UniTask Hide()
         {
             panel.SetActive(false);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
         private void OnInteract() => OnPlayerInteract?.Invoke();
 
