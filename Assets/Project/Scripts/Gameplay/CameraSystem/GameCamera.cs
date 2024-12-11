@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
+using Cysharp.Threading.Tasks;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.CameraSystem
@@ -57,13 +56,13 @@ namespace Gameplay.CameraSystem
             interactFollowCamera.Priority = 0;
         }
 
-        public async Task EnterInteractStateAsync(Vector3 followPosition, CancellationToken token)
+        public async UniTask EnterInteractStateAsync(Vector3 followPosition)
         {
             EnterInteractState(followPosition);
             
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(changeCameraDuration), token);
+                await UniTask.Delay(TimeSpan.FromSeconds(changeCameraDuration));
             }
             catch
             {

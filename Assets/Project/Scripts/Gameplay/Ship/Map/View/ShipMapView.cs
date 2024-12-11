@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Utils.Interaction;
 using System.Threading.Tasks;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Gameplay.Ship.Map.View
 {
@@ -43,15 +44,15 @@ namespace Gameplay.Ship.Map.View
         }
         public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
 
-        public async Task Hide(CancellationToken token)
+        public async UniTask Hide()
         {
             panelObject.SetActive(false);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
-        public async Task Show(CancellationToken token)
+        public async UniTask Show()
         {
             panelObject.SetActive(true);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
 
         private void OnPressOnLocation(int locationId) => OnSelectLocation?.Invoke(locationId);

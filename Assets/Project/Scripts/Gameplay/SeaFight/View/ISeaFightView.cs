@@ -1,12 +1,11 @@
-﻿using Gameplay.SeaFight.Ship.View;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.SeaFight.Ship.View;
 
 namespace Gameplay.SeaFight.View
 {
     public interface ISeaFightView
     {
-        Task<IEnemyShipView> ShowShip(CancellationToken token);
+        UniTask<IEnemyShipView> ShowShip();
         void HideShip();
     }
 }

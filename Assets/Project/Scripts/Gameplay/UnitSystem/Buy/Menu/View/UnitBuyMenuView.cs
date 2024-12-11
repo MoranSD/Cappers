@@ -1,4 +1,5 @@
-﻿using Gameplay.Panels;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Panels;
 using Gameplay.UnitSystem.Buy.Data;
 using System;
 using System.Threading;
@@ -76,16 +77,16 @@ namespace Gameplay.UnitSystem.Buy.Menu.View
             //Debug.Log($"{unitId} {success}");
         }
 
-        public async Task Show(CancellationToken token)
+        public async UniTask Show()
         {
             panel.SetActive(true);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
 
-        public async Task Hide(CancellationToken token)
+        public async UniTask Hide()
         {
             panel.SetActive(false);
-            await Task.Delay(0);
+            await UniTask.Delay(0);
         }
         private void OnInteract() => OnPlayerInteract?.Invoke();
     }

@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Ship.Fight.View
@@ -9,7 +8,7 @@ namespace Gameplay.Ship.Fight.View
         int CannonAttackZonesCount { get; }
         int BoardingPivotsCount { get; }
         Transform GetBoardingPivot(int id);
-        Task DrawCannonZoneDanger(int zoneId, CancellationToken token);
+        UniTask DrawCannonZoneDanger(int zoneId);
         void ApplyDamageInZone(int zoneId, float damage);
     }
 }

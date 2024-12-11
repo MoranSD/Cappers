@@ -1,6 +1,5 @@
-﻿using Gameplay.SeaFight.Ship.View;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.SeaFight.Ship.View;
 using UnityEngine;
 
 namespace Gameplay.SeaFight.View
@@ -16,11 +15,10 @@ namespace Gameplay.SeaFight.View
             Destroy(currentShip.gameObject);
         }
 
-        public async Task<IEnemyShipView> ShowShip(CancellationToken token)
+        public async UniTask<IEnemyShipView> ShowShip()
         {
             currentShip = Instantiate(enemyShipViewPrefab);
-            await Task.Delay(0, token);
-            if (token.IsCancellationRequested) return null;
+            await UniTask.Delay(0);
             return currentShip;
         }
     }

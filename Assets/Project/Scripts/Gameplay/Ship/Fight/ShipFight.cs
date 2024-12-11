@@ -1,7 +1,6 @@
-﻿using Gameplay.Game;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Game;
 using Gameplay.Ship.Fight.View;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Ship.Fight
@@ -23,11 +22,9 @@ namespace Gameplay.Ship.Fight
 
         public Transform GetBoardingPivot(int id) => view.GetBoardingPivot(id);
 
-        public async Task ApplyDamageInZone(int zoneId, float damage, CancellationToken token)
+        public async UniTask ApplyDamageInZone(int zoneId, float damage)
         {
-            await view.DrawCannonZoneDanger(zoneId, token);
-
-            if (token.IsCancellationRequested) return;
+            await view.DrawCannonZoneDanger(zoneId);
 
             view.ApplyDamageInZone(zoneId, damage);
 
