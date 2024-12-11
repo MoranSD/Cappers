@@ -17,7 +17,6 @@ using System.Threading;
 using Gameplay.UnitSystem.Factory;
 using Leopotam.Ecs;
 using Gameplay.Ship.UnitControl;
-using Cysharp.Threading.Tasks;
 
 namespace Gameplay.Ship.Root
 {
@@ -95,14 +94,14 @@ namespace Gameplay.Ship.Root
     {
         public PanelType Type => PanelType.gameplay;
 
-        public async UniTask Hide()
+        public async Task Hide(CancellationToken token)
         {
-            await UniTask.Delay(0);
+            await Task.Delay(0);
         }
 
-        public async UniTask Show()
+        public async Task Show(CancellationToken token)
         {
-            await UniTask.Delay(0);
+            await Task.Delay(0);
         }
     }
 }
