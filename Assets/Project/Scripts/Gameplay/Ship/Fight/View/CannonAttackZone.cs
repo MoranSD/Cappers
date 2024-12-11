@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -20,11 +21,11 @@ namespace Gameplay.Ship.Fight.View
             zoneView.SetActive(false);
         }
 
-        public async Task DrawDanger(CancellationToken token)
+        public async UniTask DrawDanger(CancellationToken token)
         {
             zoneView.SetActive(true);
 
-            await Task.Delay(1500, token);
+            await UniTask.Delay(1500, false, PlayerLoopTiming.Update, token);
             if (token.IsCancellationRequested) return;
 
             zoneView.SetActive(false);

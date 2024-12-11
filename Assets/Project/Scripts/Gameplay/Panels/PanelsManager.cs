@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Utils;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Gameplay.Panels
 {
@@ -59,7 +60,7 @@ namespace Gameplay.Panels
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }
-        public async Task ShowDefaultAsync(CancellationToken token) => await ShowPanelAsync(defaultPanelType, token);
+        public async UniTask ShowDefaultAsync(CancellationToken token) => await ShowPanelAsync(defaultPanelType, token);
         public async void ShowPanel(PanelType panelType)
         {
             cancellationTokenSource = new();
@@ -70,18 +71,18 @@ namespace Gameplay.Panels
             cancellationTokenSource.Dispose();
             cancellationTokenSource = null;
         }
-        public async Task ShowPanelAsync(PanelType panelType, CancellationToken token)
+        public async UniTask ShowPanelAsync(PanelType panelType, CancellationToken token)
         {
             if (activePanels.ContainsKey(panelType) == false)
                 throw new Exception(panelType.ToString());
 
-            await TaskUtils.WaitWhile(() => IsChanging, token);
+            await UniTask.WaitWhile(() => IsChanging, PlayerLoopTiming.Update, token);
 
             if (token.IsCancellationRequested) return;
 
             await ChangePanelProcess(panelType, token);
         }
-        private async Task ChangePanelProcess(PanelType panelType, CancellationToken token)
+        private async UniTask ChangePanelProcess(PanelType panelType, CancellationToken token)
         {
             IsChanging = true;
 

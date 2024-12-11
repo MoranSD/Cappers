@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
@@ -27,13 +28,13 @@ namespace Infrastructure.SceneLoad
             cancellationTokenSource = null;
         }
 
-        public async Task LoadAsync(SceneType sceneType, CancellationToken token) => await LoadProcess(sceneType, token, null);
+        public async UniTask LoadAsync(SceneType sceneType, CancellationToken token) => await LoadProcess(sceneType, token, null);
 
-        private async Task LoadProcess(SceneType sceneType, CancellationToken token, Action onLoaded = null)
+        private async UniTask LoadProcess(SceneType sceneType, CancellationToken token, Action onLoaded = null)
         {
             var asyncOperation = SceneManager.LoadSceneAsync((int)sceneType);
 
-            await Utils.TaskUtils.WaitWhile(() => asyncOperation.isDone == false, token);
+            await UniTask.WaitWhile(() => asyncOperation.isDone == false, PlayerLoopTiming.Update, token);
             onLoaded?.Invoke();
         }
     }

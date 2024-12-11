@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Gameplay.Panels;
 using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Gameplay.LevelLoad
 {
@@ -56,7 +57,7 @@ namespace Gameplay.LevelLoad
             cancellationTokenSource = null;
         }
 
-        public async Task LoadLocationAsync(int locationId, CancellationToken token)
+        public async UniTask LoadLocationAsync(int locationId, CancellationToken token)
         {
             if (locationId == GameConstants.SeaLocationId)
             {
@@ -76,7 +77,7 @@ namespace Gameplay.LevelLoad
             }
         }
 
-        private async Task Load(SceneType sceneType, CancellationToken token)
+        private async UniTask Load(SceneType sceneType, CancellationToken token)
         {
             OnBeginChangeLocation?.Invoke();
             IsLoading = true;

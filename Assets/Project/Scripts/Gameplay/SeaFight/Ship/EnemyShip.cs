@@ -1,4 +1,5 @@
-﻿using Gameplay.EnemySystem;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.EnemySystem;
 using Gameplay.EnemySystem.Factory;
 using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight;
@@ -60,7 +61,7 @@ namespace Gameplay.SeaFight.Ship
 
                 if(cancellationTokenSource.IsCancellationRequested) return;
 
-                await Task.Delay(3000, cancellationTokenSource.Token);
+                await UniTask.Delay(3000, false, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 
                 if (cancellationTokenSource.IsCancellationRequested) return;
 
@@ -72,10 +73,10 @@ namespace Gameplay.SeaFight.Ship
             }
         }
 
-        private async Task CannonAttackProcess()
+        private async UniTask CannonAttackProcess()
         {
             var targetsZones = GenerateIds(shipFight.CannonAttackZonesCount, 3);
-            var attackTasks = new List<Task>();
+            var attackTasks = new List<UniTask>();
 
             foreach(var zone in targetsZones)
             {
@@ -83,14 +84,14 @@ namespace Gameplay.SeaFight.Ship
                 attackTasks.Add(attackTask);
             }
 
-            await Task.WhenAll(attackTasks);
+            await UniTask.WhenAll(attackTasks);
 
             if (cancellationTokenSource.IsCancellationRequested) return;
 
             view.DrawCannonAttack();
         }
 
-        private async Task BoardingAttackProcess()
+        private async UniTask BoardingAttackProcess()
         {
             var targetPivots = GenerateIds(shipFight.BoardingPivotsCount, 3);
             var enemies = new List<IEnemyController>(targetPivots.Length);
@@ -101,12 +102,12 @@ namespace Gameplay.SeaFight.Ship
                 var enemy = enemyFactory.CreateBoardingEnemy(pivot);
                 enemies.Add(enemy);
 
-                await Task.Delay(1000, cancellationTokenSource.Token);
+                await UniTask.Delay(1000, false, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 
                 if (cancellationTokenSource.IsCancellationRequested) return;
             }
 
-            await TaskUtils.WaitWhile(() => enemies.All(x => x.IsAlive == false), cancellationTokenSource.Token);
+            await UniTask.WaitWhile(() => enemies.All(x => x.IsAlive == false), PlayerLoopTiming.Update, cancellationTokenSource.Token);
         }
 
         private int[] GenerateIds(int N, int count)

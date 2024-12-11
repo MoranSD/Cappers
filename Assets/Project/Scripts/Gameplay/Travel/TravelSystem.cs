@@ -1,4 +1,5 @@
-﻿using Gameplay.Game;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Game;
 using Gameplay.LevelLoad;
 using System;
 using System.Threading;
@@ -103,7 +104,7 @@ namespace Gameplay.Travel
             OnArriveToLocation?.Invoke();
         }
 
-        private async Task TimerProcess(int duration)
+        private async UniTask TimerProcess(int duration)
         {
             TravelTimer = duration;
             var timerWaiter = TimeSpan.FromSeconds(1);
@@ -112,8 +113,8 @@ namespace Gameplay.Travel
             {
                 try
                 {
-                    await Task.Delay(timerWaiter, cancellationTokenSource.Token);
-                    await TaskUtils.WaitWhile(() => IsPaused, cancellationTokenSource.Token);
+                    await UniTask.Delay(timerWaiter, false, PlayerLoopTiming.Update, cancellationTokenSource.Token);
+                    await UniTask.WaitWhile(() => IsPaused, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 
                     if (isCancellationRequested) return;
 

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Gameplay.CameraSystem
         void ExitFollowState();
 
         void EnterInteractState(Vector3 followPosition);
-        Task EnterInteractStateAsync(Vector3 followPosition, CancellationToken token);
+        UniTask EnterInteractStateAsync(Vector3 followPosition, CancellationToken token);
         void ExitInteractState();
     }
 }

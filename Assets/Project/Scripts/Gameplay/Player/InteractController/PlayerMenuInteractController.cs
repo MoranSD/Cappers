@@ -1,4 +1,5 @@
-﻿using Gameplay.Panels;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Panels;
 using System.Threading;
 using System.Threading.Tasks;
 using Utils;
@@ -61,12 +62,12 @@ namespace Gameplay.Player.InteractController
             await ExitInteractStateProcess();
         }
 
-        private async Task EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
+        private async UniTask EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
         {
             isEntering = true;
             cancellationTokenSource = new CancellationTokenSource();
 
-            await TaskUtils.WaitWhile(() => isExiting, cancellationTokenSource.Token);
+            await UniTask.WaitWhile(() => isExiting, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 
             if (cancellationTokenSource.IsCancellationRequested) return;
 
@@ -86,12 +87,12 @@ namespace Gameplay.Player.InteractController
             cancellationTokenSource = null;
             isEntering = false;
         }
-        private async Task ExitInteractStateProcess()
+        private async UniTask ExitInteractStateProcess()
         {
             isExiting = true;
             cancellationTokenSource = new CancellationTokenSource();
 
-            await TaskUtils.WaitWhile(() => isEntering, cancellationTokenSource.Token);
+            await UniTask.WaitWhile(() => isEntering, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 
             if (cancellationTokenSource.IsCancellationRequested) return;
 

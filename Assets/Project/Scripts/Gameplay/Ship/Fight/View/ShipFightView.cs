@@ -1,4 +1,5 @@
-﻿using Gameplay.Game.ECS.Features;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Game.ECS.Features;
 using Leopotam.Ecs;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace Gameplay.Ship.Fight.View
             });
         }
 
-        public Task DrawCannonZoneDanger(int zoneId, CancellationToken token) => cannonAttackZones[zoneId].DrawDanger(token);
+        public UniTask DrawCannonZoneDanger(int zoneId, CancellationToken token) => cannonAttackZones[zoneId].DrawDanger(token);
         public Transform GetBoardingPivot(int id) => boardingPivots[id];
     }
 }
