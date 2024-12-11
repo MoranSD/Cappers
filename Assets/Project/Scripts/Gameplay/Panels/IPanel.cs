@@ -1,11 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Gameplay.Panels
 {
     public interface IPanel
     {
         PanelType Type { get; }
-        UniTask Show();
-        UniTask Hide();
+        Task Show(CancellationToken token);
+        Task Hide(CancellationToken token);
     }
 }

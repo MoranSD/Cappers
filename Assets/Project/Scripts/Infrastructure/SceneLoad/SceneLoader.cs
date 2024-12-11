@@ -1,27 +1,39 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace Infrastructure.SceneLoad
 {
     public class SceneLoader : ISceneLoader
     {
+        private CancellationTokenSource cancellationTokenSource;
+
         public void Dispose()
         {
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+            }
         }
 
         public async void Load(SceneType sceneType, Action onLoaded = null)
         {
-            await LoadProcess(sceneType, onLoaded);
+            cancellationTokenSource = new CancellationTokenSource();
+            await LoadProcess(sceneType, cancellationTokenSource.Token, onLoaded);
+            if (cancellationTokenSource == null) return;
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
         }
 
-        public async UniTask LoadAsync(SceneType sceneType) => await LoadProcess(sceneType);
+        public async Task LoadAsync(SceneType sceneType, CancellationToken token) => await LoadProcess(sceneType, token, null);
 
-        private async UniTask LoadProcess(SceneType sceneType, Action onLoaded = null)
+        private async Task LoadProcess(SceneType sceneType, CancellationToken token, Action onLoaded = null)
         {
             var asyncOperation = SceneManager.LoadSceneAsync((int)sceneType);
 
-            await UniTask.WaitWhile(() => asyncOperation.isDone == false);
+            await Utils.TaskUtils.WaitWhile(() => asyncOperation.isDone == false, token);
             onLoaded?.Invoke();
         }
     }

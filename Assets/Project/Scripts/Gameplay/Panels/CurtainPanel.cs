@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Panels
@@ -9,16 +10,16 @@ namespace Gameplay.Panels
 
         [SerializeField] private GameObject curtainObject;
 
-        public async UniTask Hide()
+        public async Task Hide(CancellationToken token)
         {
             curtainObject.SetActive(false);
-            await UniTask.Delay(0);
+            await Task.Delay(0);
         }
 
-        public async UniTask Show()
+        public async Task Show(CancellationToken token)
         {
             curtainObject.SetActive(true);
-            await UniTask.Delay(0);
+            await Task.Delay(0);
         }
     }
 }

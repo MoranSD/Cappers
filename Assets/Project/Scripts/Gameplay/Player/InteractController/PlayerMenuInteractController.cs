@@ -1,5 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
-using Gameplay.Panels;
+﻿using Gameplay.Panels;
+using System.Threading;
+using System.Threading.Tasks;
+using Utils;
 using Utils.Interaction;
 
 namespace Gameplay.Player.InteractController
@@ -16,6 +18,8 @@ namespace Gameplay.Player.InteractController
         private bool isEntering;
         private bool isExiting;
 
+        private CancellationTokenSource cancellationTokenSource;
+
         public PlayerMenuInteractController(IPlayerController playerController, PanelsManager panelsManager)
         {
             this.playerController = playerController;
@@ -24,7 +28,11 @@ namespace Gameplay.Player.InteractController
 
         public void Dispose()
         {
-
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+            }
         }
 
         public bool CheckInteraction(PanelType panelType) => IsInteracting && InteractPanelType == panelType;
@@ -53,29 +61,43 @@ namespace Gameplay.Player.InteractController
             await ExitInteractStateProcess();
         }
 
-        private async UniTask EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
+        private async Task EnterInteractStateProcess(PanelType panelType, ICameraFollowInteractor followInteractor = null)
         {
             isEntering = true;
+            cancellationTokenSource = new CancellationTokenSource();
 
-            await UniTask.WaitWhile(() => isExiting);
+            await TaskUtils.WaitWhile(() => isExiting, cancellationTokenSource.Token);
+
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             if (followInteractor != null)
             {
                 isCameraInteracting = true;
-                await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot());
+                await playerController.GameCamera.EnterInteractStateAsync(followInteractor.GetCameraPivot(), cancellationTokenSource.Token);
+
+                if (cancellationTokenSource.IsCancellationRequested) return;
             }
 
-            await panelsManager.ShowPanelAsync(panelType);
+            await panelsManager.ShowPanelAsync(panelType, cancellationTokenSource.Token);
 
+            if (cancellationTokenSource.IsCancellationRequested) return;
+
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
             isEntering = false;
         }
-        private async UniTask ExitInteractStateProcess()
+        private async Task ExitInteractStateProcess()
         {
             isExiting = true;
+            cancellationTokenSource = new CancellationTokenSource();
 
-            await UniTask.WaitWhile(() => isEntering);
+            await TaskUtils.WaitWhile(() => isEntering, cancellationTokenSource.Token);
 
-            await panelsManager.ShowDefaultAsync();
+            if (cancellationTokenSource.IsCancellationRequested) return;
+
+            await panelsManager.ShowDefaultAsync(cancellationTokenSource.Token);
+
+            if (cancellationTokenSource.IsCancellationRequested) return;
 
             if (isCameraInteracting)
             {
@@ -83,6 +105,8 @@ namespace Gameplay.Player.InteractController
                 playerController.GameCamera.ExitInteractState();
             }
 
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
             isExiting = false;
         }
     }
