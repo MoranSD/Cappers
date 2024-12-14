@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
+using Gameplay.Ship.Fight.Cannon;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Ship.Fight.View

@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.CameraSystem
@@ -13,54 +12,33 @@ namespace Gameplay.CameraSystem
         public Vector3 Right => transform.right;
 
         [SerializeField] private CinemachineVirtualCamera playerFollowCamera;
-        [SerializeField] private CinemachineVirtualCamera interactFollowCamera;
         [SerializeField] private CinemachineVirtualCamera targetFollowCamera;
         [SerializeField] private float changeCameraDuration = 0.75f;
 
         public void Initialize()
         {
             playerFollowCamera.Priority = 1;
-            interactFollowCamera.Priority = 0;
             targetFollowCamera.Priority = 0;
         }
 
-        public void EnterFollowState(Transform target)
+        public void EnterInteractState(Transform target)
         {
             targetFollowCamera.Follow = target;
+            targetFollowCamera.LookAt = target;
             targetFollowCamera.Priority = 1;
 
             playerFollowCamera.Priority = 0;
-            interactFollowCamera.Priority = 0;
-        }
-
-        public void ExitFollowState()
-        {
-            playerFollowCamera.Priority = 1;
-
-            targetFollowCamera.Priority = 0;
-            interactFollowCamera.Priority = 0;
-        }
-
-        public void EnterInteractState(Vector3 followPosition)
-        {
-            interactFollowCamera.Follow.position = followPosition;
-            interactFollowCamera.Priority = 1;
-
-            playerFollowCamera.Priority = 0;
-            targetFollowCamera.Priority = 0;
         }
 
         public void ExitInteractState()
         {
             playerFollowCamera.Priority = 1;
-
             targetFollowCamera.Priority = 0;
-            interactFollowCamera.Priority = 0;
         }
 
-        public async UniTask EnterInteractStateAsync(Vector3 followPosition, CancellationToken token)
+        public async UniTask EnterInteractStateAsync(Transform target, CancellationToken token)
         {
-            EnterInteractState(followPosition);
+            EnterInteractState(target);
             
             try
             {

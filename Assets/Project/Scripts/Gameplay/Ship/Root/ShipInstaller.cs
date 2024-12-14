@@ -1,6 +1,5 @@
 ﻿using Gameplay.Game;
 using Gameplay.Player.InteractController;
-using Gameplay.Ship.Map.View;
 using Gameplay.Ship.Map.View.IconsHolder;
 using Infrastructure;
 using Infrastructure.Composition;
@@ -9,22 +8,21 @@ using Gameplay.Panels;
 using Gameplay.Travel;
 using UnityEngine;
 using Gameplay.World.Data;
-using System.Threading.Tasks;
 using Gameplay.Ship.Map;
-using Gameplay.Ship.UnitControl.Placement.View;
 using Gameplay.Ship.Data;
 using System.Threading;
 using Gameplay.UnitSystem.Factory;
 using Leopotam.Ecs;
 using Gameplay.Ship.UnitControl;
 using Cysharp.Threading.Tasks;
+using Gameplay.Ship.Map.View;
 
 namespace Gameplay.Ship.Root
 {
     public class ShipInstaller : Installer
     {
-        [SerializeField] private ShipMapView mapView;
-        [SerializeField] private ShipUnitExistenceView unitExistenceView;
+        [SerializeField] private ShipMapView shipMapView;
+        [SerializeField] protected ShipViewsLink shipViewsLink;
 
         private PanelsManager panelsManager;
         private TemporaryGameplayPanel gameplayTemporary;
@@ -35,10 +33,15 @@ namespace Gameplay.Ship.Root
 
         public override void PreInitialize()
         {
+            if (shipMapView == null)
+                shipMapView = FindObjectOfType<ShipMapView>();
+            if (shipViewsLink == null)
+                shipViewsLink = FindObjectOfType<ShipViewsLink>();
+
             var gameState = ServiceLocator.Get<GameState>();
             var travelSystem = ServiceLocator.Get<TravelSystem>();
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
-            var playerInteractor = ServiceLocator.Get<PlayerMenuInteractController>();
+            var playerInteractor = ServiceLocator.Get<PlayerInteractController>();
 
             var allWorldsConfig = assetProvider.Load<AllWorldsConfig>(Constants.AllWorldConfigsConfigPath);
             var currentWorldConfig = allWorldsConfig.GetWorldConfig(gameState.World.Id);
@@ -47,18 +50,21 @@ namespace Gameplay.Ship.Root
             var shipConfig = assetProvider.Load<ShipConfig>(Constants.ShipConfig);
 
             panelsManager = ServiceLocator.Get<PanelsManager>();
-            panelsManager.RegisterPanel(mapView);
+            panelsManager.RegisterPanel(shipMapView);
 
             gameplayTemporary = new TemporaryGameplayPanel();
             panelsManager.RegisterPanel(gameplayTemporary);
 
-            iconsHolder = Instantiate(iconsHolderPrefab, mapView.IconsHolderPivot);
+            iconsHolder = Instantiate(iconsHolderPrefab, shipMapView.IconsHolderPivot);
             iconsHolder.Initialize(currentWorldConfig);
-            mapView.Initialize(iconsHolder);
+            shipMapView.Initialize(iconsHolder);
 
-            shipMap = new ShipMap(gameState, travelSystem, mapView, playerInteractor);
+            shipMap = new ShipMap(gameState, travelSystem, shipMapView, playerInteractor);
 
             shipMap.Initialize();
+
+            foreach (var cannonView in shipViewsLink.CannonViews)
+                cannonView.SetInactive();
         }
 
         public override void Initialize()
@@ -68,7 +74,7 @@ namespace Gameplay.Ship.Root
             var assetProvider = ServiceLocator.Get<IAssetProvider>();
             var shipConfig = assetProvider.Load<ShipConfig>(Constants.ShipConfig);
 
-            existenceControl = new ShipUnitExistenceControl(gameState, shipConfig.PlacementConfig, unitExistenceView, unitFactory);
+            existenceControl = new ShipUnitExistenceControl(gameState, shipConfig.PlacementConfig, shipViewsLink.ShipUnitExistenceView, unitFactory);
             existenceControl.Initialize();
 
             ServiceLocator.Register(existenceControl);
@@ -82,8 +88,8 @@ namespace Gameplay.Ship.Root
             shipMap.Dispose();
 
             panelsManager.UnregisterPanel(gameplayTemporary);
-            panelsManager.UnregisterPanel(mapView);
-            mapView.Dispose();
+            panelsManager.UnregisterPanel(shipMapView);
+            shipMapView.Dispose();
 
             iconsHolder.Dispose();
 

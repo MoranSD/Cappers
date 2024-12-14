@@ -32,13 +32,15 @@ namespace Gameplay.Travel
             this.levelLoadService = levelLoadService;
         }
 
+        public void Initialize()
+        {
+            cancellationTokenSource = new();
+        }
+
         public void Dispose()
         {
-            if (cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
 
         public void BeginTravel(int locationId)
@@ -73,8 +75,6 @@ namespace Gameplay.Travel
 
         private async void TravelProcess(int locationId)
         {
-            cancellationTokenSource = new();
-
             if (gameState.IsInSea == false)
             {
                 await TimerProcess(TravelHalfDurationInSeconds);
@@ -95,9 +95,6 @@ namespace Gameplay.Travel
             await levelLoadService.LoadLocationAsync(locationId, cancellationTokenSource.Token);
 
             if (isCancellationRequested) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
 
             gameState.CurrentLocationId = locationId; 
             IsTraveling = false;

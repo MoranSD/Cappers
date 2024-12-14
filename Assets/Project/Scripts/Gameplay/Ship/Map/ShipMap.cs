@@ -12,9 +12,9 @@ namespace Gameplay.Ship.Map
         private readonly GameState gameState;
         private readonly TravelSystem travelSystem;
         private readonly IShipMapView view;
-        private readonly PlayerMenuInteractController playerMenuInteract;
+        private readonly PlayerInteractController playerMenuInteract;
 
-        public ShipMap(GameState gameState, TravelSystem travelSystem, IShipMapView view, PlayerMenuInteractController playerMenuInteract)
+        public ShipMap(GameState gameState, TravelSystem travelSystem, IShipMapView view, PlayerInteractController playerMenuInteract)
         {
             this.gameState = gameState;
             this.travelSystem = travelSystem;
@@ -53,8 +53,7 @@ namespace Gameplay.Ship.Map
             var openedLocationsIds = gameState.OpenedLocations.ToArray();
             view.UpdateLocationsVisibility(openedLocationsIds);
 
-            playerMenuInteract.EnterInteractState(PanelType.shipMap, 
-                view.Interactor is ICameraFollowInteractor cameraInteractor ? cameraInteractor : null);
+            playerMenuInteract.EnterInteractState(PanelType.shipMap, view.GetCameraInteractPivot());
         }
 
         private void OnViewTryToClose()

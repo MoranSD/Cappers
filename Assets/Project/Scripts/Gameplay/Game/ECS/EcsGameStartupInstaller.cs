@@ -36,7 +36,7 @@ namespace Gameplay.Game.ECS
             ServiceLocator.Register(systems);
         }
 
-        public override void PostInitialize()
+        public override void AfterInitialize()
         {
             AddSystems();
             AddInjections();

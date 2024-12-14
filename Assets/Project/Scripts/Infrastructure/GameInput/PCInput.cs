@@ -10,8 +10,8 @@ namespace Infrastructure.GameInput
 
         public bool IsInteractButtonPressed => Input.GetKeyDown(interactButton);
         public bool IsExitButtonPressed => Input.GetKeyDown(exitButton);
-        public bool MeleeAttackButtonPressed => Input.GetKeyDown(meleeAttackButton);
-        public bool RangeAttackButtonPressed => Input.GetKeyDown(rangeAttackButton);
+        public bool IsMeleeAttackButtonPressed => Input.GetKeyDown(meleeAttackButton);
+        public bool IsRangeAttackButtonPressed => Input.GetKeyDown(rangeAttackButton);
 
         public event Action OnPressInteractButton;
         public event Action OnPressMeleeAttackButton;

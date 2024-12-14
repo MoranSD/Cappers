@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using Utils.Interaction;
 
 namespace Gameplay.Ship.Map.View
@@ -10,6 +11,7 @@ namespace Gameplay.Ship.Map.View
 
         IInteractor Interactor { get; }
 
+        Transform GetCameraInteractPivot();
         void UpdateLocationsVisibility(params int[] ids);
     }
 }

@@ -73,12 +73,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CharacterController>k__BackingField: {fileID: 1875696148630770663}
-  <InteractorLayer>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 128
-  <EnemyLayer>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1 &19974463791187802
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +494,7 @@ Transform:
   m_GameObject: {fileID: 3775650719125799124}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35954976, y: -2.0481301e-15, z: 7.891805e-16, w: 0.9331259}
-  m_LocalPosition: {x: 0, y: 7.24, z: -8}
+  m_LocalPosition: {x: 0, y: 12.16, z: -17.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -656,7 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerFollowCamera: {fileID: 37713746032004015}
-  interactFollowCamera: {fileID: 2158507072719541065}
+  targetFollowCamera: {fileID: 2158507072719541065}
   changeCameraDuration: 0.75
 --- !u!1 &4315337861125714574
 GameObject:

@@ -9,10 +9,10 @@ namespace Gameplay.QuestSystem.Menu
     public class QuestMenu
     {
         private readonly QuestManager questManager;
-        private readonly PlayerMenuInteractController playerMenuInteract;
+        private readonly PlayerInteractController playerMenuInteract;
         private readonly IQuestMenuView view;
 
-        public QuestMenu(QuestManager questManager, PlayerMenuInteractController playerMenuInteract, IQuestMenuView view)
+        public QuestMenu(QuestManager questManager, PlayerInteractController playerMenuInteract, IQuestMenuView view)
         {
             this.questManager = questManager;
             this.playerMenuInteract = playerMenuInteract;

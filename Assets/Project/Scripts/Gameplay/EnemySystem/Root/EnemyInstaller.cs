@@ -23,6 +23,8 @@ namespace Gameplay.EnemySystem.Root
             var factory = new EnemyFactory(ecsWorld, gameConfig, factoryConfig);
             ServiceLocator.Register<IEnemyFactory>(factory);
 
+            ServiceLocator.Get<EcsSystems>().Inject(factory);
+
             //spawn by spawnPoints
             var spawnPoints = FindObjectsOfType<EnemySpawnPoint>();
             for (int i = 0; i < spawnPoints.Length; i++)

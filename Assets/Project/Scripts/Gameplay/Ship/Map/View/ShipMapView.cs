@@ -1,11 +1,9 @@
 ﻿using Gameplay.Ship.Map.View.IconsHolder;
 using Gameplay.Panels;
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Interaction;
-using System.Threading.Tasks;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -43,6 +41,8 @@ namespace Gameplay.Ship.Map.View
             closeButton.onClick.RemoveAllListeners();
         }
         public void UpdateLocationsVisibility(params int[] ids) => iconsHolder.SetIconsVisibility(ids);
+
+        public Transform GetCameraInteractPivot() => interactor.transform;
 
         public async UniTask Hide(CancellationToken token)
         {

@@ -27,6 +27,25 @@ namespace Infrastructure.States
             gameState.World = CreateWorld(0);
             gameState.CurrentLocationId = 0;// GameConstants.SeaLocationId;
             gameState.ShipHealth = 100;
+            gameState.Cannons = new()
+            {
+                new()
+                {
+                    ShipPosition = 0
+                },
+                new()
+                {
+                    ShipPosition = 1
+                },
+                new()
+                {
+                    ShipPosition = 2
+                },
+                new()
+                {
+                    ShipPosition = 3
+                }
+            };
             gameState.OpenLocation(0);//0 is "Port 0" location id, depends on index in config
 
             levelLoadService.LoadLocation(gameState.CurrentLocationId);

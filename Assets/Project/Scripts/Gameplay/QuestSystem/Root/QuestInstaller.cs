@@ -26,7 +26,7 @@ namespace Gameplay.QuestSystem.Root
             panelsManager.RegisterPanel(questMenuView);
 
             var gameState = ServiceLocator.Get<GameState>();
-            var playerMenuInteract = ServiceLocator.Get<PlayerMenuInteractController>();
+            var playerMenuInteract = ServiceLocator.Get<PlayerInteractController>();
             var questManager = ServiceLocator.Get<QuestManager>();
 
             questMenu = new QuestMenu(questManager, playerMenuInteract, questMenuView);

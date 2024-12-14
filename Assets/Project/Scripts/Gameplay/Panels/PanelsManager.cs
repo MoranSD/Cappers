@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Utils;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Gameplay.LevelLoad;
 
 namespace Gameplay.Panels
 {
@@ -23,13 +24,15 @@ namespace Gameplay.Panels
             this.defaultPanelType = defaultPanelType;
         }
 
+        public void Initialize()
+        {
+            cancellationTokenSource = new();
+        }
+
         public void Dispose()
         {
-            if (cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
 
         public void RegisterPanel(IPanel panel)
@@ -52,24 +55,12 @@ namespace Gameplay.Panels
 
         public async void ShowDefault()
         {
-            cancellationTokenSource = new();
             await ShowPanelAsync(defaultPanelType, cancellationTokenSource.Token);
-
-            if (cancellationTokenSource == null) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
         }
         public async UniTask ShowDefaultAsync(CancellationToken token) => await ShowPanelAsync(defaultPanelType, token);
         public async void ShowPanel(PanelType panelType)
         {
-            cancellationTokenSource = new();
             await ShowPanelAsync(panelType, cancellationTokenSource.Token);
-
-            if (cancellationTokenSource == null) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
         }
         public async UniTask ShowPanelAsync(PanelType panelType, CancellationToken token)
         {

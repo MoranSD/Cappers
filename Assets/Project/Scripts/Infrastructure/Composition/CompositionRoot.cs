@@ -21,7 +21,7 @@ namespace Infrastructure.Composition
                 initializer.Initialize();
 
             foreach (var initializer in initializers)
-                initializer.PostInitialize();
+                initializer.AfterInitialize();
         }
 
         public void Dispose()

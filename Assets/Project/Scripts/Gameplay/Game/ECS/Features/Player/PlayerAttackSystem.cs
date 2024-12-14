@@ -21,10 +21,10 @@ namespace Gameplay.Game.ECS.Features
                 if (targetLook.HasTargetsInRange == false)
                     continue;
 
-                if (input.MeleeAttackButtonPressed)
+                if (input.IsMeleeAttackButtonPressed)
                     PerformAttack(transform, ref targetLook.Targets, ref weaponsLink.MeleeWeapon);
 
-                if (input.RangeAttackButtonPressed)
+                if (input.IsRangeAttackButtonPressed)
                     PerformAttack(transform, ref targetLook.Targets, ref weaponsLink.RangeWeapon);
             }
         }

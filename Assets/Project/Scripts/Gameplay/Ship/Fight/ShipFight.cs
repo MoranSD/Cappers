@@ -2,7 +2,6 @@
 using Gameplay.Game;
 using Gameplay.Ship.Fight.View;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Ship.Fight

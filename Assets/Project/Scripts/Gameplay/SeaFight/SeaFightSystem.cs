@@ -1,7 +1,7 @@
 ﻿using Gameplay.EnemySystem.Factory;
 using Gameplay.QuestSystem;
 using Gameplay.SeaFight.Ship;
-using Gameplay.SeaFight.View;
+using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight;
 using Gameplay.Travel;
 using System.Linq;
@@ -16,67 +16,50 @@ namespace Gameplay.SeaFight
 
         private readonly TravelSystem travelSystem;
         private readonly QuestManager questManager;
-        private readonly IEnemyFactory enemyFactory;
-        private readonly ShipFight shipFight;
 
-        private readonly ISeaFightView view;
-
-        private CancellationTokenSource cancellationTokenSource;
-
-        public SeaFightSystem(TravelSystem travelSystem, QuestManager questManager, ISeaFightView view, ShipFight shipFight, IEnemyFactory enemyFactory)
+        public SeaFightSystem(TravelSystem travelSystem, QuestManager questManager, IEnemyShipView shipView, ShipFight shipFight, IEnemyFactory enemyFactory)
         {
+            EnemyShip = new(shipView, enemyFactory, shipFight);
+
             this.travelSystem = travelSystem;
             this.questManager = questManager;
-            this.shipFight = shipFight;
-            this.enemyFactory = enemyFactory;
-
-            this.view = view;
         }
 
         public void Initialize()
         {
+            EnemyShip.Initialize();
+            EnemyShip.OnFightEnd += OnFightEnd;
             travelSystem.OnLeaveLocation += OnTravelBegin;
         }
 
         public void Dispose()
         {
+            EnemyShip.OnFightEnd -= OnFightEnd;
+            EnemyShip.Dispose();
             travelSystem.OnLeaveLocation -= OnTravelBegin;
-
-            if(cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
-            if(IsInFight)
-            {
-                EnemyShip.OnFightEnd -= OnFightEnd;
-                EnemyShip.Dispose();
-            }
         }
 
-        public async void BeginFight()
+        public void BeginFight()
         {
             if (IsInFight)
                 throw new System.Exception();
 
             IsInFight = true;
-            cancellationTokenSource = new();
-
-            var newShipView = await view.ShowShip(cancellationTokenSource.Token);
-
-            if (cancellationTokenSource.IsCancellationRequested) return;
-
-            EnemyShip = new(newShipView, enemyFactory, shipFight);
-            EnemyShip.OnFightEnd += OnFightEnd;
             EnemyShip.BeginFight();
+        }
 
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
+        private void OnTravelSkip()
+        {
+            //todo:
         }
 
         private void OnTravelBegin()
         {
             //TODO: нужно посчитать просто шанс появления боя либо, если есть квест на доставку, то шанс 100%
+            //еще не стоит это делать сразу, лучше подождать N время
+            //в будущем, всегда будет максимум 1 бой и всегда будет некая задержка
+            //но если игрок скипает поездку, то после скипа будет затемнение экрана
+            //потом либо поездка скипнется и будет загрузка сцены, либо начнется бой
             if (questManager.ActiveQuests.Any(x => x.QuestType == QuestSystem.Data.QuestType.delivery) == false)
                 return;
 
@@ -90,13 +73,9 @@ namespace Gameplay.SeaFight
                 throw new System.Exception();
 
             IsInFight = false;
-            view.HideShip();
+            EnemyShip.Reset();
 
-            EnemyShip.OnFightEnd -= OnFightEnd;
-            EnemyShip.Dispose();
-            EnemyShip = null;
-
-            //TODO: if player is dead so do nothing
+            //TODO: if player is dead or is win so do nothing
             if (travelSystem.IsTraveling && travelSystem.IsPaused)
                 travelSystem.Unpause();
         }

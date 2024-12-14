@@ -4,7 +4,6 @@ using Infrastructure.Composition;
 using Infrastructure.DataProviding;
 using Infrastructure.SceneLoad;
 using Gameplay.World.Data;
-using System.Threading.Tasks;
 using Gameplay.Panels;
 using System;
 using System.Threading;
@@ -36,25 +35,20 @@ namespace Gameplay.LevelLoad
             this.assetProvider = assetProvider;
         }
 
+        public void Initialize()
+        {
+            cancellationTokenSource = new();
+        }
+
         public void Dispose()
         {
-            if (cancellationTokenSource != null) 
-            { 
-                cancellationTokenSource.Cancel(); 
-                cancellationTokenSource.Dispose();
-            }
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
 
         public async void LoadLocation(int locationId)
         {
-            cancellationTokenSource = new CancellationTokenSource();
-
             await LoadLocationAsync(locationId, cancellationTokenSource.Token);
-
-            if (cancellationTokenSource == null) return;
-
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
         }
 
         public async UniTask LoadLocationAsync(int locationId, CancellationToken token)

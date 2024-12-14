@@ -10,22 +10,20 @@ namespace Infrastructure.SceneLoad
     {
         private CancellationTokenSource cancellationTokenSource;
 
+        public void Initialize()
+        {
+            cancellationTokenSource = new();
+        }
+
         public void Dispose()
         {
-            if (cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-            }
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
 
         public async void Load(SceneType sceneType, Action onLoaded = null)
         {
-            cancellationTokenSource = new CancellationTokenSource();
             await LoadProcess(sceneType, cancellationTokenSource.Token, onLoaded);
-            if (cancellationTokenSource == null) return;
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
         }
 
         public async UniTask LoadAsync(SceneType sceneType, CancellationToken token) => await LoadProcess(sceneType, token, null);

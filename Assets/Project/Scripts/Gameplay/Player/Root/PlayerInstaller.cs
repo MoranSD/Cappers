@@ -10,7 +10,6 @@ using UnityEngine;
 using Leopotam.Ecs;
 using Gameplay.Game.ECS.Features;
 using Gameplay.Game;
-using Utils;
 
 namespace Gameplay.Player.Root
 {
@@ -60,7 +59,8 @@ namespace Gameplay.Player.Root
 
             //InteractController
             var panelsManager = ServiceLocator.Get<PanelsManager>();
-            ServiceLocator.Register(new PlayerMenuInteractController(player, panelsManager));
+            var interactController = ServiceLocator.Register(new PlayerInteractController(player, panelsManager));
+            interactController.Initialize();
         }
 
         private void CreatePlayerWeapons(PlayerConfigSO playerConfig, EcsWorld ecsWorld, ref EcsEntity playerEntity)
@@ -110,7 +110,7 @@ namespace Gameplay.Player.Root
         {
             ServiceLocator.Remove<IGameCamera>();
 
-            var interactController = ServiceLocator.Remove<PlayerMenuInteractController>();
+            var interactController = ServiceLocator.Remove<PlayerInteractController>();
             interactController.Dispose();
         }
     }

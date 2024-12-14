@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Gameplay.QuestSystem.Quests;
+using Gameplay.Ship.Fight.Cannon.Data;
 using Gameplay.UnitSystem.Data;
 using Gameplay.World;
 
@@ -21,6 +22,7 @@ namespace Gameplay.Game
         public List<UnitData> Units;
         //Ship stats
         public float ShipHealth;
+        public List<CannonInfo> Cannons;
 
         public GameState()
         {
@@ -29,6 +31,7 @@ namespace Gameplay.Game
             CompletedQuests = new();
             QuestItems = new();
             Units = new();
+            Cannons = new();
         }
 
         public void OpenLocation(int locationId)

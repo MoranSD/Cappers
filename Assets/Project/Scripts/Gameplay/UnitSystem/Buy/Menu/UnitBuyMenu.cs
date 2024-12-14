@@ -8,10 +8,10 @@ namespace Gameplay.UnitSystem.Buy.Menu
     public class UnitBuyMenu
     {
         private readonly UnitBuySystem buySystem;
-        private readonly PlayerMenuInteractController playerMenuInteract;
+        private readonly PlayerInteractController playerMenuInteract;
         private readonly IUnitBuyMenuView view;
 
-        public UnitBuyMenu(UnitBuySystem buySystem, PlayerMenuInteractController playerMenuInteract, IUnitBuyMenuView view)
+        public UnitBuyMenu(UnitBuySystem buySystem, PlayerInteractController playerMenuInteract, IUnitBuyMenuView view)
         {
             this.buySystem = buySystem;
             this.playerMenuInteract = playerMenuInteract;

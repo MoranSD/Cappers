@@ -7,8 +7,8 @@ namespace Infrastructure.GameInput
     {
         bool IsInteractButtonPressed { get; }
         bool IsExitButtonPressed { get; }
-        bool MeleeAttackButtonPressed { get; }
-        bool RangeAttackButtonPressed { get; }
+        bool IsMeleeAttackButtonPressed { get; }
+        bool IsRangeAttackButtonPressed { get; }
 
         event Action OnPressInteractButton;
 

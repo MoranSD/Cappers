@@ -2,6 +2,7 @@
 using Gameplay.Game;
 using Gameplay.Game.ECS.Features;
 using Leopotam.Ecs;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.EnemySystem.Factory
@@ -13,6 +14,8 @@ namespace Gameplay.EnemySystem.Factory
         private readonly EnemyFactoryConfig config;
 
         private int globalSpawnId = 0;
+
+        private List<int> aliveIds = new List<int>();
 
         public EnemyFactory(EcsWorld ecsWorld, GameConfig gameConfig, EnemyFactoryConfig config)
         {
@@ -32,6 +35,7 @@ namespace Gameplay.EnemySystem.Factory
             var controller = Object.Instantiate(enemyConfigSO.ViewPrefab, spawnPoint.position, spawnPoint.rotation);
 
             var enemyEntity = ecsWorld.NewEntity();
+            aliveIds.Add(globalSpawnId);
             controller.Initialize(globalSpawnId, enemyEntity);
             globalSpawnId++;
 
@@ -78,5 +82,9 @@ namespace Gameplay.EnemySystem.Factory
         }
 
         public IEnemyController CreateBoardingEnemy(Transform spawnPoint) => Create(spawnPoint, EnemyType.melee);
+
+        public bool IsAlive(int enemyId) => aliveIds.Contains(enemyId);
+
+        public void RemoveDeadEnemy(int enemyId) => aliveIds.Remove(enemyId);
     }
 }

@@ -20,12 +20,12 @@ namespace Gameplay.UnitSystem.Root
 
         private PanelsManager panelsManager;
 
-        public override void PostInitialize()
+        public override void AfterInitialize()
         {
-            base.PostInitialize();
+            base.AfterInitialize();
 
             var unitExistenceControl = ServiceLocator.Get<ShipUnitExistenceControl>();
-            var playerMenuInteract = ServiceLocator.Get<PlayerMenuInteractController>();
+            var playerMenuInteract = ServiceLocator.Get<PlayerInteractController>();
 
             panelsManager = ServiceLocator.Get<PanelsManager>();
             panelsManager.RegisterPanel(unitBuyMenuView);
