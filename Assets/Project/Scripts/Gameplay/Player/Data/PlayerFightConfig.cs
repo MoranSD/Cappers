@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Gameplay.Player.Data
 {
@@ -12,5 +13,11 @@ namespace Gameplay.Player.Data
         public float LongAttackDistance;
         public float BaseMeleeDamage;
         public float BaseLongDamage;
+        public float MeleeMoveSlowDownDuration;
+        public float LongMoveSlowDownDuration;
+        public float SlowedMoveSpeed;
+        public float MeleePushForce;
+        public float PushForceDuration;
+        public Vector3 MeleeDamageZoneBorders;
     }
 }

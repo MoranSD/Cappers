@@ -51,7 +51,11 @@ namespace Gameplay.Player.Root
 
             ref var movable = ref playerEntity.Get<ChMovableComponent>();
             movable.CharacterController = player.CharacterController;
-            movable.Speed = playerConfig.MainConfig.MovementConfig.MoveSpeed;
+            ref var gravity = ref playerEntity.Get<ChGravityComponent>();
+            gravity.CharacterController = player.CharacterController;
+            ref var moveDirection = ref playerEntity.Get<MoveDirectionData>();
+            ref var moveSpeed = ref playerEntity.Get<MoveSpeedData>();
+            moveSpeed.Speed = playerConfig.MainConfig.MovementConfig.MoveSpeed;
 
             ref var turnable = ref playerEntity.Get<TFTurnableComponent>();
 
@@ -65,10 +69,11 @@ namespace Gameplay.Player.Root
 
         private void CreatePlayerWeapons(PlayerConfigSO playerConfig, EcsWorld ecsWorld, ref EcsEntity playerEntity)
         {
-            var meleeWeapon = CreateWeaponEntity(ecsWorld, ref playerEntity,
+            var meleeWeapon = CreateWeaponEntity<MeleeWeaponComponent>(ecsWorld, ref playerEntity,
             new()
             {
-                AttackDistance = playerConfig.MainConfig.FightConfig.MeleeAttackDistance,
+                ZonePivot = player.MeleeWeaponDamageZone,
+                ZoneBorders = playerConfig.MainConfig.FightConfig.MeleeDamageZoneBorders,
                 Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage,
             },
             new()
@@ -77,7 +82,7 @@ namespace Gameplay.Player.Root
                 AttackCoolDown = 0
             });
 
-            var rangeWeapon = CreateWeaponEntity(ecsWorld, ref playerEntity,
+            var rangeWeapon = CreateWeaponEntity<DistanceWeaponComponent>(ecsWorld, ref playerEntity,
             new()
             {
                 AttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance,
@@ -93,11 +98,12 @@ namespace Gameplay.Player.Root
             weaponLink.MeleeWeapon = meleeWeapon;
             weaponLink.RangeWeapon = rangeWeapon;
         }
-        private EcsEntity CreateWeaponEntity(EcsWorld ecsWorld, ref EcsEntity playerEntity, DistanceWeaponComponent distanceComponent, AttackCoolDownComponent coolDownComponent)
+        private EcsEntity CreateWeaponEntity<WC>(EcsWorld ecsWorld, ref EcsEntity playerEntity, WC weaponComponent, AttackCoolDownComponent coolDownComponent)
+            where WC : struct
         {
             var weapon = ecsWorld.NewEntity();
 
-            weapon.Replace(distanceComponent);
+            weapon.Replace(weaponComponent);
             weapon.Replace(coolDownComponent);
 
             ref var ownerComponent = ref weapon.Get<WeaponOwnerComponent>();

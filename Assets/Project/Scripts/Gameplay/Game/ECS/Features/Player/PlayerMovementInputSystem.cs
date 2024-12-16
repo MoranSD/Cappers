@@ -8,7 +8,7 @@ namespace Gameplay.Game.ECS.Features
     {
         private readonly IInput input = null;
         private readonly IGameCamera gameCamera = null;
-        private readonly EcsFilter<TagPlayer, ChMovableComponent> filter = null;
+        private readonly EcsFilter<TagPlayer, MoveDirectionData> filter = null;
 
         public void Run()
         {
@@ -21,9 +21,7 @@ namespace Gameplay.Game.ECS.Features
                 moveDirection.Normalize();
 
                 ref var move = ref filter.Get2(i);
-                ref var direction = ref move.Direction;
-
-                direction = moveDirection;
+                move.Direction = moveDirection;
             }
         }
     }

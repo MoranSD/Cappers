@@ -25,7 +25,7 @@ namespace Gameplay.Game.ECS.Features
                 
                 targetHealth.Health -= attackRequest.Damage;
 
-                _world.NewEntityWithComponent<ApplyDamageEvent>(new()
+                _world.NewOneFrameEntity(new ApplyDamageEvent()
                 {
                     Sender = attackRequest.Sender,
                     Target = attackRequest.Target,

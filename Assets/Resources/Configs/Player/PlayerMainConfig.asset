@@ -27,6 +27,12 @@ MonoBehaviour:
       LongAttackDistance: 8
       BaseMeleeDamage: 2
       BaseLongDamage: 6
+      MeleeMoveSlowDownDuration: 1
+      LongMoveSlowDownDuration: 1
+      SlowedMoveSpeed: 1
+      MeleePushForce: 11
+      PushForceDuration: 0.05
+      MeleeDamageZoneBorders: {x: 1, y: 1, z: 1}
     HealthConfig:
       StartHealth: 10
       MaxHealth: 10

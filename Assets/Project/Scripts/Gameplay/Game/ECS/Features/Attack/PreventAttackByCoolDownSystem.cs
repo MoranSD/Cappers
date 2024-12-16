@@ -10,7 +10,7 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var request = ref filter.Get1(i);
-                ref var attackSender = ref request.Sender;
+                ref var attackSender = ref request.WeaponSender;
 
                 if (attackSender.Has<AttackCoolDownComponent>())
                 {

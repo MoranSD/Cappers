@@ -1,13 +1,18 @@
-﻿using Leopotam.Ecs;
+﻿using Gameplay.Game.ECS.Features;
+using Leopotam.Ecs;
 
 namespace Utils
 {
     public static class EcsWorldExtensions
     {
-        public static EcsEntity NewEntityWithComponent<T>(this EcsWorld ecsWorld, in T component) where T : struct
+        public static EcsEntity NewOneFrameEntity<T>(this EcsWorld ecsWorld, params T[] components) where T : struct
         {
             var entity = ecsWorld.NewEntity();
-            entity.Replace(component);
+            entity.Get<OneFrameEntity>();
+
+            foreach (var component in components)
+                entity.Replace(component);
+
             return entity;
         }
     }

@@ -26,7 +26,7 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var unitTag = ref entity.Get<TagUnit>();
 
-                _world.NewEntityWithComponent<AgentSetDestinationRequest>(new()
+                _world.NewOneFrameEntity(new AgentSetDestinationRequest()
                 {
                     Target = entity,
                     Destination = unitExistence.GetUnitIdlePosition(unitTag.Controller.Data.Id)

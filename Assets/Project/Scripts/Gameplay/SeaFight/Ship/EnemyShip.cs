@@ -44,9 +44,14 @@ namespace Gameplay.SeaFight.Ship
 
         public void ApplyDamage(Transform hitPoint, float damage)
         {
-            health -= damage;
-            //todo: draw die if dead
-            //todo: ask view for critical hit
+            if (health <= 0) return;
+
+            health -= damage * (view.DidHitCriticalZone(hitPoint) ? 2 : 1);
+
+            if (health <= 0)
+            {
+                view.DrawDie();
+            }
         }
 
         public void SetCriticalZonesActive(bool active) => view.SetCriticalZonesActive(active);
@@ -87,7 +92,7 @@ namespace Gameplay.SeaFight.Ship
 
             foreach(var zone in targetsZones)
             {
-                var attackTask = shipFight.ApplyDamageInZone(zone, 5, cancellationTokenSource.Token);
+                var attackTask = shipFight.ApplyCannonDamageInZone(zone, 5, cancellationTokenSource.Token);
                 attackTasks.Add(attackTask);
             }
 

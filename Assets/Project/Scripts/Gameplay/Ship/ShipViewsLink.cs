@@ -1,4 +1,5 @@
 ﻿using Gameplay.Ship.Fight.Cannon;
+using Gameplay.Ship.Fight.Hole;
 using Gameplay.Ship.Fight.View;
 using Gameplay.Ship.UnitControl.Placement.View;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace Gameplay.Ship
         public ShipUnitExistenceView ShipUnitExistenceView;
         public ShipFightView ShipFightView;
         public List<CannonView> CannonViews;
+        public ShipHoleView HoleView;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Leopotam.Ecs;
-using System;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
@@ -24,11 +23,16 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var weapon = ref filter.Get2(i).Weapon;
 
-                _world.NewEntityWithComponent<AttackRequest>(new()
-                {
-                    Sender = weapon,
-                    Target = agroComponent.Target,
-                });
+                _world.NewEntity()
+                    .Replace(new AttackRequest()
+                    {
+                        WeaponSender = weapon,
+                    })
+                    .Replace(new AttackRequestTargetData()
+                    {
+                        Target = agroComponent.Target,
+                    })
+                    .Replace(new OneFrameEntity());
             }
         }
     }

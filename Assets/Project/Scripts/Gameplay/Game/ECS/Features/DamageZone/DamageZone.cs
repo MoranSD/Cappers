@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct OneFrameDamageZone
+    public struct DamageZone
     {
         public Vector3 Center;
         public Vector3 Border;

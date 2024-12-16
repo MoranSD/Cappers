@@ -34,14 +34,18 @@ namespace Gameplay.Game.ECS.Features
                     {
                         var unitInteract = followControlComponent.EntitiesInControl.First();
 
-                        _world.NewEntityWithComponent<RemoveFollowControlRequest>(new()
-                        {
-                            Sender = playerEntity,
-                            Target = unitInteract,
-                        });
-
-                        ref var unit = ref unitInteract.Get<TagUnit>().Controller;
-                        unitInteractable.Interact(unit);
+                        _world.NewEntity()
+                            .Replace(new RemoveFollowControlRequest()
+                            {
+                                Sender = playerEntity,
+                                Target = unitInteract,
+                            })
+                            .Replace(new UnitInteractJobRequest()
+                            {
+                                Target = unitInteract,
+                                Interactable = unitInteractable,
+                            })
+                            .Replace(new OneFrameEntity());
                     }
                     else
                     {
@@ -58,7 +62,7 @@ namespace Gameplay.Game.ECS.Features
 
                     if (followControlComponent.EntitiesInControl.Contains(entityAround))
                     {
-                        _world.NewEntityWithComponent<RemoveFollowControlRequest>(new()
+                        _world.NewOneFrameEntity(new RemoveFollowControlRequest()
                         {
                             Sender = playerEntity,
                             Target = entityAround,
@@ -66,7 +70,7 @@ namespace Gameplay.Game.ECS.Features
                     }
                     else
                     {
-                        _world.NewEntityWithComponent<AddFollowControlRequest>(new()
+                        _world.NewOneFrameEntity(new AddFollowControlRequest()
                         {
                             Sender = playerEntity,
                             Target = entityAround,

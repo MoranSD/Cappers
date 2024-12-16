@@ -1709,6 +1709,8 @@ MonoBehaviour:
   - {fileID: 2119995399560255747}
   - {fileID: 8805339130025331856}
   - {fileID: 4953795375998092727}
+  HoleView: {fileID: 3788712371067025085, guid: 50f574368a61f2b4d9408bc13b658cb3,
+    type: 3}
 --- !u!1 &8697084144994826773
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using Gameplay.UnitSystem.Data;
 using UnityEngine;
+using Utils.Interaction;
 
 namespace Gameplay.UnitSystem.Controller
 {
@@ -8,6 +9,7 @@ namespace Gameplay.UnitSystem.Controller
         UnitData Data { get; }
 
         void GoToIdlePosition(Vector3 position);
+        void InteractWith(IUnitInteractable interactable);
         void Destroy();
     }
 }

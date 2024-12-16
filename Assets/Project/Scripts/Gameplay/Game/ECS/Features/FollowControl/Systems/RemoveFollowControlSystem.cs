@@ -27,7 +27,7 @@ namespace Gameplay.Game.ECS.Features
                 controlTarget.Del<FollowComponent>();
                 controlTarget.Del<TagUnderFollowControl>();
 
-                _world.NewEntityWithComponent<RemovedFollowControlEvent>(new()
+                _world.NewOneFrameEntity(new RemovedFollowControlEvent()
                 {
                     Target = controlTarget,
                 });

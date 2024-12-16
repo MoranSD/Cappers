@@ -10,6 +10,7 @@ using Infrastructure.GameInput;
 using Infrastructure.TickManagement;
 using Gameplay.Player.InteractController;
 using Gameplay.SeaFight.Ship.View;
+using Gameplay.Ship.Fight.Hole;
 
 namespace Gameplay.Ship.Root
 {
@@ -23,9 +24,11 @@ namespace Gameplay.Ship.Root
 
             var gameState = ServiceLocator.Get<GameState>();
             var ecsWorld = ServiceLocator.Get<EcsWorld>();
+            var tickManager = ServiceLocator.Get<TickManager>();
 
             shipViewsLink.ShipFightView.Initialize(ecsWorld);
-            var shipFight = new ShipFight(shipViewsLink.ShipFightView, gameState);
+            var holeFactory = new ShipHoleFactory(tickManager, shipViewsLink.HoleView, shipViewsLink.ShipFightView);
+            var shipFight = new ShipFight(shipViewsLink.ShipFightView, gameState, holeFactory);
 
             ServiceLocator.Register(shipFight);
         }

@@ -7,6 +7,17 @@ namespace Utils
 {
     public static class EntityUtil
     {
+        public static Vector3 GetDirectionToEntity(Transform transform, EcsEntity ecsEntity)
+        {
+            if (ecsEntity.Has<TranslationComponent>() == false)
+            {
+                Debug.Log($"No TranslationComponent {ecsEntity.GetInternalId()}");
+                return Vector3.zero;
+            }
+
+            ref var targetTF = ref ecsEntity.Get<TranslationComponent>().Transform;
+            return targetTF.position - transform.position;
+        }
         public static EcsEntity GetClosestEntity(Transform transform, EcsEntity[] entities)
         {
             EcsEntity closestEntity = entities.First(x => x.Has<TranslationComponent>());

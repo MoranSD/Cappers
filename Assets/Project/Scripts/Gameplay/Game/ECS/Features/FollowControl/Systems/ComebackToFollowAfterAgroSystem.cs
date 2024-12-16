@@ -20,7 +20,7 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var followOwner = ref entity.Get<TagUnderFollowControl>().Owner;
 
-                _world.NewEntityWithComponent<AddFollowControlRequest>(new()
+                _world.NewOneFrameEntity(new AddFollowControlRequest()
                 {
                     Sender = followOwner,
                     Target = entity,

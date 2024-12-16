@@ -27,7 +27,7 @@ namespace Gameplay.Game.ECS.Features
                     {
                         arc.Progress = 1;
 
-                        _world.NewEntityWithComponent<ReachArcEndEvent>(new ()
+                        _world.NewOneFrameEntity(new ReachArcEndEvent()
                         {
                             Entity = entity,
                         });

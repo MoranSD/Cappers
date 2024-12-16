@@ -4,7 +4,9 @@ using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using Utils;
+using Utils.Interaction;
 
 namespace Gameplay.UnitSystem.Controller
 {
@@ -25,10 +27,19 @@ namespace Gameplay.UnitSystem.Controller
 
         public void GoToIdlePosition(Vector3 position)
         {
-            EcsWorld.NewEntityWithComponent<AgentSetDestinationRequest>(new()
+            EcsWorld.NewOneFrameEntity(new AgentSetDestinationRequest()
             {
                 Target = EcsEntity,
                 Destination = position
+            });
+        }
+
+        public void InteractWith(IUnitInteractable interactable)
+        {
+            EcsWorld.NewOneFrameEntity(new UnitInteractJobRequest()
+            {
+                Target = EcsEntity,
+                Interactable = interactable
             });
         }
 

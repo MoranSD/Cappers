@@ -40,7 +40,6 @@ namespace Gameplay.Game.ECS
         {
             AddSystems();
             AddInjections();
-            AddOneFrames();
 
             systems.Init();
 
@@ -65,7 +64,11 @@ namespace Gameplay.Game.ECS
                 .Add(new PlayerMovementInputSystem())
                 .Add(new PlayerInteractionSystem())
 
-                .Add(new ChMovementPhysicsSystem())
+                //velocity
+                .Add(new AddVelocitySystem())
+                .Add(new TemporaryVelocitySystem())
+
+                .Add(new ChGravitySystem())
                 .Add(new ChMovementSystem())
 
                 .Add(new ArcMovementSystem())
@@ -91,11 +94,18 @@ namespace Gameplay.Game.ECS
                 .Add(new AddFollowControlSystem())
                 .Add(new RemoveFollowControlSystem())
 
+                .Add(new UnitGoToIdleAfterRemoveFollow())
+
+                //UnitJob
+                .Add(new UnitApplyInteractJobSystem())
+                .Add(new UnitInteractJobSystem())
+
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
                 .Add(new PreventAttackByCoolDownSystem())
 
                 .Add(new DistanceWeaponAttackSystem())
+                .Add(new MeleeWeaponAttackSystem())
 
                 .Add(new AgentFollowSystem())
                 .Add(new AgentSetDestinationSystem())
@@ -104,12 +114,22 @@ namespace Gameplay.Game.ECS
 
                 .Add(new ApplyDamageSystem())
 
+                //velocity
+                .Add(new ApplyVelocitySystem())
+
+                //SlowDown
+                .Add(new ApplySlowDownSystem())
+                .Add(new SlowDownSystem())
+                .Add(new SmoothRecoverySlowDownSystem())
+
                 .Add(new UnitDieSystem())
                 .Add(new EnemyDieSystem())
 
                 .Add(new UpdateAnimationSystem())
                 
-                .Add(new ChangeStateSystem());
+                .Add(new ChangeStateSystem())
+                
+                .Add(new OneFrameEntitySystem());
         }
 
         private void AddInjections()
@@ -125,24 +145,6 @@ namespace Gameplay.Game.ECS
                 .Inject(gameConfig)
                 .Inject(input)
                 .Inject(playerConfig);
-        }
-
-        private void AddOneFrames()
-        {
-            systems
-                .OneFrame<TryFindAndUpdateFollowControlTargetStateRequest>()
-                .OneFrame<RemoveFollowControlRequest>()
-                .OneFrame<RemovedFollowControlEvent>()
-                .OneFrame<AddFollowControlRequest>()
-                .OneFrame<AgentSetDestinationRequest>()
-                .OneFrame<ApplyDamageRequest>()
-                .OneFrame<ApplyDamageEvent>()
-                .OneFrame<AttackRequest>()
-                .OneFrame<BeginAgroEvent>()
-                .OneFrame<EndAgroEvent>()
-                .OneFrame<ChangeStateRequest>()
-                .OneFrame<OneFrameDamageZone>()
-                .OneFrame<ReachArcEndEvent>();
         }
     }
 }
