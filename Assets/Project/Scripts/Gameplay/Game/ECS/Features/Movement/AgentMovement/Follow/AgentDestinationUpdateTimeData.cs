@@ -1,6 +1,6 @@
 ﻿namespace Gameplay.Game.ECS.Features
 {
-    public struct AgentDestinationUpdateTime
+    public struct AgentDestinationUpdateTimeData
     {
         public float DestinationUpdateTime;
     }

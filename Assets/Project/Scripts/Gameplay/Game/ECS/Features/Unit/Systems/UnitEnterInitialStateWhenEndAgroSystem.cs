@@ -6,8 +6,6 @@ namespace Gameplay.Game.ECS.Features
 {
     public class UnitEnterInitialStateWhenEndAgroSystem : IEcsRunSystem
     {
-        private readonly ShipUnitExistenceControl unitExistence = null;
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<EndAgroEvent> filter = null;
         public void Run()
         {
@@ -25,12 +23,7 @@ namespace Gameplay.Game.ECS.Features
                     continue;
 
                 ref var unitTag = ref entity.Get<TagUnit>();
-
-                _world.NewOneFrameEntity(new AgentSetDestinationRequest()
-                {
-                    Target = entity,
-                    Destination = unitExistence.GetUnitIdlePosition(unitTag.Controller.Data.Id)
-                });
+                unitTag.Controller.GoToIdlePosition();
             }
         }
     }

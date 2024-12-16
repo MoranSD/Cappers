@@ -48,7 +48,7 @@ namespace Gameplay.EnemySystem.Factory
             ref var movable = ref enemyEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
 
-            enemyEntity.Get<AgentDestinationUpdateTime>();
+            enemyEntity.Get<AgentDestinationUpdateTimeData>();
 
             ref var targetLook = ref enemyEntity.Get<TargetLookComponent>();
             targetLook.TargetLayer = gameConfig.EnemyTargetLayers;

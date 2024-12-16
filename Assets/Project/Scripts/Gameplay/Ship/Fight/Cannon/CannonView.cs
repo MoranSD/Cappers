@@ -1,4 +1,5 @@
 ﻿using Gameplay.SeaFight.Ship.View;
+using Gameplay.UnitSystem.Controller;
 using Infrastructure.GameInput;
 using System;
 using UnityEngine;
@@ -9,12 +10,13 @@ namespace Gameplay.Ship.Fight.Cannon
     public class CannonView : MonoBehaviour, ICannonView
     {
         public event Action OnPlayerInteract;
-        public event Action OnUnitInteract;
+        public event Action<IUnitController> OnUnitInteract;
 
         [field: SerializeField] public Transform AimPivot { get; private set; }
+        [field: SerializeField] public Transform UnitInteractPivot { get; private set; }
 
         [SerializeField] private float aimMoveSpeed = 3;
-        [SerializeField] private TriggerInteractor interactor;
+        [SerializeField] private UnitTriggerInteractor interactor;
         [SerializeField] private CannonBall cannonBallPrefab;
         [SerializeField] private Transform ballStartPivot;
 
@@ -29,6 +31,7 @@ namespace Gameplay.Ship.Fight.Cannon
             this.enemyShipView = enemyShipView;
             this.input = input;
             interactor.OnInteracted += OnPlayerInteracted;
+            interactor.OnUnitInteracted += OnUnitInteracted;
 
             //todo: убрать эффект от метода SetInactive
             gameObject.SetActive(true);
@@ -37,6 +40,7 @@ namespace Gameplay.Ship.Fight.Cannon
         public void Dispose()
         {
             interactor.OnInteracted -= OnPlayerInteracted;
+            interactor.OnUnitInteracted -= OnUnitInteracted;
         }
 
         private void Update()
@@ -62,7 +66,7 @@ namespace Gameplay.Ship.Fight.Cannon
         public void SetAvailable(bool available) => interactor.IsInteractable = available;
 
         private void OnPlayerInteracted() => OnPlayerInteract?.Invoke();
-        private void OnUnitInteracted() => OnUnitInteract?.Invoke();
+        private void OnUnitInteracted(IUnitController unit) => OnUnitInteract?.Invoke(unit);
 
         public void BeginAim()
         {
@@ -81,6 +85,12 @@ namespace Gameplay.Ship.Fight.Cannon
         {
             var ball = Instantiate(cannonBallPrefab, ballStartPivot.position, Quaternion.identity);
             ball.Fly(ballStartPivot, AimPivot, callBack);
+        }
+
+        public void OnUnitAim()
+        {
+            //todo: установить в рандомную позицию в пределах прицеливания
+            AimPivot.position = enemyShipView.AimZone.transform.position;
         }
     }
 }

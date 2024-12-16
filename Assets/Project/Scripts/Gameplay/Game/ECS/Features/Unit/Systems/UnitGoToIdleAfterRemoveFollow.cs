@@ -1,13 +1,9 @@
-﻿using Gameplay.Ship.UnitControl;
-using Leopotam.Ecs;
-using Utils;
+﻿using Leopotam.Ecs;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class UnitGoToIdleAfterRemoveFollow : IEcsRunSystem
     {
-        private readonly ShipUnitExistenceControl unitExistence = null;
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<RemovedFollowControlEvent> filter = null;
         public void Run()
         {
@@ -20,12 +16,7 @@ namespace Gameplay.Game.ECS.Features
                     continue;
 
                 ref var unitTag = ref entity.Get<TagUnit>();
-
-                _world.NewOneFrameEntity(new AgentSetDestinationRequest()
-                {
-                    Target = entity,
-                    Destination = unitExistence.GetUnitIdlePosition(unitTag.Controller.Data.Id)
-                });
+                unitTag.Controller.GoToIdlePosition();
             }
         }
     }

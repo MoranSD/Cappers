@@ -4,7 +4,6 @@ using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 using Utils;
 using Utils.Interaction;
 
@@ -18,6 +17,8 @@ namespace Gameplay.UnitSystem.Controller
 
         [field: SerializeField] public NavMeshAgent NavMeshAgent { get; private set; }
 
+        private Vector3 idlePosition;
+
         public void Initialize(EcsWorld ecsWorld, EcsEntity ecsEntity, UnitData data)
         {
             EcsWorld = ecsWorld;
@@ -27,10 +28,20 @@ namespace Gameplay.UnitSystem.Controller
 
         public void GoToIdlePosition(Vector3 position)
         {
+            idlePosition = position;
             EcsWorld.NewOneFrameEntity(new AgentSetDestinationRequest()
             {
                 Target = EcsEntity,
                 Destination = position
+            });
+        }
+
+        public void GoToIdlePosition()
+        {
+            EcsWorld.NewOneFrameEntity(new AgentSetDestinationRequest()
+            {
+                Target = EcsEntity,
+                Destination = idlePosition
             });
         }
 
@@ -46,6 +57,18 @@ namespace Gameplay.UnitSystem.Controller
         public void Destroy()
         {
             Destroy(gameObject);
+        }
+
+        public void BeginCannonInteract(Transform cannonPivot)
+        {
+            transform.position = cannonPivot.position;
+            EcsEntity.Get<BlockFreezed>();
+        }
+
+        public void EndCannonInteract()
+        {
+            EcsEntity.Del<BlockFreezed>();
+            GoToIdlePosition();
         }
     }
 }

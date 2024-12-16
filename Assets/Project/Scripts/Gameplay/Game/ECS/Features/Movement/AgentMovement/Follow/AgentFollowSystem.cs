@@ -6,7 +6,7 @@ namespace Gameplay.Game.ECS.Features
     public class AgentFollowSystem : IEcsRunSystem
     {
         private const float DestinationUpdateRate = 0.5f;
-        private readonly EcsFilter<AgentMovableComponent, FollowComponent, AgentDestinationUpdateTime> filter = null;
+        private readonly EcsFilter<AgentMovableComponent, FollowComponent, AgentDestinationUpdateTimeData> filter = null;
 
         public void Run()
         {

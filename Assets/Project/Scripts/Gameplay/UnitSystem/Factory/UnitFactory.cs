@@ -34,7 +34,7 @@ namespace Gameplay.UnitSystem.Factory
             ref var translation = ref unitEntity.Get<TranslationComponent>();
             translation.Transform = controller.transform;
 
-            unitEntity.Get<AgentDestinationUpdateTime>();
+            unitEntity.Get<AgentDestinationUpdateTimeData>();
             ref var movable = ref unitEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
             controller.NavMeshAgent.speed = unitData.Speed;

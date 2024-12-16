@@ -5,7 +5,7 @@ namespace Gameplay.Game.ECS.Features
 {
     public class UnitInteractJobSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<TagUnit, TranslationComponent, UnitInteractJob> filter = null;
+        private readonly EcsFilter<TagUnit, TranslationComponent, UnitInteractJobComponent> filter = null;
 
         public void Run()
         {
@@ -17,10 +17,10 @@ namespace Gameplay.Game.ECS.Features
 
                 if (Vector3.Distance(transform.position, job.Interactable.Position) <= GameConstants.UnitInteractDistance)
                 {
-                    ref var entity = ref filter.GetEntity(i);
-                    entity.Del<UnitInteractJob>();
-
                     job.Interactable.Interact(controller);
+
+                    ref var entity = ref filter.GetEntity(i);
+                    entity.Del<UnitInteractJobComponent>();
                 }
             }
         }

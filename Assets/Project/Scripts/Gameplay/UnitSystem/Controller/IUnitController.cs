@@ -10,6 +10,8 @@ namespace Gameplay.UnitSystem.Controller
 
         void GoToIdlePosition(Vector3 position);
         void InteractWith(IUnitInteractable interactable);
+        void BeginCannonInteract(Transform cannonPivot);
+        void EndCannonInteract();
         void Destroy();
     }
 }

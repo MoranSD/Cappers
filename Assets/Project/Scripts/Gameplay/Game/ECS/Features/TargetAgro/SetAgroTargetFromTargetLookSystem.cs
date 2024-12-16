@@ -6,7 +6,7 @@ namespace Gameplay.Game.ECS.Features
     public class SetAgroTargetFromTargetLookSystem : IEcsRunSystem
     {
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TranslationComponent, TargetAgroComponent, TargetLookComponent> filter = null;
+        private readonly EcsFilter<TranslationComponent, TargetAgroComponent, TargetLookComponent>.Exclude<BlockFreezed> filter = null;
         public void Run()
         {
             foreach (var i in filter)

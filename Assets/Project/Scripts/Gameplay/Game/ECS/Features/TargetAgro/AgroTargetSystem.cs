@@ -1,12 +1,11 @@
 ﻿using Leopotam.Ecs;
-using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class AgroTargetSystem : IEcsRunSystem
     {
         private readonly EcsWorld _world = null;
-        private readonly EcsFilter<TargetAgroComponent, WeaponLink> filter = null;
+        private readonly EcsFilter<TargetAgroComponent, WeaponLink>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {

@@ -31,7 +31,7 @@ namespace Gameplay.Game.ECS.Features
                         Destination = request.Interactable.Position,
                     });
 
-                    ref var job = ref request.Target.Get<UnitInteractJob>();
+                    ref var job = ref request.Target.Get<UnitInteractJobComponent>();
                     job.Interactable = request.Interactable;
                 }
             }

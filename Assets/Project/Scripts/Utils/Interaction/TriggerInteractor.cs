@@ -8,6 +8,11 @@ namespace Utils.Interaction
         public event Action OnInteracted;
         public bool IsInteractable { get; set; } = true;
 
-        public void Interact() => OnInteracted?.Invoke();
+        public void Interact()
+        {
+            if (IsInteractable == false) return;
+
+            OnInteracted?.Invoke();
+        }
     }
 }
