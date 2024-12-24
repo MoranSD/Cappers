@@ -63,72 +63,58 @@ namespace Gameplay.Game.ECS
             systems
                 .Add(new PlayerMovementInputSystem())
                 .Add(new PlayerInteractionSystem())
-
                 //velocity
+                .Add(new ApplyVelocitySystem())
                 .Add(new AddVelocitySystem())
                 .Add(new TemporaryVelocitySystem())
-
+                //movement
                 .Add(new ChGravitySystem())
                 .Add(new ChMovementSystem())
-
                 .Add(new ArcMovementSystem())
-
                 .Add(new TFTurnSystem())
-
                 //finds targets around
                 .Add(new TargetLookSystem())
-
+                //player
                 .Add(new PlayerTurnSystem())
                 .Add(new PlayerAttackSystem())
-
                 //agro system
                 .Add(new SetAgroTargetFromTargetLookSystem())
                 .Add(new AgroTargetSystem())
-
-                //unit
-                .Add(new UnitRemoveFollowInteractionWhenBeginAgroSystem())
-                .Add(new UnitEnterInitialStateWhenEndAgroSystem())
-
                 //follow
                 .Add(new ComebackToFollowAfterAgroSystem())
                 .Add(new AddFollowControlSystem())
                 .Add(new RemoveFollowControlSystem())
-
+                //Unit
+                .Add(new UnitRemoveFollowInteractionWhenBeginAgroSystem())
+                .Add(new UnitEnterInitialStateWhenEndAgroSystem())
                 .Add(new UnitGoToIdleAfterRemoveFollow())
-
-                //UnitJob
                 .Add(new UnitApplyInteractJobSystem())
                 .Add(new UnitInteractJobSystem())
-
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
                 .Add(new PreventAttackByCoolDownSystem())
-
+                //weapon
                 .Add(new DistanceWeaponAttackSystem())
                 .Add(new MeleeWeaponAttackSystem())
-
+                //agent
                 .Add(new AgentFollowSystem())
                 .Add(new AgentSetDestinationSystem())
-
+                //zone
                 .Add(new DamageZoneSystem())
-
+                //damage
                 .Add(new ApplyDamageSystem())
-
-                //velocity
-                .Add(new ApplyVelocitySystem())
-
                 //SlowDown
                 .Add(new ApplySlowDownSystem())
                 .Add(new SlowDownSystem())
                 .Add(new SmoothRecoverySlowDownSystem())
-
+                //die
                 .Add(new UnitDieSystem())
                 .Add(new EnemyDieSystem())
-
+                //animation
                 .Add(new UpdateAnimationSystem())
-                
+                //state
                 .Add(new ChangeStateSystem())
-                
+                //one frame
                 .Add(new OneFrameEntitySystem());
         }
 
