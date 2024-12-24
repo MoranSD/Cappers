@@ -2,7 +2,7 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct ApplySlowDownEvent
+    public struct ApplySlowDownRequest
     {
         public EcsEntity Target;
         public float Duration;

@@ -11,7 +11,6 @@ namespace Gameplay.Game.ECS.Features
         private readonly GameConfig gameConfig = null;
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TagPlayer, TranslationComponent, TargetLookComponent, PlayerWeaponLink>.Exclude<BlockFreezed> filter = null;
         public void Run()
         {
@@ -61,22 +60,23 @@ namespace Gameplay.Game.ECS.Features
 
             var targetWeapon = isMelee ? weaponsLink.MeleeWeapon : isRange ? weaponsLink.RangeWeapon : default;
 
-            var requestEntity = _world.NewEntity()
-                .Replace(new AttackRequest()
-                {
-                    WeaponSender = targetWeapon
-                })
-                .Replace(new AttackRequestTargetLayerData()
-                {
-                    LayerMask = gameConfig.PlayerTargetLayers
-                })
-                .Replace(new OneFrameEntity());
+            var attackRequest = new AttackRequest()
+            {
+                Sender = targetWeapon,
+                ExtensionData = new()
+                    {
+                        { AttackRequest.TARGET_LAYER_EXTENSION_DATA_KEY, gameConfig.PlayerTargetLayers }
+                    },
+            };
 
             if (targetLook.HasTargetsInRange)
             {
-                ref var requestTargetData = ref requestEntity.Get<AttackRequestTargetData>();
-                requestTargetData.Target = closestTarget;
+                attackRequest.ExtensionData.Add(AttackRequest.TARGET_EXTENSION_DATA_KEY, closestTarget);
+                //look at closestTarget
             }
+
+            EventBus.Invoke(attackRequest);
+
         }
         private void PerformAttackFeel(Vector3 attackDirection, ref EcsEntity playerEntity, int attackType)
         {
@@ -101,7 +101,7 @@ namespace Gameplay.Game.ECS.Features
              * если стреляем, то игрок должен посмотреть моментально но плавно на цель
              */
 
-            _world.NewOneFrameEntity(new ApplySlowDownEvent()
+            EventBus.Invoke(new ApplySlowDownRequest()
             {
                 Target = playerEntity,
                 Duration = slowDownDuration,

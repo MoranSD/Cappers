@@ -1,35 +1,42 @@
 ﻿using Leopotam.Ecs;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class AddFollowControlSystem : IEcsRunSystem
+    public class AddFollowControlSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<AddFollowControlRequest> filter = null;
-
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
+            EventBus.Unsubscribe<AddFollowControlRequest>(OnAddFollow);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<AddFollowControlRequest>(OnAddFollow);
+        }
+
+        private void OnAddFollow(AddFollowControlRequest followControlRequest)
+        {
+            if (followControlRequest.Sender.Has<FollowControllerComponent>() == false) return;
+
+            ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControllerComponent>();
+            ref var controlTarget = ref followControlRequest.Target;
+
+            if (controlTarget.Has<TagAvailableForFollowControlInteraction>() == false)
             {
-                ref var followControlRequest = ref filter.Get1(i);
-                ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControllerComponent>();
-                ref var controlTarget = ref followControlRequest.Target;
-
-                if(controlTarget.Has<TagAvailableForFollowControlInteraction>() == false)
-                {
-                    Debug.Log("Cant control uncontrollable target");
-                    continue;
-                }
-
-                if(senderControlComponent.EntitiesInControl.Contains(controlTarget) == false)
-                    senderControlComponent.EntitiesInControl.Add(controlTarget);
-
-                ref var followComponent = ref controlTarget.Get<FollowComponent>();
-                followComponent.Target = followControlRequest.Sender;
-
-                ref var underfollowTag = ref controlTarget.Get<TagUnderFollowControl>();
-                underfollowTag.Owner = followControlRequest.Sender;
+                Debug.Log("Cant control uncontrollable target");
+                return;
             }
+
+            if (senderControlComponent.EntitiesInControl.Contains(controlTarget) == false)
+                senderControlComponent.EntitiesInControl.Add(controlTarget);
+
+            ref var followComponent = ref controlTarget.Get<FollowComponent>();
+            followComponent.Target = followControlRequest.Sender;
+
+            ref var underfollowTag = ref controlTarget.Get<TagUnderFollowControl>();
+            underfollowTag.Owner = followControlRequest.Sender;
         }
     }
 }

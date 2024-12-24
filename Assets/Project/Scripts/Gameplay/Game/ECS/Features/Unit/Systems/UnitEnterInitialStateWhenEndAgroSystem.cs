@@ -1,30 +1,34 @@
-﻿using Gameplay.Ship.UnitControl;
-using Leopotam.Ecs;
+﻿using Leopotam.Ecs;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UnitEnterInitialStateWhenEndAgroSystem : IEcsRunSystem
+    public class UnitEnterInitialStateWhenEndAgroSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<EndAgroEvent> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
-            {
-                ref var beginsAgroEvent = ref filter.Get1(i);
-                ref var entity = ref beginsAgroEvent.Entity;
+            EventBus.Unsubscribe<EndAgroEvent>(OnEndAgro);
+        }
 
-                if (entity.Has<TagUnit>() == false)
-                    continue;
+        public void Init()
+        {
+            EventBus.Subscribe<EndAgroEvent>(OnEndAgro, 1);
+        }
 
-                entity.Get<TagAvailableForFollowControlInteraction>();
+        private void OnEndAgro(EndAgroEvent beginsAgroEvent)
+        {
+            ref var entity = ref beginsAgroEvent.Entity;
 
-                if (entity.Has<TagUnderFollowControl>())
-                    continue;
+            if (entity.Has<TagUnit>() == false)
+                return;
 
-                ref var unitTag = ref entity.Get<TagUnit>();
-                unitTag.Controller.GoToIdlePosition();
-            }
+            entity.Get<TagAvailableForFollowControlInteraction>();
+
+            if (entity.Has<TagUnderFollowControl>())
+                return;
+
+            ref var unitTag = ref entity.Get<TagUnit>();
+            unitTag.Controller.GoToIdlePosition();
         }
     }
 }

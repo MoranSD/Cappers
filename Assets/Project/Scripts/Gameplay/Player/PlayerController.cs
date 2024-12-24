@@ -43,7 +43,7 @@ namespace Gameplay.Player
                     var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
                     float slowedSpeed = playerConfig.MainConfig.FightConfig.SlowedMoveSpeed;
                     float slowDownDuration = playerConfig.MainConfig.FightConfig.MeleeMoveSlowDownDuration;
-                    world.NewOneFrameEntity(new ApplySlowDownEvent()
+                    EventBus.Invoke(new ApplySlowDownRequest()
                     {
                         Target = EcsEntity,
                         Duration = slowDownDuration,
@@ -58,7 +58,7 @@ namespace Gameplay.Player
                     var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
                     float slowedSpeed = playerConfig.MainConfig.FightConfig.SlowedMoveSpeed;
                     float slowDownDuration = playerConfig.MainConfig.FightConfig.LongMoveSlowDownDuration;
-                    world.NewOneFrameEntity(new ApplySlowDownEvent()
+                    EventBus.Invoke(new ApplySlowDownRequest()
                     {
                         Target = EcsEntity,
                         Duration = slowDownDuration,
@@ -73,7 +73,7 @@ namespace Gameplay.Player
                 var assetProvider = ServiceLocator.Get<IAssetProvider>();
                 var playerConfig = assetProvider.Load<PlayerConfigSO>(Constants.PlayerConfigPath);
 
-                world.NewOneFrameEntity(new ApplyVelocityEvent()
+                EventBus.Invoke(new ApplyVelocityRequest()
                 {
                     Target = EcsEntity,
                     Direction = transform.forward,

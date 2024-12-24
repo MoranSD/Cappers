@@ -1,26 +1,32 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ApplyVelocitySystem : IEcsRunSystem
+    public class ApplyVelocitySystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<ApplyVelocityEvent> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
+            EventBus.Unsubscribe<ApplyVelocityRequest>(OnVelocity);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<ApplyVelocityRequest>(OnVelocity);
+        }
+
+        private void OnVelocity(ApplyVelocityRequest avRequest)
+        {
+            ref var target = ref avRequest.Target;
+
+            ref var velocity = ref target.Get<VelocityComponent>();
+            velocity.Direction = avRequest.Direction;
+            velocity.Force = avRequest.Force;
+
+            if (avRequest.IsTemporary)
             {
-                ref var avEvent = ref filter.Get1(i);
-                ref var target = ref avEvent.Target;
-
-                ref var velocity = ref target.Get<VelocityComponent>();
-                velocity.Direction = avEvent.Direction;
-                velocity.Force = avEvent.Force;
-
-                if(avEvent.IsTemporary)
-                {
-                    ref var temp = ref target.Get<TemporaryVelocityComponent>();
-                    temp.Duration = avEvent.Duration;
-                }
+                ref var temp = ref target.Get<TemporaryVelocityComponent>();
+                temp.Duration = avRequest.Duration;
             }
         }
     }

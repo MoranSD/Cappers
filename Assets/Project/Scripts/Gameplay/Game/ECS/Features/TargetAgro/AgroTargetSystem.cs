@@ -1,10 +1,10 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class AgroTargetSystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TargetAgroComponent, WeaponLink>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
@@ -22,16 +22,21 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var weapon = ref filter.Get2(i).Weapon;
 
-                _world.NewEntity()
-                    .Replace(new AttackRequest()
+                if (weapon.Has<AttackCoolDownComponent>())
+                {
+                    ref var coolDown = ref weapon.Get<AttackCoolDownComponent>();
+
+                    if (coolDown.AttackCoolDown > 0) continue;
+                }
+
+                EventBus.Invoke(new AttackRequest()
+                {
+                    Sender = weapon,
+                    ExtensionData = new()
                     {
-                        WeaponSender = weapon,
-                    })
-                    .Replace(new AttackRequestTargetData()
-                    {
-                        Target = agroComponent.Target,
-                    })
-                    .Replace(new OneFrameEntity());
+                        { AttackRequest.TARGET_EXTENSION_DATA_KEY, agroComponent.Target }
+                    },
+                });
             }
         }
     }

@@ -1,27 +1,32 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class PreventAttackByCoolDownSystem : IEcsRunSystem
+    public class PreventAttackByCoolDownSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<AttackRequest> filter = null;
-        public void Run()
+        public void Init()
         {
-            foreach (var i in filter)
+            EventBus.Subscribe<AttackRequest>(OnWeaponAttack, 1);
+        }
+
+        public void Destroy()
+        {
+            EventBus.Unsubscribe<AttackRequest>(OnWeaponAttack);
+        }
+
+        private void OnWeaponAttack(AttackRequest request)
+        {
+            ref var attackSender = ref request.Sender;
+
+            if (attackSender.Has<AttackCoolDownComponent>())
             {
-                ref var request = ref filter.Get1(i);
-                ref var attackSender = ref request.WeaponSender;
-
-                if (attackSender.Has<AttackCoolDownComponent>())
-                {
-                    ref var coolDownComponent = ref attackSender.Get<AttackCoolDownComponent>();
-
-                    if (coolDownComponent.AttackCoolDown <= 0)
-                        continue;
-
-                    ref var requestEntity = ref filter.GetEntity(i);
-                    requestEntity.Del<AttackRequest>();
-                }
+                ref var coolDownComponent = ref attackSender.Get<AttackCoolDownComponent>();
+                request.HasCooldown = coolDownComponent.AttackCoolDown > 0;
+            }
+            else
+            {
+                request.HasCooldown = false;
             }
         }
     }

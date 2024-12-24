@@ -1,37 +1,43 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ApplySlowDownSystem : IEcsRunSystem
+    public class ApplySlowDownSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<ApplySlowDownEvent> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
+            EventBus.Unsubscribe<ApplySlowDownRequest>(OnSlowDown);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<ApplySlowDownRequest>(OnSlowDown);
+        }
+
+        private void OnSlowDown(ApplySlowDownRequest slRequest)
+        {
+            ref var target = ref slRequest.Target;
+
+            if (target.Has<MoveSpeedData>())
             {
-                ref var slEvent = ref filter.Get1(i);
-                ref var target = ref slEvent.Target;
+                ref var speedData = ref target.Get<MoveSpeedData>();
+                bool alreadySlowed = target.Has<SlowDownComponent>();
+                ref var slowDownComp = ref target.Get<SlowDownComponent>();
 
-                if (target.Has<MoveSpeedData>())
+                slowDownComp.Duration = slRequest.Duration;
+
+                if (alreadySlowed == false)
+                    slowDownComp.NormalSpeed = speedData.Speed;
+
+                if (slRequest.WithSmoothRecovery)
                 {
-                    ref var speedData = ref target.Get<MoveSpeedData>();
-                    bool alreadySlowed = target.Has<SlowDownComponent>();
-                    ref var slowDownComp = ref target.Get<SlowDownComponent>();
-
-                    slowDownComp.Duration = slEvent.Duration;
-                    
-                    if(alreadySlowed == false)
-                        slowDownComp.NormalSpeed = speedData.Speed;
-
-                    if (slEvent.WithSmoothRecovery)
-                    {
-                        ref var recovery = ref target.Get<SmoothRecoverySlowDownComponent>();
-                        recovery.StartDuration = slEvent.Duration;
-                        recovery.StartSpeed = slEvent.SlowSpeed;
-                    }
-
-                    speedData.Speed = slEvent.SlowSpeed;
+                    ref var recovery = ref target.Get<SmoothRecoverySlowDownComponent>();
+                    recovery.StartDuration = slRequest.Duration;
+                    recovery.StartSpeed = slRequest.SlowSpeed;
                 }
+
+                speedData.Speed = slRequest.SlowSpeed;
             }
         }
     }

@@ -4,36 +4,38 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UnitApplyInteractJobSystem : IEcsRunSystem
+    public class UnitApplyInteractJobSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsWorld _world = null;
-        private readonly EcsFilter<UnitInteractJobRequest> filter = null;
-
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
+            EventBus.Unsubscribe<UnitInteractJobRequest>(OnJob);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<UnitInteractJobRequest>(OnJob);
+        }
+
+        private void OnJob(UnitInteractJobRequest request)
+        {
+            if (request.Target.Has<TagUnit>() == false) return;
+
+            ref var unit = ref request.Target.Get<TagUnit>().Controller;
+
+            if (Vector3.Distance(unit.transform.position, request.Interactable.Position) <= GameConstants.UnitInteractDistance)
             {
-                ref var request = ref filter.Get1(i);
-
-                if (request.Target.Has<TagUnit>() == false) continue;
-
-                ref var unit = ref request.Target.Get<TagUnit>().Controller;
-
-                if(Vector3.Distance(unit.transform.position, request.Interactable.Position) <= GameConstants.UnitInteractDistance)
+                request.Interactable.Interact(unit);
+            }
+            else
+            {
+                EventBus.Invoke(new AgentSetDestinationRequest()
                 {
-                    request.Interactable.Interact(unit);
-                }
-                else
-                {
-                    _world.NewOneFrameEntity(new AgentSetDestinationRequest()
-                    {
-                        Target = request.Target,
-                        Destination = request.Interactable.Position,
-                    });
+                    Target = request.Target,
+                    Destination = request.Interactable.Position,
+                });
 
-                    ref var job = ref request.Target.Get<UnitInteractJobComponent>();
-                    job.Interactable = request.Interactable;
-                }
+                ref var job = ref request.Target.Get<UnitInteractJobComponent>();
+                job.Interactable = request.Interactable;
             }
         }
     }

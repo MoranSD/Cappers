@@ -1,12 +1,35 @@
 ﻿using Leopotam.Ecs;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ChMovementSystem : IEcsRunSystem
+    public class ChMovementSystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroySystem
     {
         private readonly EcsFilter<ChMovableComponent, MoveSpeedData, MoveDirectionData>.Exclude<BlockFreezed> filter = null;
-        private readonly EcsFilter<MoveEvent> filter2 = null;
+
+        public void Destroy()
+        {
+            EventBus.Unsubscribe<MoveRequest>(OnMove);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<MoveRequest>(OnMove);
+        }
+
+        private void OnMove(MoveRequest mRequest)
+        {
+            ref var target = ref mRequest.Target;
+
+            if (target.Has<ChMovableComponent>())
+            {
+                ref var controller = ref target.Get<ChMovableComponent>().CharacterController;
+
+                var moveDirection = mRequest.Direction * mRequest.Speed * Time.deltaTime;
+                controller.Move(moveDirection);
+            }
+        }
 
         public void Run()
         {
@@ -21,19 +44,6 @@ namespace Gameplay.Game.ECS.Features
 
                 var moveDirection = direction * speed * deltaTime;
                 controller.Move(moveDirection);
-            }
-            foreach (var i in filter2)
-            {
-                ref var mEvent = ref filter2.Get1(i);
-                ref var target = ref mEvent.Target;
-
-                if (target.Has<ChMovableComponent>())
-                {
-                    ref var controller = ref target.Get<ChMovableComponent>().CharacterController;
-
-                    var moveDirection = mEvent.Direction * mEvent.Speed * deltaTime;
-                    controller.Move(moveDirection);
-                }
             }
         }
     }

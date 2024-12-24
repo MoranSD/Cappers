@@ -29,7 +29,7 @@ namespace Gameplay.UnitSystem.Controller
         public void GoToIdlePosition(Vector3 position)
         {
             idlePosition = position;
-            EcsWorld.NewOneFrameEntity(new AgentSetDestinationRequest()
+            EventBus.Invoke(new AgentSetDestinationRequest()
             {
                 Target = EcsEntity,
                 Destination = position
@@ -38,7 +38,7 @@ namespace Gameplay.UnitSystem.Controller
 
         public void GoToIdlePosition()
         {
-            EcsWorld.NewOneFrameEntity(new AgentSetDestinationRequest()
+            EventBus.Invoke(new AgentSetDestinationRequest()
             {
                 Target = EcsEntity,
                 Destination = idlePosition
@@ -47,7 +47,7 @@ namespace Gameplay.UnitSystem.Controller
 
         public void InteractWith(IUnitInteractable interactable)
         {
-            EcsWorld.NewOneFrameEntity(new UnitInteractJobRequest()
+            EventBus.Invoke(new UnitInteractJobRequest()
             {
                 Target = EcsEntity,
                 Interactable = interactable

@@ -1,23 +1,29 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UnitGoToIdleAfterRemoveFollow : IEcsRunSystem
+    public class UnitGoToIdleAfterRemoveFollow : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<RemovedFollowControlEvent> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
-            {
-                ref var removeEvent = ref filter.Get1(i);
-                ref var entity = ref removeEvent.Target;
+            EventBus.Unsubscribe<RemovedFollowControlEvent>(OnRemoveFollow);
+        }
 
-                if (entity.Has<TagUnit>() == false)
-                    continue;
+        public void Init()
+        {
+            EventBus.Subscribe<RemovedFollowControlEvent>(OnRemoveFollow);
+        }
 
-                ref var unitTag = ref entity.Get<TagUnit>();
-                unitTag.Controller.GoToIdlePosition();
-            }
+        private void OnRemoveFollow(RemovedFollowControlEvent removeEvent)
+        {
+            ref var entity = ref removeEvent.Target;
+
+            if (entity.Has<TagUnit>() == false)
+                return;
+
+            ref var unitTag = ref entity.Get<TagUnit>();
+            unitTag.Controller.GoToIdlePosition();
         }
     }
 }

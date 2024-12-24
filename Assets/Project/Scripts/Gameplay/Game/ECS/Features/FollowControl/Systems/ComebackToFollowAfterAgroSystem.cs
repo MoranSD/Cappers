@@ -3,29 +3,32 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ComebackToFollowAfterAgroSystem : IEcsRunSystem
+    public class ComebackToFollowAfterAgroSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsWorld _world = null;
-        private readonly EcsFilter<EndAgroEvent> filter = null;
-
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
+            EventBus.Unsubscribe<EndAgroEvent>(OnEndAgro);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<EndAgroEvent>(OnEndAgro);
+        }
+
+        private void OnEndAgro(EndAgroEvent endsAgroEvent)
+        {
+            ref var entity = ref endsAgroEvent.Entity;
+
+            if (entity.Has<TagUnderFollowControl>() == false)
+                return;
+
+            ref var followOwner = ref entity.Get<TagUnderFollowControl>().Owner;
+
+            EventBus.Invoke(new AddFollowControlRequest()
             {
-                ref var endsAgroEvent = ref filter.Get1(i);
-                ref var entity = ref endsAgroEvent.Entity;
-
-                if (entity.Has<TagUnderFollowControl>() == false)
-                    continue;
-
-                ref var followOwner = ref entity.Get<TagUnderFollowControl>().Owner;
-
-                _world.NewOneFrameEntity(new AddFollowControlRequest()
-                {
-                    Sender = followOwner,
-                    Target = entity,
-                });
-            }
+                Sender = followOwner,
+                Target = entity,
+            });
         }
     }
 }

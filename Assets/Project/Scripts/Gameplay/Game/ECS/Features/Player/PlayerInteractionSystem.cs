@@ -13,7 +13,6 @@ namespace Gameplay.Game.ECS.Features
         private readonly GameConfig gameConfig = null;
         private readonly PlayerConfigSO playerConfig = null;
         private readonly IInput input = null;
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TagPlayer, TranslationComponent, FollowControllerComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
@@ -35,18 +34,16 @@ namespace Gameplay.Game.ECS.Features
                     {
                         var unitInteract = followControlComponent.EntitiesInControl.First();
 
-                        _world.NewEntity()
-                            .Replace(new RemoveFollowControlRequest()
-                            {
-                                Sender = playerEntity,
-                                Target = unitInteract,
-                            })
-                            .Replace(new UnitInteractJobRequest()
-                            {
-                                Target = unitInteract,
-                                Interactable = unitInteractable,
-                            })
-                            .Replace(new OneFrameEntity());
+                        EventBus.Invoke(new RemoveFollowControlRequest()
+                        {
+                            Sender = playerEntity,
+                            Target = unitInteract,
+                        });
+                        EventBus.Invoke(new UnitInteractJobRequest()
+                        {
+                            Target = unitInteract,
+                            Interactable = unitInteractable,
+                        });
                     }
                     else
                     {
@@ -63,7 +60,7 @@ namespace Gameplay.Game.ECS.Features
 
                     if (followControlComponent.EntitiesInControl.Contains(entityAround))
                     {
-                        _world.NewOneFrameEntity(new RemoveFollowControlRequest()
+                        EventBus.Invoke(new RemoveFollowControlRequest()
                         {
                             Sender = playerEntity,
                             Target = entityAround,
@@ -71,7 +68,7 @@ namespace Gameplay.Game.ECS.Features
                     }
                     else
                     {
-                        _world.NewOneFrameEntity(new AddFollowControlRequest()
+                        EventBus.Invoke(new AddFollowControlRequest()
                         {
                             Sender = playerEntity,
                             Target = entityAround,

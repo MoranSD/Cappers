@@ -1,22 +1,28 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UnitRemoveFollowInteractionWhenBeginAgroSystem : IEcsRunSystem
+    public class UnitRemoveFollowInteractionWhenBeginAgroSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<BeginAgroEvent> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
-            {
-                ref var beginsAgroEvent = ref filter.Get1(i);
-                ref var entity = ref beginsAgroEvent.Entity;
+            EventBus.Unsubscribe<BeginAgroEvent>(OnBeginAgro);
+        }
 
-                if (entity.Has<TagUnit>() == false)
-                    continue;
+        public void Init()
+        {
+            EventBus.Subscribe<BeginAgroEvent>(OnBeginAgro);
+        }
 
-                entity.Del<TagAvailableForFollowControlInteraction>();
-            }
+        private void OnBeginAgro(BeginAgroEvent beginsAgroEvent)
+        {
+            ref var entity = ref beginsAgroEvent.Entity;
+
+            if (entity.Has<TagUnit>() == false)
+                return;
+
+            entity.Del<TagAvailableForFollowControlInteraction>();
         }
     }
 }

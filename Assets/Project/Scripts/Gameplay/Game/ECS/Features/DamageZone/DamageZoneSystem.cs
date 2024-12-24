@@ -6,7 +6,6 @@ namespace Gameplay.Game.ECS.Features
 {
     public class DamageZoneSystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<DamageZone> filter = null;
 
         public void Run()
@@ -25,7 +24,7 @@ namespace Gameplay.Game.ECS.Features
                 {
                     if(collider.TryGetComponent(out IEcsEntityHolder holder))
                     {
-                        _world.NewOneFrameEntity(new ApplyDamageRequest()
+                        EventBus.Invoke(new ApplyDamageRequest()
                         {
                             Damage = zone.Damage,
                             Sender = zoneEntity,

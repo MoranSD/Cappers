@@ -5,7 +5,6 @@ namespace Gameplay.Game.ECS.Features
 {
     public class SetAgroTargetFromTargetLookSystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TranslationComponent, TargetAgroComponent, TargetLookComponent>.Exclude<BlockFreezed> filter = null;
         public void Run()
         {
@@ -24,14 +23,14 @@ namespace Gameplay.Game.ECS.Features
 
                 if (hadTarget && agroComponent.HasTarget == false)
                 {
-                    _world.NewOneFrameEntity(new EndAgroEvent()
+                    EventBus.Invoke(new EndAgroEvent()
                     {
                         Entity = entity
                     });
                 }
                 else if (hadTarget == false && agroComponent.HasTarget)
                 {
-                    _world.NewOneFrameEntity(new BeginAgroEvent()
+                    EventBus.Invoke(new BeginAgroEvent()
                     {
                         Entity = entity
                     });

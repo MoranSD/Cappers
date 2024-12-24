@@ -4,34 +4,36 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ApplyDamageSystem : IEcsRunSystem
+    public class ApplyDamageSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsWorld _world = null;
-        private readonly EcsFilter<ApplyDamageRequest> filter = null;
-
-        public void Run()
+        public void Init()
         {
-            foreach (var i in filter)
+            EventBus.Subscribe<ApplyDamageRequest>(OnApplyDamage);
+        }
+
+        public void Destroy()
+        {
+            EventBus.Unsubscribe<ApplyDamageRequest>(OnApplyDamage);
+        }
+
+        private void OnApplyDamage(ApplyDamageRequest attackRequest)
+        {
+            if (attackRequest.Target.Has<HealthComponent>() == false)
             {
-                ref var attackRequest = ref filter.Get1(i);
-
-                if(attackRequest.Target.Has<HealthComponent>() == false)
-                {
-                    Debug.Log("No health on target");
-                    continue;
-                }
-
-                ref var targetHealth = ref attackRequest.Target.Get<HealthComponent>();
-                
-                targetHealth.Health -= attackRequest.Damage;
-
-                _world.NewOneFrameEntity(new ApplyDamageEvent()
-                {
-                    Sender = attackRequest.Sender,
-                    Target = attackRequest.Target,
-                    Damage = attackRequest.Damage,
-                });
+                Debug.Log("No health on target");
+                return;
             }
+
+            ref var targetHealth = ref attackRequest.Target.Get<HealthComponent>();
+
+            targetHealth.Health -= attackRequest.Damage;
+
+            EventBus.Invoke(new ApplyDamageEvent()
+            {
+                Sender = attackRequest.Sender,
+                Target = attackRequest.Target,
+                Damage = attackRequest.Damage,
+            });
         }
     }
 }

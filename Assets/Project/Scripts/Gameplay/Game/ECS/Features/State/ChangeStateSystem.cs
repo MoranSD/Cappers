@@ -1,22 +1,28 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ChangeStateSystem : IEcsRunSystem
+    public class ChangeStateSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<ChangeStateRequest> filter = null;
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
-            {
-                ref var request = ref filter.Get1(i);
-                ref var targetEntity = ref request.Target;
+            EventBus.Unsubscribe<ChangeStateRequest>(OnChangeState);
+        }
 
-                if(targetEntity.IsAlive() == false)
-                    continue;
+        public void Init()
+        {
+            EventBus.Subscribe<ChangeStateRequest>(OnChangeState);
+        }
 
-                request.ChangeState.Invoke(ref targetEntity);
-            }
+        private void OnChangeState(ChangeStateRequest request)
+        {
+            ref var targetEntity = ref request.Target;
+
+            if (targetEntity.IsAlive() == false)
+                return;
+
+            request.ChangeState.Invoke(ref targetEntity);
         }
     }
 }

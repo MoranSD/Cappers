@@ -1,20 +1,27 @@
 ﻿using Leopotam.Ecs;
+using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class AgentSetDestinationSystem : IEcsRunSystem
+    public class AgentSetDestinationSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly EcsFilter<AgentSetDestinationRequest> filter = null;
-
-        public void Run()
+        public void Destroy()
         {
-            foreach (var i in filter)
-            {
-                ref var setDestinationEvent = ref filter.Get1(i);
-                ref var agent = ref setDestinationEvent.Target.Get<AgentMovableComponent>().NavMeshAgent;
+            EventBus.Unsubscribe<AgentSetDestinationRequest>(OnSetDestination);
+        }
 
-                agent.SetDestination(setDestinationEvent.Destination);
-            }
+        public void Init()
+        {
+            EventBus.Subscribe<AgentSetDestinationRequest>(OnSetDestination);
+        }
+
+        private void OnSetDestination(AgentSetDestinationRequest setDestinationRequest)
+        {
+            if (setDestinationRequest.Target.Has<AgentMovableComponent>() == false) return;
+
+            ref var agent = ref setDestinationRequest.Target.Get<AgentMovableComponent>().NavMeshAgent;
+
+            agent.SetDestination(setDestinationRequest.Destination);
         }
     }
 }

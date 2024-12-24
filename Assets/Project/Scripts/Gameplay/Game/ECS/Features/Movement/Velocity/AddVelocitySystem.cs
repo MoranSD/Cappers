@@ -5,7 +5,6 @@ namespace Gameplay.Game.ECS.Features
 {
     public class AddVelocitySystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<VelocityComponent> filter = null;
         public void Run()
         {
@@ -14,7 +13,7 @@ namespace Gameplay.Game.ECS.Features
                 ref var target = ref filter.GetEntity(i);
                 ref var velocity = ref filter.Get1(i);
 
-                _world.NewOneFrameEntity(new MoveEvent()
+                EventBus.Invoke(new MoveRequest()
                 {
                     Target = target,
                     Direction = velocity.Direction,

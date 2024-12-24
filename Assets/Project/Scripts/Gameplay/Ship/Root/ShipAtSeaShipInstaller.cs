@@ -17,6 +17,7 @@ namespace Gameplay.Ship.Root
     public class ShipAtSeaShipInstaller : ShipInstaller
     {
         private List<Cannon> activeCannons;
+        private ShipHoleFactory holeFactory;
 
         public override void Initialize()
         {
@@ -27,7 +28,7 @@ namespace Gameplay.Ship.Root
             var tickManager = ServiceLocator.Get<TickManager>();
 
             shipViewsLink.ShipFightView.Initialize(ecsWorld);
-            var holeFactory = new ShipHoleFactory(tickManager, shipViewsLink.HoleView, shipViewsLink.ShipFightView);
+            holeFactory = new ShipHoleFactory(tickManager, shipViewsLink.HoleView, shipViewsLink.ShipFightView);
             var shipFight = new ShipFight(shipViewsLink.ShipFightView, gameState, holeFactory);
 
             ServiceLocator.Register(shipFight);
@@ -67,6 +68,8 @@ namespace Gameplay.Ship.Root
 
             var tickManager = ServiceLocator.Get<TickManager>();
             var gameState = ServiceLocator.Get<GameState>();
+
+            holeFactory.Dispose();
 
             foreach (var cannon in activeCannons)
             {

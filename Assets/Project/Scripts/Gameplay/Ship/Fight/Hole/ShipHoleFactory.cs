@@ -27,6 +27,7 @@ namespace Gameplay.Ship.Fight.Hole
             foreach (var hole in createdHoles)
             {
                 hole.OnFixed -= OnHoleFixed;
+                tickManager.Remove(hole);
                 hole.Dispose();
             }
         }

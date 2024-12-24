@@ -6,7 +6,6 @@ namespace Gameplay.Game.ECS.Features
 {
     public class ArcMovementSystem : IEcsRunSystem
     {
-        private readonly EcsWorld _world = null;
         private readonly EcsFilter<TranslationComponent, ArcMovementComponent> filter = null;
 
         public void Run()
@@ -27,7 +26,7 @@ namespace Gameplay.Game.ECS.Features
                     {
                         arc.Progress = 1;
 
-                        _world.NewOneFrameEntity(new ReachArcEndEvent()
+                        EventBus.Invoke(new ReachArcEndEvent()
                         {
                             Entity = entity,
                         });

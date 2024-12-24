@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct MoveEvent
+    public struct MoveRequest
     {
         public EcsEntity Target;
         public Vector3 Direction;
