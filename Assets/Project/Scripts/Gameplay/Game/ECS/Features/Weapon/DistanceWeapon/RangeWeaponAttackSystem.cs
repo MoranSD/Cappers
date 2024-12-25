@@ -23,9 +23,9 @@ namespace Gameplay.Game.ECS.Features
             ref var weaponEntity = ref request.Sender;
             if (weaponEntity.Has<RangeWeaponTag>() == false) return;
 
-            ref var weaponOwner = ref weaponEntity.Get<WeaponOwnerComponent>().Owner;
+            ref var weaponOwner = ref weaponEntity.Get<WeaponOwnerData>().Owner;
             var target = (EcsEntity)request.ExtensionData[AttackRequest.TARGET_EXTENSION_DATA_KEY];
-            ref var attackDistance = ref weaponEntity.Get<RangeWeaponData>().AttackDistance;
+            ref var attackDistance = ref weaponEntity.Get<WeaponAttackDistanceData>().AttackDistance;
 
             if (EntityUtil.GetDistance(weaponOwner, target) > attackDistance)
                 return;

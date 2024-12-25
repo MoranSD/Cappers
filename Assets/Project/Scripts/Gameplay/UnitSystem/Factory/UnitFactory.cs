@@ -56,11 +56,11 @@ namespace Gameplay.UnitSystem.Factory
                 {
                     Damage = unitData.Damage
                 })
-                .Replace(new RangeWeaponData()
+                .Replace(new WeaponAttackDistanceData()
                 {
                     AttackDistance = 2
                 })
-                .Replace(new WeaponOwnerComponent()
+                .Replace(new WeaponOwnerData()
                 {
                     Owner = unitEntity
                 })

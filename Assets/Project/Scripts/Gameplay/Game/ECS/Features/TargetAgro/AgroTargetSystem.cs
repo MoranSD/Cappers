@@ -30,9 +30,9 @@ namespace Gameplay.Game.ECS.Features
                     if (coolDown.AttackCoolDown > 0) continue;
                 }
 
-                if (weapon.Has<RangeWeaponData>())
+                if (weapon.Has<WeaponAttackDistanceData>())
                 {
-                    ref var distanceData = ref weapon.Get<RangeWeaponData>();
+                    ref var distanceData = ref weapon.Get<WeaponAttackDistanceData>();
 
                     if (EntityUtil.GetDistance(entity, agroComponent.Target) > distanceData.AttackDistance) continue;
                 }

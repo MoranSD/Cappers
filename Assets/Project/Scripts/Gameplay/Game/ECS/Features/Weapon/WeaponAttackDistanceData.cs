@@ -1,6 +1,6 @@
 ﻿namespace Gameplay.Game.ECS.Features
 {
-    public struct RangeWeaponData
+    public struct WeaponAttackDistanceData
     {
         public float AttackDistance;
     }

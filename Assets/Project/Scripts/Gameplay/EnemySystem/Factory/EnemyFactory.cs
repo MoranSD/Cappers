@@ -66,11 +66,11 @@ namespace Gameplay.EnemySystem.Factory
                 {
                     Damage = enemyConfigSO.Config.AttackConfig.Damage
                 })
-                .Replace(new RangeWeaponData()
+                .Replace(new WeaponAttackDistanceData()
                 {
                     AttackDistance = enemyConfigSO.Config.AttackConfig.AttackDistance
                 })
-                .Replace(new WeaponOwnerComponent()
+                .Replace(new WeaponOwnerData()
                 {
                     Owner = enemyEntity
                 })

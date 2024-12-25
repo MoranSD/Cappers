@@ -70,7 +70,7 @@ namespace Gameplay.Player.Root
                     ZonePivot = player.MeleeWeaponDamageZone,
                     ZoneBorders = playerConfig.MainConfig.FightConfig.MeleeDamageZoneBorders
                 })
-                .Replace(new WeaponOwnerComponent()
+                .Replace(new WeaponOwnerData()
                 {
                     Owner = playerEntity
                 })
@@ -86,11 +86,11 @@ namespace Gameplay.Player.Root
                 {
                     Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage
                 })
-                .Replace(new RangeWeaponData()
+                .Replace(new WeaponAttackDistanceData()
                 {
                     AttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance
                 })
-                .Replace(new WeaponOwnerComponent()
+                .Replace(new WeaponOwnerData()
                 {
                     Owner = playerEntity
                 })

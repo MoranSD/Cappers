@@ -2,7 +2,7 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct WeaponOwnerComponent
+    public struct WeaponOwnerData
     {
         public EcsEntity Owner;
     }
