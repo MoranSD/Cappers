@@ -51,7 +51,7 @@ namespace Gameplay.Player.Root
 
             ref var movable = ref playerEntity.Get<ChMovableComponent>();
             movable.CharacterController = player.CharacterController;
-            ref var gravity = ref playerEntity.Get<ChGravityComponent>();
+            ref var gravity = ref playerEntity.Get<CCGravityComponent>();
             gravity.CharacterController = player.CharacterController;
             ref var moveDirection = ref playerEntity.Get<MoveDirectionData>();
             ref var moveSpeed = ref playerEntity.Get<MoveSpeedData>();
@@ -59,57 +59,55 @@ namespace Gameplay.Player.Root
 
             ref var turnable = ref playerEntity.Get<TFTurnableComponent>();
 
-            CreatePlayerWeapons(playerConfig, ecsWorld, ref playerEntity);
+            var meleeWeapon = ecsWorld.NewEntity()
+                .Replace(new MeleeWeaponTag())
+                .Replace(new WeaponDamageData()
+                {
+                    Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage
+                })
+                .Replace(new MeleeWeaponData()
+                {
+                    ZonePivot = player.MeleeWeaponDamageZone,
+                    ZoneBorders = playerConfig.MainConfig.FightConfig.MeleeDamageZoneBorders
+                })
+                .Replace(new WeaponOwnerComponent()
+                {
+                    Owner = playerEntity
+                })
+                .Replace(new AttackCoolDownComponent()
+                {
+                    AttackRate = playerConfig.MainConfig.FightConfig.MeleeAttackDelay,
+                    AttackCoolDown = 0
+                });
+
+            var rangeWeapon = ecsWorld.NewEntity()
+                .Replace(new RangeWeaponTag())
+                .Replace(new WeaponDamageData()
+                {
+                    Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage
+                })
+                .Replace(new RangeWeaponData()
+                {
+                    AttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance
+                })
+                .Replace(new WeaponOwnerComponent()
+                {
+                    Owner = playerEntity
+                })
+                .Replace(new AttackCoolDownComponent()
+                {
+                    AttackRate = playerConfig.MainConfig.FightConfig.MeleeAttackDelay,
+                    AttackCoolDown = 0
+                });
+
+            ref var weaponLink = ref playerEntity.Get<PlayerWeaponLink>();
+            weaponLink.MeleeWeapon = meleeWeapon;
+            weaponLink.RangeWeapon = rangeWeapon;
 
             //InteractController
             var panelsManager = ServiceLocator.Get<PanelsManager>();
             var interactController = ServiceLocator.Register(new PlayerInteractController(player, panelsManager));
             interactController.Initialize();
-        }
-
-        private void CreatePlayerWeapons(PlayerConfigSO playerConfig, EcsWorld ecsWorld, ref EcsEntity playerEntity)
-        {
-            var meleeWeapon = CreateWeaponEntity<MeleeWeaponComponent>(ecsWorld, ref playerEntity,
-            new()
-            {
-                ZonePivot = player.MeleeWeaponDamageZone,
-                ZoneBorders = playerConfig.MainConfig.FightConfig.MeleeDamageZoneBorders,
-                Damage = playerConfig.MainConfig.FightConfig.BaseMeleeDamage,
-            },
-            new()
-            {
-                AttackRate = playerConfig.MainConfig.FightConfig.MeleeAttackDelay,
-                AttackCoolDown = 0
-            });
-
-            var rangeWeapon = CreateWeaponEntity<DistanceWeaponComponent>(ecsWorld, ref playerEntity,
-            new()
-            {
-                AttackDistance = playerConfig.MainConfig.FightConfig.LongAttackDistance,
-                Damage = playerConfig.MainConfig.FightConfig.BaseLongDamage,
-            },
-            new()
-            {
-                AttackRate = playerConfig.MainConfig.FightConfig.LongAttackDelay,
-                AttackCoolDown = 0
-            });
-
-            ref var weaponLink = ref playerEntity.Get<PlayerWeaponLink>();
-            weaponLink.MeleeWeapon = meleeWeapon;
-            weaponLink.RangeWeapon = rangeWeapon;
-        }
-        private EcsEntity CreateWeaponEntity<WC>(EcsWorld ecsWorld, ref EcsEntity playerEntity, WC weaponComponent, AttackCoolDownComponent coolDownComponent)
-            where WC : struct
-        {
-            var weapon = ecsWorld.NewEntity();
-
-            weapon.Replace(weaponComponent);
-            weapon.Replace(coolDownComponent);
-
-            ref var ownerComponent = ref weapon.Get<WeaponOwnerComponent>();
-            ownerComponent.Owner = playerEntity;
-
-            return weapon;
         }
 
         public override void Dispose()

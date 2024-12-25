@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ChGravitySystem : IEcsRunSystem
+    public class CCGravitySystem : IEcsRunSystem
     {
-        private readonly EcsFilter<ChGravityComponent> filter = null;
+        private readonly EcsFilter<CCGravityComponent> filter = null;
 
         public void Run()
         {

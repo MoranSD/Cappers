@@ -20,13 +20,11 @@ namespace Gameplay.Game.ECS.Features
 
         private void OnWeaponAttack(AttackRequest request)
         {
-            if (request.HasCooldown) return;
-
+            if (request.IsAbleToAttack == false) return;
             if (request.ExtensionData.ContainsKey(AttackRequest.TARGET_LAYER_EXTENSION_DATA_KEY) == false) return;
 
             ref var weaponEntity = ref request.Sender;
-
-            if (weaponEntity.Has<MeleeWeaponComponent>() == false) return;
+            if (weaponEntity.Has<MeleeWeaponTag>() == false) return;
 
             if (weaponEntity.Has<AttackCoolDownComponent>())
             {
@@ -34,15 +32,16 @@ namespace Gameplay.Game.ECS.Features
                 coolDownComponent.AttackCoolDown += coolDownComponent.AttackRate;
             }
 
-            ref var meleeWeapon = ref weaponEntity.Get<MeleeWeaponComponent>();
+            ref var damage = ref weaponEntity.Get<WeaponDamageData>().Damage;
+            ref var meleeWeaponData = ref weaponEntity.Get<MeleeWeaponData>();
 
             var zoneEntity = _world.NewEntity()
                 .Replace(new DamageZone()
                 {
-                    Center = meleeWeapon.ZonePivot.position,
-                    Border = meleeWeapon.ZoneBorders,
-                    Orientation = meleeWeapon.ZonePivot.rotation,
-                    Damage = meleeWeapon.Damage,
+                    Center = meleeWeaponData.ZonePivot.position,
+                    Border = meleeWeaponData.ZoneBorders,
+                    Orientation = meleeWeaponData.ZonePivot.rotation,
+                    Damage = damage,
                 })
                 .Replace(new DamageZoneTargetLayerData()
                 {

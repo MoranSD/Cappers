@@ -17,16 +17,14 @@ namespace Gameplay.Game.ECS.Features
 
         private void OnWeaponAttack(AttackRequest request)
         {
+            if (request.IsAbleToAttack == false) return;
+
             ref var attackSender = ref request.Sender;
 
             if (attackSender.Has<AttackCoolDownComponent>())
             {
                 ref var coolDownComponent = ref attackSender.Get<AttackCoolDownComponent>();
-                request.HasCooldown = coolDownComponent.AttackCoolDown > 0;
-            }
-            else
-            {
-                request.HasCooldown = false;
+                request.IsAbleToAttack = coolDownComponent.AttackCoolDown <= 0;
             }
         }
     }

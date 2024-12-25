@@ -1,35 +1,11 @@
 ﻿using Leopotam.Ecs;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class ChMovementSystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroySystem
+    public class CCMovementSystem : IEcsRunSystem
     {
         private readonly EcsFilter<ChMovableComponent, MoveSpeedData, MoveDirectionData>.Exclude<BlockFreezed> filter = null;
-
-        public void Destroy()
-        {
-            EventBus.Unsubscribe<MoveRequest>(OnMove);
-        }
-
-        public void Init()
-        {
-            EventBus.Subscribe<MoveRequest>(OnMove);
-        }
-
-        private void OnMove(MoveRequest mRequest)
-        {
-            ref var target = ref mRequest.Target;
-
-            if (target.Has<ChMovableComponent>())
-            {
-                ref var controller = ref target.Get<ChMovableComponent>().CharacterController;
-
-                var moveDirection = mRequest.Direction * mRequest.Speed * Time.deltaTime;
-                controller.Move(moveDirection);
-            }
-        }
 
         public void Run()
         {

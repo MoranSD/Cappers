@@ -3,7 +3,7 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class DistanceWeaponAttackSystem : IEcsInitSystem, IEcsDestroySystem
+    public class RangeWeaponAttackSystem : IEcsInitSystem, IEcsDestroySystem
     {
         public void Init()
         {
@@ -17,17 +17,17 @@ namespace Gameplay.Game.ECS.Features
 
         private void OnWeaponAttack(AttackRequest request)
         {
-            if (request.HasCooldown) return;
-
+            if (request.IsAbleToAttack == false) return;
             if (request.ExtensionData.ContainsKey(AttackRequest.TARGET_EXTENSION_DATA_KEY) == false) return;
 
-            var target = (EcsEntity)request.ExtensionData[AttackRequest.TARGET_EXTENSION_DATA_KEY];
             ref var weaponEntity = ref request.Sender;
+            if (weaponEntity.Has<RangeWeaponTag>() == false) return;
 
-            ref var distanceWeapon = ref weaponEntity.Get<DistanceWeaponComponent>();
             ref var weaponOwner = ref weaponEntity.Get<WeaponOwnerComponent>().Owner;
+            var target = (EcsEntity)request.ExtensionData[AttackRequest.TARGET_EXTENSION_DATA_KEY];
+            ref var attackDistance = ref weaponEntity.Get<RangeWeaponData>().AttackDistance;
 
-            if (EntityUtil.GetDistance(weaponOwner, target) > distanceWeapon.AttackDistance)
+            if (EntityUtil.GetDistance(weaponOwner, target) > attackDistance)
                 return;
 
             if (weaponEntity.Has<AttackCoolDownComponent>())
@@ -36,11 +36,13 @@ namespace Gameplay.Game.ECS.Features
                 coolDownComponent.AttackCoolDown += coolDownComponent.AttackRate;
             }
 
+            ref var damage = ref weaponEntity.Get<WeaponDamageData>().Damage;
+
             EventBus.Invoke(new ApplyDamageRequest()
             {
                 Sender = weaponOwner,
                 Target = target,
-                Damage = distanceWeapon.Damage,
+                Damage = damage,
             });
         }
     }

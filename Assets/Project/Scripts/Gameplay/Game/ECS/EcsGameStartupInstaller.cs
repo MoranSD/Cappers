@@ -65,18 +65,20 @@ namespace Gameplay.Game.ECS
                 .Add(new PlayerInteractionSystem())
                 //velocity
                 .Add(new ApplyVelocitySystem())
-                .Add(new AddVelocitySystem())
                 .Add(new TemporaryVelocitySystem())
                 //movement
-                .Add(new ChGravitySystem())
-                .Add(new ChMovementSystem())
+                .Add(new CCGravitySystem())
+                .Add(new CCMovementSystem())
+                .Add(new CСVelocityMovementSystem())
+                //arc
                 .Add(new ArcMovementSystem())
+                //tf turn
                 .Add(new TFTurnSystem())
-                //finds targets around
-                .Add(new TargetLookSystem())
                 //player
                 .Add(new PlayerTurnSystem())
                 .Add(new PlayerAttackSystem())
+                //finds targets around
+                .Add(new TargetLookSystem())
                 //agro system
                 .Add(new SetAgroTargetFromTargetLookSystem())
                 .Add(new AgroTargetSystem())
@@ -90,11 +92,12 @@ namespace Gameplay.Game.ECS
                 .Add(new UnitGoToIdleAfterRemoveFollow())
                 .Add(new UnitApplyInteractJobSystem())
                 .Add(new UnitInteractJobSystem())
+                .Add(new UnitDieSystem())
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
                 .Add(new PreventAttackByCoolDownSystem())
                 //weapon
-                .Add(new DistanceWeaponAttackSystem())
+                .Add(new RangeWeaponAttackSystem())
                 .Add(new MeleeWeaponAttackSystem())
                 //agent
                 .Add(new AgentFollowSystem())
@@ -107,8 +110,7 @@ namespace Gameplay.Game.ECS
                 .Add(new ApplySlowDownSystem())
                 .Add(new SlowDownSystem())
                 .Add(new SmoothRecoverySlowDownSystem())
-                //die
-                .Add(new UnitDieSystem())
+                //enemy
                 .Add(new EnemyDieSystem())
                 //animation
                 .Add(new UpdateAnimationSystem())

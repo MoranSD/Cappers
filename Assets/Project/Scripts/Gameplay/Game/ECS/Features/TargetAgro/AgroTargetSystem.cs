@@ -17,6 +17,7 @@ namespace Gameplay.Game.ECS.Features
 
                 ref var entity = ref filter.GetEntity(i);
 
+                //updates/sets follow target
                 ref var followComponent = ref entity.Get<FollowComponent>();
                 followComponent.Target = agroComponent.Target;
 
@@ -27,6 +28,13 @@ namespace Gameplay.Game.ECS.Features
                     ref var coolDown = ref weapon.Get<AttackCoolDownComponent>();
 
                     if (coolDown.AttackCoolDown > 0) continue;
+                }
+
+                if (weapon.Has<RangeWeaponData>())
+                {
+                    ref var distanceData = ref weapon.Get<RangeWeaponData>();
+
+                    if (EntityUtil.GetDistance(entity, agroComponent.Target) > distanceData.AttackDistance) continue;
                 }
 
                 EventBus.Invoke(new AttackRequest()

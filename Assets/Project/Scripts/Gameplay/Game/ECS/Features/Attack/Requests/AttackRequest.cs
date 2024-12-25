@@ -6,7 +6,7 @@ namespace Gameplay.Game.ECS.Features
     public class AttackRequest
     {
         public EcsEntity Sender;
-        public bool HasCooldown = false;
+        public bool IsAbleToAttack = true;
 
         public Dictionary<string, object> ExtensionData;
 
