@@ -2,7 +2,6 @@
 using Infrastructure.GameInput;
 using Leopotam.Ecs;
 using System.Linq;
-using UnityEngine;
 using Utils;
 using Utils.Interaction;
 

@@ -18,6 +18,7 @@ namespace Gameplay.Game.ECS.Features
 
         private void OnApplyDamage(ApplyDamageRequest attackRequest)
         {
+            if (attackRequest.Target.IsAlive() == false) return;
             if (attackRequest.Target.Has<HealthComponent>() == false)
             {
                 Debug.Log("No health on target");

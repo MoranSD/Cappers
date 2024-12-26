@@ -1,4 +1,5 @@
-﻿using Infrastructure.TickManagement;
+﻿using Gameplay.UnitSystem.Controller;
+using Infrastructure.TickManagement;
 using System;
 
 namespace Gameplay.Ship.Fight.Hole
@@ -9,26 +10,29 @@ namespace Gameplay.Ship.Fight.Hole
 
         public bool IsFixed { get; private set; } = false;
 
-        private readonly IShipHoleView view;
+        public readonly IShipHoleView View;
+
         private readonly ShipFight ship;
 
         private const float damageRate = 1;
-        private const float damage = 5;
+        private const float damage = 2;
 
         private float damageTime = damageRate;
 
         public ShipHole(IShipHoleView view, ShipFight ship)
         {
-            this.view = view;
+            this.View = view;
             this.ship = ship;
         }
         public void Initialize()
         {
-            view.OnFix += OnFix;
+            View.OnInteracted += OnFix;
+            View.OnUnitInteracted += OnFix;
         }
         public void Dispose()
         {
-            view.OnFix -= OnFix;
+            View.OnInteracted -= OnFix;
+            View.OnUnitInteracted -= OnFix;
         }
         public void Update(float deltaTime)
         {
@@ -39,13 +43,20 @@ namespace Gameplay.Ship.Fight.Hole
 
             damageTime += damageRate;
             ship.ApplyDamage(damage);
-            view.DrawDamage();
+            View.DrawDamage();
         }
         private void OnFix()
         {
             IsFixed = true;
-            view.Hide();
+            View.Hide();
             OnFixed?.Invoke();
+        }
+        private void OnFix(IUnitController unit)
+        {
+            IsFixed = true;
+            View.Hide();
+            OnFixed?.Invoke();
+            unit.GoToIdlePosition();
         }
     }
 }

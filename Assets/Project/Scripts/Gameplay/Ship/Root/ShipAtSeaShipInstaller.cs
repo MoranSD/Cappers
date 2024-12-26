@@ -11,6 +11,7 @@ using Infrastructure.TickManagement;
 using Gameplay.Player.InteractController;
 using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight.Hole;
+using Gameplay.Ship.UnitControl.Fight;
 
 namespace Gameplay.Ship.Root
 {
@@ -18,6 +19,8 @@ namespace Gameplay.Ship.Root
     {
         private List<Cannon> activeCannons;
         private ShipHoleFactory holeFactory;
+        private ShipFight shipFight;
+        private ShipUnitFightControl unitFightControl;
 
         public override void Initialize()
         {
@@ -29,7 +32,7 @@ namespace Gameplay.Ship.Root
 
             shipViewsLink.ShipFightView.Initialize(ecsWorld);
             holeFactory = new ShipHoleFactory(tickManager, shipViewsLink.HoleView, shipViewsLink.ShipFightView);
-            var shipFight = new ShipFight(shipViewsLink.ShipFightView, gameState, holeFactory);
+            shipFight = new ShipFight(shipViewsLink.ShipFightView, gameState, holeFactory);
 
             ServiceLocator.Register(shipFight);
         }
@@ -57,7 +60,13 @@ namespace Gameplay.Ship.Root
                 cannonView.Initialize(seaFightView, input);
                 cannon.Initialize(cannonInfo);
                 tickManager.Add(cannon);
+
+                activeCannons.Add(cannon);
             }
+
+            //unitFightControl = new ShipUnitFightControl(shipFight, seaFightSystem, existenceControl, activeCannons);
+            //unitFightControl.Initialize();
+            //tickManager.Add(unitFightControl);
         }
 
         public override void Dispose()
@@ -68,6 +77,9 @@ namespace Gameplay.Ship.Root
 
             var tickManager = ServiceLocator.Get<TickManager>();
             var gameState = ServiceLocator.Get<GameState>();
+
+            //unitFightControl.Dispose();
+            //tickManager.Remove(unitFightControl);
 
             holeFactory.Dispose();
 
@@ -83,7 +95,6 @@ namespace Gameplay.Ship.Root
                     continue;
 
                 var cannonView = shipViewsLink.CannonViews[i];
-                cannonView.Dispose();
             }
         }
     }

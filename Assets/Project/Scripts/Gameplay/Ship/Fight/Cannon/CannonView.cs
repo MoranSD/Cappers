@@ -7,16 +7,18 @@ using Utils.Interaction;
 
 namespace Gameplay.Ship.Fight.Cannon
 {
-    public class CannonView : MonoBehaviour, ICannonView
+    public class CannonView : MonoBehaviour, ICannonView, IUnitInteractable
     {
-        public event Action OnPlayerInteract;
-        public event Action<IUnitController> OnUnitInteract;
+        public event Action OnInteracted;
+        public event Action<IUnitController> OnUnitInteracted;
+
+        public bool IsInteractable { get; private set; } = false;
+        public Transform Pivot => transform;
 
         [field: SerializeField] public Transform AimPivot { get; private set; }
         [field: SerializeField] public Transform UnitInteractPivot { get; private set; }
 
         [SerializeField] private float aimMoveSpeed = 3;
-        [SerializeField] private UnitTriggerInteractor interactor;
         [SerializeField] private CannonBall cannonBallPrefab;
         [SerializeField] private Transform ballStartPivot;
 
@@ -30,17 +32,9 @@ namespace Gameplay.Ship.Fight.Cannon
             isInitialized = true;
             this.enemyShipView = enemyShipView;
             this.input = input;
-            interactor.OnInteracted += OnPlayerInteracted;
-            interactor.OnUnitInteracted += OnUnitInteracted;
 
             //todo: убрать эффект от метода SetInactive
             gameObject.SetActive(true);
-        }
-
-        public void Dispose()
-        {
-            interactor.OnInteracted -= OnPlayerInteracted;
-            interactor.OnUnitInteracted -= OnUnitInteracted;
         }
 
         private void Update()
@@ -58,15 +52,14 @@ namespace Gameplay.Ship.Fight.Cannon
             if (isInitialized)
                 throw new System.Exception();
 
-            interactor.IsInteractable = false;
+            IsInteractable = false;
             //todo: временное
             gameObject.SetActive(false);
         }
+        public void SetAvailable(bool available) => IsInteractable = available;
 
-        public void SetAvailable(bool available) => interactor.IsInteractable = available;
-
-        private void OnPlayerInteracted() => OnPlayerInteract?.Invoke();
-        private void OnUnitInteracted(IUnitController unit) => OnUnitInteract?.Invoke(unit);
+        public void Interact() => OnInteracted?.Invoke();
+        public void Interact(IUnitController unit) => OnUnitInteracted?.Invoke(unit);
 
         public void BeginAim()
         {
@@ -74,19 +67,16 @@ namespace Gameplay.Ship.Fight.Cannon
             AimPivot.position = enemyShipView.AimZone.transform.position;
             isAiming = true;
         }
-
         public void EndAim()
         {
             AimPivot.gameObject.SetActive(false);
             isAiming = false;
         }
-
         public void DrawCannonFly(Action callBack)
         {
             var ball = Instantiate(cannonBallPrefab, ballStartPivot.position, Quaternion.identity);
             ball.Fly(ballStartPivot, AimPivot, callBack);
         }
-
         public void OnUnitAim()
         {
             //todo: установить в рандомную позицию в пределах прицеливания

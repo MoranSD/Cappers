@@ -1797,6 +1797,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerStuff
       objectReference: {fileID: 0}
+    - target: {fileID: 19974463791187802, guid: 42fd581f75093d940a4a67bce69474f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2353124492627658689, guid: 42fd581f75093d940a4a67bce69474f0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1887,6 +1892,11 @@ PrefabInstance:
       propertyPath: ShipMapView
       value: 
       objectReference: {fileID: 214780173}
+    - target: {fileID: 2378138338215831452, guid: 78537c53264e0f34885c295fe1d5995d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2771761083211585687, guid: 78537c53264e0f34885c295fe1d5995d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1936,6 +1946,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3281150246953328846, guid: 78537c53264e0f34885c295fe1d5995d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8351228711258555194, guid: 78537c53264e0f34885c295fe1d5995d,
         type: 3}

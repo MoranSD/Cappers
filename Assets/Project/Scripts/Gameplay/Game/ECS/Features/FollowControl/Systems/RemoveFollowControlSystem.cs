@@ -16,22 +16,30 @@ namespace Gameplay.Game.ECS.Features
             EventBus.Subscribe<RemoveFollowControlRequest>(OnRemoveFollow);
         }
 
-        private void OnRemoveFollow(RemoveFollowControlRequest removeFollowControlRequest)
+        private void OnRemoveFollow(RemoveFollowControlRequest request)
         {
-            if (removeFollowControlRequest.Sender.Has<FollowControllerComponent>() == false) return;
-
-            ref var senderControlComponent = ref removeFollowControlRequest.Sender.Get<FollowControllerComponent>();
-            ref var controlTarget = ref removeFollowControlRequest.Target;
-
-            if (controlTarget.Has<TagUnderFollowControl>() == false)
+            if (request.Target.Has<BlockFollowControl>())
+            {
+                Debug.Log("Cant control uncontrollable target");
+                return;
+            }
+            if (request.Target.Has<TagUnderFollowControl>() == false)
             {
                 Debug.Log("Cant remove control from not controlled target");
                 return;
             }
 
-            senderControlComponent.EntitiesInControl.Remove(controlTarget);
+            ref var controlTarget = ref request.Target;
+
+            if (request.Sender.Has<FollowControllerComponent>())
+            {
+                ref var senderControlComponent = ref request.Sender.Get<FollowControllerComponent>();
+                senderControlComponent.EntitiesInControl.Remove(controlTarget);
+            }
+
             controlTarget.Del<FollowComponent>();
             controlTarget.Del<TagUnderFollowControl>();
+            controlTarget.Del<FollowControlledComponent>();
 
             EventBus.Invoke(new RemovedFollowControlEvent()
             {

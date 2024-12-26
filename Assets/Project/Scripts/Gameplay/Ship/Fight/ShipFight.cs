@@ -2,6 +2,7 @@
 using Gameplay.Game;
 using Gameplay.Ship.Fight.Hole;
 using Gameplay.Ship.Fight.View;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace Gameplay.Ship.Fight
 {
     public class ShipFight
     {
+        public event Action<ShipHole> OnGotHole;
+
         private readonly IShipFightView view;
         private readonly GameState gameState;
         private readonly IShipHoleFactory holeFactory;
@@ -47,8 +50,11 @@ namespace Gameplay.Ship.Fight
             gameState.ShipHealth -= damage;
             view.DrawGetDamage(gameState.ShipHealth);
 
-            if (new System.Random().Next(10) >= 5)
-                holeFactory.CreateHoleInZone(zoneId, this);
+            if (new System.Random().Next(10) >= 8)
+            {
+                var hole = holeFactory.CreateHoleInZone(zoneId, this);
+                OnGotHole?.Invoke(hole);
+            }
         }
     }
 }

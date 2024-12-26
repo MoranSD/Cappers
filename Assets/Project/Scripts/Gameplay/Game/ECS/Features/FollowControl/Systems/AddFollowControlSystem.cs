@@ -16,27 +16,34 @@ namespace Gameplay.Game.ECS.Features
             EventBus.Subscribe<AddFollowControlRequest>(OnAddFollow);
         }
 
-        private void OnAddFollow(AddFollowControlRequest followControlRequest)
+        private void OnAddFollow(AddFollowControlRequest request)
         {
-            if (followControlRequest.Sender.Has<FollowControllerComponent>() == false) return;
-
-            ref var senderControlComponent = ref followControlRequest.Sender.Get<FollowControllerComponent>();
-            ref var controlTarget = ref followControlRequest.Target;
-
-            if (controlTarget.Has<TagAvailableForFollowControlInteraction>() == false)
+            if (request.Target.Has<BlockFollowControl>())
             {
                 Debug.Log("Cant control uncontrollable target");
                 return;
             }
 
-            if (senderControlComponent.EntitiesInControl.Contains(controlTarget) == false)
-                senderControlComponent.EntitiesInControl.Add(controlTarget);
+            ref var controlTarget = ref request.Target;
+
+            if (request.Sender.Has<FollowControllerComponent>())
+            {
+                ref var controlComponent = ref request.Sender.Get<FollowControllerComponent>();
+
+                if (controlComponent.EntitiesInControl.Contains(controlTarget) == false)
+                    controlComponent.EntitiesInControl.Add(controlTarget);
+            }
+
+            ref var ownerTf = ref request.Sender.Get<TranslationComponent>().Transform;
 
             ref var followComponent = ref controlTarget.Get<FollowComponent>();
-            followComponent.Target = followControlRequest.Sender;
+            followComponent.Target = ownerTf;
 
-            ref var underfollowTag = ref controlTarget.Get<TagUnderFollowControl>();
-            underfollowTag.Owner = followControlRequest.Sender;
+            controlTarget.Get<TagUnderFollowControl>();
+
+            ref var controlled = ref controlTarget.Get<FollowControlledComponent>();
+            controlled.Owner = request.Sender;
+            controlled.OwnerTransform = ownerTf;
         }
     }
 }

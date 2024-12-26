@@ -1,5 +1,4 @@
 ﻿using Gameplay.CameraSystem;
-using Gameplay.Game.ECS.Features;
 using Gameplay.Player.Data;
 using Infrastructure;
 using Infrastructure.Composition;
@@ -11,6 +10,8 @@ using Voody.UniLeo;
 
 namespace Gameplay.Game.ECS
 {
+    using Features;
+
     public class EcsGameStartupInstaller : Installer
     {
         private EcsWorld world;
@@ -66,7 +67,7 @@ namespace Gameplay.Game.ECS
                 //velocity
                 .Add(new ApplyVelocitySystem())
                 .Add(new TemporaryVelocitySystem())
-                //movement
+                //CC movement
                 .Add(new CCGravitySystem())
                 .Add(new CCMovementSystem())
                 .Add(new CСVelocityMovementSystem())
@@ -80,19 +81,18 @@ namespace Gameplay.Game.ECS
                 //finds targets around
                 .Add(new TargetLookSystem())
                 //agro system
-                .Add(new SetAgroTargetFromTargetLookSystem())
-                .Add(new AgroTargetSystem())
+                .Add(new UpdateAgroTargetSystem())
+                .Add(new UpdateFollowAgroSystem())
+                .Add(new AgroTargetAttackSystem())
                 //follow
-                .Add(new ComebackToFollowAfterAgroSystem())
                 .Add(new AddFollowControlSystem())
+                .Add(new UpdateFollowTargetSystem())
                 .Add(new RemoveFollowControlSystem())
                 //Unit
-                .Add(new UnitRemoveFollowInteractionWhenBeginAgroSystem())
-                .Add(new UnitEnterInitialStateWhenEndAgroSystem())
-                .Add(new UnitGoToIdleAfterRemoveFollow())
-                .Add(new UnitApplyInteractJobSystem())
+                .Add(new UnitSystem())
+                //job
+                .Add(new UpdateInteractJobTargetFollowSystem())
                 .Add(new UnitInteractJobSystem())
-                .Add(new UnitDieSystem())
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
                 .Add(new PreventAttackByCoolDownSystem())

@@ -8,7 +8,7 @@ namespace Utils.Interaction
     {
         public event Action<IUnitController> OnUnitInteracted;
 
-        public Vector3 Position => transform.position;
+        public Transform Pivot => transform;
 
         public void Interact(IUnitController unit)
         {

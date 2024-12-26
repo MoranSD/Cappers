@@ -26,7 +26,7 @@ namespace Gameplay.UnitSystem.Factory
             var controller = GameObject.Instantiate(bodyPrefab, position, Quaternion.identity);
 
             var unitEntity = ecsWorld.NewEntity();
-            controller.Initialize(ecsWorld, unitEntity, unitData);
+            controller.Initialize(ecsWorld, unitEntity, unitData, position);
 
             ref var tag = ref unitEntity.Get<TagUnit>();
             tag.Controller = controller;
@@ -34,21 +34,19 @@ namespace Gameplay.UnitSystem.Factory
             ref var translation = ref unitEntity.Get<TranslationComponent>();
             translation.Transform = controller.transform;
 
-            unitEntity.Get<AgentDestinationUpdateTimeData>();
             ref var movable = ref unitEntity.Get<AgentMovableComponent>();
             movable.NavMeshAgent = controller.NavMeshAgent;
             controller.NavMeshAgent.speed = unitData.Speed;
-
-            unitEntity.Get<TagAvailableForFollowControlInteraction>();
+            unitEntity.Get<AgentDestinationUpdateTimeData>();
 
             ref var targetLook = ref unitEntity.Get<TargetLookComponent>();
             targetLook.TargetLayer = gameConfig.PlayerTargetLayers;
             targetLook.Range = 10;
 
+            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
+
             ref var health = ref unitEntity.Get<HealthComponent>();
             health.Health = unitData.Health;
-
-            ref var agro = ref unitEntity.Get<TargetAgroComponent>();
 
             var rangeWeapon = ecsWorld.NewEntity()
                 .Replace(new RangeWeaponTag())

@@ -24,12 +24,13 @@ namespace Gameplay.Ship.Root
         [SerializeField] private ShipMapView shipMapView;
         [SerializeField] protected ShipViewsLink shipViewsLink;
 
+        protected ShipUnitExistenceControl existenceControl;
+
         private PanelsManager panelsManager;
         private TemporaryGameplayPanel gameplayTemporary;
         private MapIconsHolder iconsHolder;
 
         private ShipMap shipMap;
-        private ShipUnitExistenceControl existenceControl;
 
         public override void PreInitialize()
         {
@@ -85,6 +86,7 @@ namespace Gameplay.Ship.Root
 
         public override void Dispose()
         {
+            existenceControl.Dispose();
             shipMap.Dispose();
 
             panelsManager.UnregisterPanel(gameplayTemporary);

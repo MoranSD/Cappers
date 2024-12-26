@@ -1,7 +1,7 @@
 ﻿using Gameplay.EnemySystem.Data;
 using Gameplay.Game;
+using Gameplay.Game.ECS;
 using Gameplay.Game.ECS.Features;
-using Gameplay.Player.Data;
 using Leopotam.Ecs;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +37,7 @@ namespace Gameplay.EnemySystem.Factory
 
             var enemyEntity = ecsWorld.NewEntity();
             aliveIds.Add(globalSpawnId);
-            controller.Initialize(globalSpawnId, enemyEntity);
+            controller.Initialize(globalSpawnId, enemyEntity, this);
             globalSpawnId++;
 
             ref var tag = ref enemyEntity.Get<TagEnemy>();
@@ -86,7 +86,13 @@ namespace Gameplay.EnemySystem.Factory
             return controller;
         }
 
-        public IEnemyController CreateBoardingEnemy(Transform spawnPoint) => Create(spawnPoint, EnemyType.melee);
+        public IEnemyController CreateBoardingEnemy(Transform spawnPoint)
+        {
+            var enemy = Create(spawnPoint, EnemyType.melee);
+            ref var look = ref ((IEcsEntityHolder)enemy).EcsEntity.Get<TargetLookComponent>();
+            look.Range *= 2;
+            return enemy;
+        }
 
         public bool IsAlive(int enemyId) => aliveIds.Contains(enemyId);
 

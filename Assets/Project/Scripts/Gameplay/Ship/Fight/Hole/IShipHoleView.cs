@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Gameplay.UnitSystem.Controller;
+using System;
 
 namespace Gameplay.Ship.Fight.Hole
 {
     public interface IShipHoleView
     {
-        event Action OnFix;
+        public event Action OnInteracted;
+        public event Action<IUnitController> OnUnitInteracted;
 
         void Hide();
         void DrawDamage();

@@ -14,6 +14,7 @@ namespace Gameplay.SeaFight.Ship
     public class EnemyShip
     {
         public event Action OnFightEnd;
+        public event Action<IEnemyController> OnBoard;
 
         private readonly IEnemyShipView view;
         private readonly IEnemyFactory enemyFactory;
@@ -28,7 +29,7 @@ namespace Gameplay.SeaFight.Ship
             this.view = view;
             this.enemyFactory = enemyFactory;
             this.shipFight = shipFight;
-            health = 10;
+            health = 1;
         }
 
         public void Initialize()
@@ -73,16 +74,11 @@ namespace Gameplay.SeaFight.Ship
 
                 if (shipFight.IsDead || health <= 0)
                 {
+                    view.Hide();
                     OnFightEnd?.Invoke();
                     return;
                 }
             }
-        }
-
-        public void Reset()
-        {
-            view.Hide();
-            //todo
         }
 
         private async UniTask CannonAttackProcess()
@@ -92,7 +88,7 @@ namespace Gameplay.SeaFight.Ship
 
             foreach(var zone in targetsZones)
             {
-                var attackTask = shipFight.ApplyCannonDamageInZone(zone, 5, cancellationTokenSource.Token);
+                var attackTask = shipFight.ApplyCannonDamageInZone(zone, 3, cancellationTokenSource.Token);
                 attackTasks.Add(attackTask);
             }
 
@@ -111,7 +107,9 @@ namespace Gameplay.SeaFight.Ship
             {
                 var pivot = shipFight.GetBoardingPivot(pivotId);
                 var enemy = enemyFactory.CreateBoardingEnemy(pivot);
+
                 enemiesIds.Add(enemy.Id);
+                OnBoard?.Invoke(enemy);
 
                 await UniTask.Delay(1000, false, PlayerLoopTiming.Update, cancellationTokenSource.Token);
 

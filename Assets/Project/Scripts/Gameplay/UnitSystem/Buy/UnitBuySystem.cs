@@ -30,11 +30,11 @@ namespace Gameplay.UnitSystem.BuyMenu
                 unitsInStock.Add(new UnitToBuyData()
                 {
                     Id = i,
-                    Price = new Random().Next(0, 10),
+                    Price = new Random().Next(1, 11),
                     BodyType = (UnitBodyType)new Random().Next(0, 2),
-                    Health = new Random().Next(0, 10),
-                    Speed = new Random().Next(0, 10),
-                    Damage = new Random().Next(0, 10),
+                    Health = new Random().Next(1, 11),
+                    Speed = new Random().Next(1, 11),
+                    Damage = new Random().Next(1, 11),
                 });
         }
 

@@ -4,8 +4,8 @@ using Gameplay.SeaFight.Ship;
 using Gameplay.SeaFight.Ship.View;
 using Gameplay.Ship.Fight;
 using Gameplay.Travel;
+using System;
 using System.Linq;
-using System.Threading;
 
 namespace Gameplay.SeaFight
 {
@@ -73,9 +73,8 @@ namespace Gameplay.SeaFight
                 throw new System.Exception();
 
             IsInFight = false;
-            EnemyShip.Reset();
 
-            //TODO: if player is dead or is win so do nothing
+            //TODO: if player is dead do nothing
             if (travelSystem.IsTraveling && travelSystem.IsPaused)
                 travelSystem.Unpause();
         }

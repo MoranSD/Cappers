@@ -5,7 +5,7 @@ namespace Gameplay.Game.ECS.Features
 {
     public class CCGravitySystem : IEcsRunSystem
     {
-        private readonly EcsFilter<CCGravityComponent> filter = null;
+        private readonly EcsFilter<CCGravityComponent>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {

@@ -6,7 +6,7 @@ namespace Gameplay.Game.ECS.Features
     public class AgentFollowSystem : IEcsRunSystem
     {
         private const float DestinationUpdateRate = 0.5f;
-        private readonly EcsFilter<AgentMovableComponent, FollowComponent, AgentDestinationUpdateTimeData> filter = null;
+        private readonly EcsFilter<AgentMovableComponent, FollowComponent, AgentDestinationUpdateTimeData>.Exclude<BlockFreezed> filter = null;
 
         public void Run()
         {
@@ -16,25 +16,25 @@ namespace Gameplay.Game.ECS.Features
             {
                 ref var followTarget = ref filter.Get2(i);
 
-                if (followTarget.Target.IsAlive() == false)
-                {
-                    ref var entity = ref filter.GetEntity(i);
-                    entity.Del<FollowComponent>();
-                    continue;
-                }
+                //if (followTarget.Target == null)
+                //    continue;
 
-                ref var agent = ref filter.Get1(i).NavMeshAgent;
-                ref var destimationTime = ref filter.Get3(i);
+                TrySetDestination(ref filter.GetEntity(i), deltaTime, followTarget.Target.position);
+            }
+        }
 
-                destimationTime.DestinationUpdateTime -= deltaTime;
+        private void TrySetDestination(ref EcsEntity entity, float deltaTime, Vector3 destination)
+        {
+            ref var agent = ref entity.Get<AgentMovableComponent>().NavMeshAgent;
+            ref var destimationTime = ref entity.Get<AgentDestinationUpdateTimeData>();
 
-                if (destimationTime.DestinationUpdateTime <= 0)
-                {
-                    destimationTime.DestinationUpdateTime = DestinationUpdateRate;
+            destimationTime.DestinationUpdateTime -= deltaTime;
 
-                    ref var targetTF = ref followTarget.Target.Get<TranslationComponent>().Transform;
-                    agent.SetDestination(targetTF.position);
-                }
+            if (destimationTime.DestinationUpdateTime <= 0)
+            {
+                destimationTime.DestinationUpdateTime = DestinationUpdateRate;
+
+                agent.SetDestination(destination);
             }
         }
     }
