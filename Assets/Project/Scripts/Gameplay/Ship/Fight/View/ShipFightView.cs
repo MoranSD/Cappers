@@ -52,7 +52,7 @@ namespace Gameplay.Ship.Fight.View
 
         public void DrawGetDamage(float currentHealth)
         {
-            Debug.Log($"Ship health {currentHealth}");
+            //Debug.Log($"Ship health {currentHealth}");
         }
     }
 }

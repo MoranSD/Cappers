@@ -15,7 +15,7 @@ namespace Gameplay.Ship.Fight.Hole
         private readonly ShipFight ship;
 
         private const float damageRate = 1;
-        private const float damage = 2;
+        private const float damage = 0;
 
         private float damageTime = damageRate;
 

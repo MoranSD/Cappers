@@ -17,24 +17,18 @@ namespace Gameplay.UnitSystem.Controller
         public bool IsInteracting { get; private set; }
         public EcsWorld EcsWorld { get; private set; }
         public EcsEntity EcsEntity { get; private set; }
-        public UnitData Data => data;
+        public int Id { get; private set; }
 
         [field: SerializeField] public NavMeshAgent NavMeshAgent { get; private set; }
 
-        private UnitData data;
         private Vector3 idlePosition;
 
-        public void Initialize(EcsWorld ecsWorld, EcsEntity ecsEntity, UnitData data, Vector3 idlePosition)
+        public void Initialize(EcsWorld ecsWorld, EcsEntity ecsEntity, int id, Vector3 idlePosition)
         {
             EcsWorld = ecsWorld;
             EcsEntity = ecsEntity;
-            this.data = data;
+            Id = id;
             this.idlePosition = idlePosition;
-        }
-
-        public void UpdateHealthData(float health)
-        {
-            data.Health = health;
         }
 
         public void GoToIdlePosition(Vector3 position)
@@ -90,9 +84,11 @@ namespace Gameplay.UnitSystem.Controller
 
         public void Attack(IEnemyController enemy)
         {
-            ref var agro = ref EcsEntity.Get<TargetAgroComponent>();
-            agro.HasTarget = true;
-            agro.Target = ((IEcsEntityHolder)enemy).EcsEntity;
+            EventBus.Invoke<BeginAgroRequest>(new()
+            {
+                Entity = EcsEntity,
+                Target = ((IEcsEntityHolder)enemy).EcsEntity
+            });
         }
 
         public void Repair(ShipHole hole)
@@ -100,8 +96,6 @@ namespace Gameplay.UnitSystem.Controller
             var interactor = hole.View as IUnitInteractable;
             InteractWith(interactor);
         }
-
-        public bool IsAlive() => data.Health > 0;
 
         public void Use(Cannon cannon)
         {

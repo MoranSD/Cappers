@@ -14,7 +14,7 @@ namespace Gameplay.Game.ECS.Features
             {
                 ref var job = ref filter.Get3(i);
 
-                if(job.Interactable == null || job.Interactable.IsInteractable == false)
+                if (job.Interactable.Equals(null) || job.Interactable.IsInteractable == false)
                 {
                     OnEndJob();
                     continue;
@@ -33,7 +33,8 @@ namespace Gameplay.Game.ECS.Features
                 {
                     ref var entity = ref filter.GetEntity(i);
                     entity.Del<UnitInteractJobComponent>();
-                    EventBus.Invoke<EndInteractJobEvent>(new()
+                    entity.Del<FollowComponent>();
+                    EventBus.Invoke<UnitEndInteractJobEvent>(new()
                     {
                         Entity = entity,
                     });

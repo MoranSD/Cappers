@@ -7,7 +7,7 @@ namespace Utils
 {
     public static class EntityUtil
     {
-        public static Vector3 GetDirectionToEntity(Transform transform, EcsEntity ecsEntity)
+        public static Vector3 GetDirectionToEntity(ref Transform transform, ref EcsEntity ecsEntity)
         {
             if (ecsEntity.Has<TranslationComponent>() == false)
             {
@@ -18,7 +18,7 @@ namespace Utils
             ref var targetTF = ref ecsEntity.Get<TranslationComponent>().Transform;
             return targetTF.position - transform.position;
         }
-        public static EcsEntity GetClosestEntity(Transform transform, EcsEntity[] entities)
+        public static EcsEntity GetClosestEntity(ref Transform transform, ref EcsEntity[] entities)
         {
             EcsEntity closestEntity = entities.First(x => x.Has<TranslationComponent>());
             Vector3 closestEntityPosition = closestEntity.Get<TranslationComponent>().Transform.position;
@@ -38,7 +38,7 @@ namespace Utils
 
             return closestEntity;
         }
-        public static float GetDistance(EcsEntity from, EcsEntity to)
+        public static float GetDistance(ref EcsEntity from, ref EcsEntity to)
         {
             if (from.Has<TranslationComponent>() == false)
             {
@@ -57,7 +57,7 @@ namespace Utils
                 return Vector3.Distance(ourTF.position, targetTF.position);
             }
         }
-        public static float GetDistance(Transform transform, EcsEntity entity)
+        public static float GetDistance(ref Transform transform, ref EcsEntity entity)
         {
             if (entity.Has<TranslationComponent>() == false)
             {

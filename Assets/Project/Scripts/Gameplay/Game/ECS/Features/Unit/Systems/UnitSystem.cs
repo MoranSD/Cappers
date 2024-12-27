@@ -15,6 +15,7 @@ namespace Gameplay.Game.ECS.Features
             EventBus.Unsubscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Unsubscribe<UnitEndInteractEvent>(OnEndInteract);
             EventBus.Unsubscribe<UnitInteractJobRequest>(OnJob);
+            EventBus.Unsubscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
             EventBus.Unsubscribe<ApplyDamageEvent>(OnApplyDamage);
             EventBus.Unsubscribe<RemovedFollowControlEvent>(OnRemoveFollow);
             EventBus.Unsubscribe<EndAgroEvent>(OnEndAgro);
@@ -26,6 +27,7 @@ namespace Gameplay.Game.ECS.Features
             EventBus.Subscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Subscribe<UnitEndInteractEvent>(OnEndInteract);
             EventBus.Subscribe<UnitInteractJobRequest>(OnJob);
+            EventBus.Subscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
             EventBus.Subscribe<ApplyDamageEvent>(OnApplyDamage);
             EventBus.Subscribe<RemovedFollowControlEvent>(OnRemoveFollow);
             EventBus.Subscribe<EndAgroEvent>(OnEndAgro, 1);
@@ -78,19 +80,19 @@ namespace Gameplay.Game.ECS.Features
             ref var unit = ref damageEvent.Target.Get<TagUnit>();
             ref var health = ref damageEvent.Target.Get<HealthComponent>();
 
-            unit.Controller.UpdateHealthData(Mathf.Min(0, health.Health));
-
             if (health.Health <= 0)
             {
                 EventBus.Invoke<UnitDieEvent>(new()
                 {
-                    UnitData = unit.Controller.Data
+                    UnitId = unit.Controller.Id
                 });
 
-                int unitId = unit.Controller.Data.Id;
+                int unitId = unit.Controller.Id;
                 existenceControl.RemoveUnit(unitId);
 
                 unit.Controller.Destroy();
+                ref var weapon = ref damageEvent.Target.Get<WeaponLink>().Weapon;
+                weapon.Destroy();
                 damageEvent.Target.Destroy();
             }
         }
@@ -106,6 +108,15 @@ namespace Gameplay.Game.ECS.Features
 
             ref var job = ref request.Target.Get<UnitInteractJobComponent>();
             job.Interactable = request.Interactable;
+        }
+        private void OnEndInteractJob(UnitEndInteractJobEvent interactEvent)
+        {
+            ref var entity = ref interactEvent.Entity;
+            ref var unit = ref entity.Get<TagUnit>();
+
+            if (unit.Controller.IsInteracting) return;
+
+            unit.Controller.GoToIdlePosition();
         }
         private void OnBeginInteract(UnitBeginInteractEvent interactEvent)
         {
@@ -124,6 +135,9 @@ namespace Gameplay.Game.ECS.Features
             entity.Del<BlockFollowControl>();
             entity.Del<BlockFreezed>();
             entity.Del<BlockUnitInteractJob>();
+
+            ref var unit = ref entity.Get<TagUnit>();
+            unit.Controller.GoToIdlePosition();
         }
     }
 }

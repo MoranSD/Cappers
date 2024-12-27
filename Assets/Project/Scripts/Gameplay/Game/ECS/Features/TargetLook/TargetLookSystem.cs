@@ -14,8 +14,11 @@ namespace Gameplay.Game.ECS.Features
                 ref var transform = ref filter.Get1(i).Transform;
                 ref var targetLook = ref filter.Get2(i);
 
-                targetLook.HasTargetsInRange = EnvironmentProvider
-                    .TryGetEntitiesAround(transform, targetLook.Range, targetLook.TargetLayer, out targetLook.Targets);
+                var targets = EnvironmentProvider
+                    .TryGetEntitiesAround(transform, targetLook.Range, targetLook.TargetLayer);
+
+                targetLook.HasTargetsInRange = targets != null;
+                targetLook.Targets = targets;
             }
         }
     }

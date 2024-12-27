@@ -26,7 +26,7 @@ namespace Gameplay.UnitSystem.Factory
             var controller = GameObject.Instantiate(bodyPrefab, position, Quaternion.identity);
 
             var unitEntity = ecsWorld.NewEntity();
-            controller.Initialize(ecsWorld, unitEntity, unitData, position);
+            controller.Initialize(ecsWorld, unitEntity, unitData.Id, position);
 
             ref var tag = ref unitEntity.Get<TagUnit>();
             tag.Controller = controller;

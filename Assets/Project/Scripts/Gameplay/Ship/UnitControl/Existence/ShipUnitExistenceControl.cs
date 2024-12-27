@@ -45,19 +45,7 @@ namespace Gameplay.Ship.UnitControl
 
         public void Dispose()
         {
-            foreach (var unit in units)
-            {
-                var unitData = unit.Data;
-
-                if(gameState.Units.Any(x => x.Id == unitData.Id) == false)
-                {
-                    Debug.Log($"No unit data!");
-                    continue;
-                }
-
-                gameState.Units.Remove(gameState.Units.First(x => x.Id == unitData.Id));
-                gameState.Units.Add(unitData);
-            }
+            //тут раньше обновлялись данные в gameState и юнитах на сцене
         }
 
         public bool HasPlaceForUnit()
@@ -99,7 +87,7 @@ namespace Gameplay.Ship.UnitControl
                 throw new System.Exception(unitId.ToString());
 
             gameState.Units.Remove(gameState.Units.First(x => x.Id == unitId));
-            units.Remove(units.First(x => x.Data.Id == unitId));
+            units.Remove(units.First(x => x.Id == unitId));
         }
 
         private int GetNextUnitId()

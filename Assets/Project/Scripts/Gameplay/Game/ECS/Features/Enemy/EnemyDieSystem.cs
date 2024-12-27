@@ -21,6 +21,8 @@ namespace Gameplay.Game.ECS.Features
                 factory.RemoveDeadEnemy(enemy.Controller.Id);
                 enemy.Controller.Destroy();
                 ref var enemyEntity = ref filter.GetEntity(i);
+                ref var weapon = ref enemyEntity.Get<WeaponLink>().Weapon;
+                weapon.Destroy();
                 enemyEntity.Destroy();
             }
         }

@@ -122,7 +122,7 @@ namespace Gameplay.Ship.Fight.Cannon
                 throw new System.Exception();
 
             IsUnitInteracting = true;
-            interactUnitId = unit.Data.Id;
+            interactUnitId = unit.Id;
             unit.BeginCannonInteract(View.UnitInteractPivot);
             View.OnUnitAim();
 
@@ -138,7 +138,7 @@ namespace Gameplay.Ship.Fight.Cannon
             View.DrawCannonFly(() =>
             {
                 isShooting = false;
-                seaFightSystem.EnemyShip.ApplyDamage(View.AimPivot, 5);
+                seaFightSystem.EnemyShip.ApplyDamage(View.AimPivot, 0);
             });
 
             OnUsed?.Invoke();
@@ -159,7 +159,7 @@ namespace Gameplay.Ship.Fight.Cannon
         private void OnUnitDie(UnitDieEvent dieEvent)
         {
             if (IsUnitInteracting == false) return;
-            if (interactUnitId != dieEvent.UnitData.Id) return;
+            if (interactUnitId != dieEvent.UnitId) return;
 
 
             IsUnitInteracting = false;

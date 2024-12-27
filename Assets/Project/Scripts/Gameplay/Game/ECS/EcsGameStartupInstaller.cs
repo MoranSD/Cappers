@@ -91,8 +91,8 @@ namespace Gameplay.Game.ECS
                 //Unit
                 .Add(new UnitSystem())
                 //job
-                .Add(new UpdateInteractJobTargetFollowSystem())
                 .Add(new UnitInteractJobSystem())
+                .Add(new UpdateInteractJobTargetFollowSystem())
                 //attack system
                 .Add(new ReloadAttackCoolDownSystem())
                 .Add(new PreventAttackByCoolDownSystem())

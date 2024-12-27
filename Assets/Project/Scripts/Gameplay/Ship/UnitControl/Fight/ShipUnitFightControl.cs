@@ -3,23 +3,27 @@ using Gameplay.SeaFight;
 using Gameplay.Ship.Fight;
 using Gameplay.Ship.Fight.Cannon;
 using Gameplay.Ship.Fight.Hole;
+using Gameplay.UnitSystem;
 using Gameplay.UnitSystem.Controller;
 using Infrastructure.TickManagement;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using Utils;
 
 namespace Gameplay.Ship.UnitControl.Fight
 {
     public class ShipUnitFightControl : ITickable
     {
         private List<IUnitJob> jobList;
-        private List<IUnitController> freeUnits;
-        private List<UnitWithJob> busyUnits;
+        private List<IUnitJob> processJobs;
 
         private readonly ShipFight shipFight;
         private readonly SeaFightSystem fightSystem;
         private readonly ShipUnitExistenceControl unitExistenceControl;
+
         private readonly List<Cannon> activeCannons;
+        private readonly List<Cannon> busyCannons;
 
         private const float setCannonJobRate = 10;
         private float setCannonJobTime = 0;
@@ -30,9 +34,9 @@ namespace Gameplay.Ship.UnitControl.Fight
             this.fightSystem = fightSystem;
             this.unitExistenceControl = unitExistenceControl;
             this.activeCannons = activeCannons;
+            busyCannons = new();
             jobList = new();
-            freeUnits = new();
-            busyUnits = new();
+            processJobs = new();
         }
 
         public void Initialize()
@@ -40,7 +44,7 @@ namespace Gameplay.Ship.UnitControl.Fight
             shipFight.OnGotHole += OnGotHole;
             fightSystem.EnemyShip.OnBoard += OnEnemyBoard;
 
-            freeUnits.AddRange(unitExistenceControl.ActiveUnits);
+            EventBus.Subscribe<UnitDieEvent>(OnUnitDie);
         }
 
         public void Dispose()
@@ -48,20 +52,20 @@ namespace Gameplay.Ship.UnitControl.Fight
             shipFight.OnGotHole -= OnGotHole;
             fightSystem.EnemyShip.OnBoard -= OnEnemyBoard;
 
+            EventBus.Unsubscribe<UnitDieEvent>(OnUnitDie);
+
             foreach (var job in jobList)
                 if (job is IDisposableJob disposable)
                     disposable.Dispose();
 
-            foreach (var bu in busyUnits)
-                if (bu.Job is IDisposableJob disposable)
+            foreach (var job in processJobs)
+                if (job is IDisposableJob disposable)
                     disposable.Dispose();
         }
 
         public void Update(float deltaTime)
         {
-            UpdateLists();
-
-            if (busyUnits.Count > 0 && fightSystem.IsInFight)
+            if (processJobs.Count > 0 && fightSystem.IsInFight)
             {
                 setCannonJobTime += deltaTime;
 
@@ -69,15 +73,16 @@ namespace Gameplay.Ship.UnitControl.Fight
                 {
                     setCannonJobTime -= setCannonJobRate;
 
-                    var availableCannons = activeCannons.Where(x => x.IsAvailable);
+                    if (HasFreeUnits() == false) return;
+
+                    var availableCannons = activeCannons.Where(x => x.IsAvailable).Except(busyCannons);
 
                     if(availableCannons.Count() == 0)
-                    {
-                        UpdateLists();
                         return;
-                    }
 
                     var cannon = availableCannons.ElementAt(new System.Random().Next(availableCannons.Count()));
+                    busyCannons.Add(cannon);
+
                     var job = new UnitUseCannonJob(cannon);
                     job.Initialize();
 
@@ -89,35 +94,38 @@ namespace Gameplay.Ship.UnitControl.Fight
         private void OnGotHole(ShipHole hole) => OnNewJob(new UnitRepairJob(hole));
         private void OnEnemyBoard(IEnemyController enemy) => OnNewJob(new UnitAttackJob(enemy));
 
+        private bool HasFreeUnits()
+        {
+            return unitExistenceControl.ActiveUnits
+            .Except(processJobs.Select(x => x.Executor))
+            .Count() > 0;
+        }
+        private IUnitController GetFreeUnit()
+        {
+            return unitExistenceControl.ActiveUnits
+            .Except(processJobs.Select(x => x.Executor))
+            .First();
+        }
         private void OnNewJob(IUnitJob job)
         {
             UpdateLists();
 
-            if (freeUnits.Count > 0) BeginExecuteJob(job);
+            if (HasFreeUnits()) BeginExecuteJob(job);
             else jobList.Add(job);
         }
         private void UpdateLists()
         {
-            for (int i = freeUnits.Count - 1; i >= 0; i--)
-                if(freeUnits[i].IsAlive() == false)
-                    freeUnits.RemoveAt(i);
-
-            for (int i = busyUnits.Count - 1; i >= 0; i--)
+            for (int i = processJobs.Count - 1; i >= 0; i--)
             {
-                if (busyUnits[i].Job.IsDone())
+                if (processJobs[i].IsDone())
                 {
-                    if(busyUnits[i].Unit.IsAlive())
-                        freeUnits.Add(busyUnits[i].Unit);
+                    if (processJobs[i] is ICannonJob job)
+                        busyCannons.Remove(job.Cannon);
 
-                    busyUnits.RemoveAt(i);
-                }
-                else if (busyUnits[i].Job.IsFailed())
-                {
-                    if (busyUnits[i].Unit.IsAlive())
-                        freeUnits.Add(busyUnits[i].Unit);
+                    if (processJobs[i] is IDisposableJob disposable)
+                        disposable.Dispose();
 
-                    jobList.Add(busyUnits[i].Job);
-                    busyUnits.RemoveAt(i);
+                    processJobs.RemoveAt(i);
                 }
             }
 
@@ -125,64 +133,76 @@ namespace Gameplay.Ship.UnitControl.Fight
             {
                 if (jobList[i].IsDone())
                 {
+                    if (processJobs[i] is ICannonJob job)
+                        busyCannons.Remove(job.Cannon);
+
+                    if (jobList[i] is IDisposableJob disposable)
+                        disposable.Dispose();
+
                     jobList.RemoveAt(i);
                 }
-                else if (freeUnits.Count > 0)
+                else if (HasFreeUnits())
                 {
-                    BeginExecuteJob(jobList[i]);
+                    var job = jobList[i];
                     jobList.RemoveAt(i);
+                    BeginExecuteJob(job);
                 }
             }
         }
         private void BeginExecuteJob(IUnitJob job)
         {
-            var freeUnit = freeUnits.First();
-            freeUnits.Remove(freeUnit);
-
+            var freeUnit = GetFreeUnit();
             job.Execute(freeUnit);
-
-            busyUnits.Add(new()
-            {
-                Unit = freeUnit,
-                Job = job
-            });
+            processJobs.Add(job);
         }
 
-        private class UnitUseCannonJob : IUnitJob, IDisposableJob
+        private void OnUnitDie(UnitDieEvent dieEvent)
         {
-            private readonly Cannon cannon;
-            private IUnitController unit;
+            if (processJobs.Any(x => x.Executor.Id == dieEvent.UnitId) == false) return;
+
+            var job = processJobs.First(x => x.Executor.Id == dieEvent.UnitId);
+            processJobs.Remove(job);
+
+            if (job.IsDone() == false && HasFreeUnits()) BeginExecuteJob(job);
+            else jobList.Add(job);
+        }
+
+        private class UnitUseCannonJob : IUnitJob, IDisposableJob, ICannonJob
+        {
+            public IUnitController Executor { get; private set; }
+            public Cannon Cannon { get; private set; }
+
             private bool isCannonUsed;
 
             public UnitUseCannonJob(Cannon cannon)
             {
-                this.cannon = cannon;
+                this.Cannon = cannon;
             }
 
             public void Initialize()
             {
-                cannon.OnUsed += OnCannonUsed;
+                Cannon.OnUsed += OnCannonUsed;
             }
 
             public void Dispose()
             {
-                cannon.OnUsed -= OnCannonUsed;
+                Cannon.OnUsed -= OnCannonUsed;
             }
 
             public void Execute(IUnitController controller)
             {
-                controller.Use(cannon);
-                unit = controller;
+                controller.Use(Cannon);
+                Executor = controller;
             }
-            public bool IsFailed() => unit.IsAlive() == false;
             public bool IsDone() => isCannonUsed;
 
             private void OnCannonUsed() => isCannonUsed = true;
         }
         private class UnitRepairJob : IUnitJob
         {
+            public IUnitController Executor { get; private set; }
+
             private readonly ShipHole hole;
-            private IUnitController unit;
 
             public UnitRepairJob(ShipHole hole)
             {
@@ -192,15 +212,15 @@ namespace Gameplay.Ship.UnitControl.Fight
             public void Execute(IUnitController controller)
             {
                 controller.Repair(hole);
-                unit = controller;
+                Executor = controller;
             }
-            public bool IsFailed() => unit.IsAlive() == false;
             public bool IsDone() => hole.IsFixed;
         }
         private class UnitAttackJob : IUnitJob
         {
+            public IUnitController Executor { get; private set; }
+
             private readonly IEnemyController enemy;
-            private IUnitController unit;
 
             public UnitAttackJob(IEnemyController enemy)
             {
@@ -209,21 +229,19 @@ namespace Gameplay.Ship.UnitControl.Fight
             public void Execute(IUnitController controller)
             {
                 controller.Attack(enemy);
-                unit = controller;
+                Executor = controller;
             }
-            public bool IsFailed() => unit.IsAlive() == false;
             public bool IsDone() => enemy.IsAlive() == false;
-        }
-        private struct UnitWithJob
-        {
-            public IUnitController Unit;
-            public IUnitJob Job;
         }
         private interface IUnitJob
         {
+            IUnitController Executor { get; }
             void Execute(IUnitController controller);
-            bool IsFailed();
             bool IsDone();
+        }
+        private interface ICannonJob
+        {
+            Cannon Cannon { get; }
         }
         private interface IDisposableJob
         {

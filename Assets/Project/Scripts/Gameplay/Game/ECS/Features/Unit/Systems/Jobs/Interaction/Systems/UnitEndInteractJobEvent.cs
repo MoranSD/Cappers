@@ -2,7 +2,7 @@
 
 namespace Gameplay.Game.ECS.Features
 {
-    public struct EndInteractJobEvent
+    public struct UnitEndInteractJobEvent
     {
         public EcsEntity Entity;
     }

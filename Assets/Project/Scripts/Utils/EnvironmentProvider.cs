@@ -25,16 +25,18 @@ namespace Utils
             return TryGetEntityHoldersAround(transform, range, gameConfig.UnitLayer, out unitHolders);
         }
 
-        public static bool TryGetEntitiesAround(Transform transform, float range, LayerMask targetLayer, out EcsEntity[] entities)
+        public static EcsEntity[] TryGetEntitiesAround(Transform transform, float range, LayerMask targetLayer)
         {
             bool hasEntitiesAround = TryGetEntityHoldersAround(transform, range, targetLayer, out var holders);
 
-            entities = holders
+            if (hasEntitiesAround == false)
+                return null;
+
+            return holders
                 .Select(x => x.EcsEntity)
                 .Where(x => x.IsAlive())
                 .ToArray();
 
-            return hasEntitiesAround;
         }
 
         public static bool TryGetEntityHoldersAround(Transform transform, float range, LayerMask targetLayer, out IEcsEntityHolder[] holders)

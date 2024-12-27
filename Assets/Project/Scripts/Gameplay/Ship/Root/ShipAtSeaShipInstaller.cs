@@ -64,9 +64,9 @@ namespace Gameplay.Ship.Root
                 activeCannons.Add(cannon);
             }
 
-            //unitFightControl = new ShipUnitFightControl(shipFight, seaFightSystem, existenceControl, activeCannons);
-            //unitFightControl.Initialize();
-            //tickManager.Add(unitFightControl);
+            unitFightControl = new ShipUnitFightControl(shipFight, seaFightSystem, existenceControl, activeCannons);
+            unitFightControl.Initialize();
+            tickManager.Add(unitFightControl);
         }
 
         public override void Dispose()
@@ -78,8 +78,8 @@ namespace Gameplay.Ship.Root
             var tickManager = ServiceLocator.Get<TickManager>();
             var gameState = ServiceLocator.Get<GameState>();
 
-            //unitFightControl.Dispose();
-            //tickManager.Remove(unitFightControl);
+            unitFightControl.Dispose();
+            tickManager.Remove(unitFightControl);
 
             holeFactory.Dispose();
 

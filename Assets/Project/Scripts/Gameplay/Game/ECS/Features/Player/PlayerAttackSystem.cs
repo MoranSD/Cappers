@@ -45,14 +45,14 @@ namespace Gameplay.Game.ECS.Features
             bool isMelee = input.IsMeleeAttackButtonPressed;
 
             var closestTarget = targetLook.HasTargetsInRange ? 
-                EntityUtil.GetClosestEntity(transform, targetLook.Targets) : 
+                EntityUtil.GetClosestEntity(ref transform, ref targetLook.Targets) : 
                 default;
 
             Vector3 attackDirection = transform.forward;
 
             if (targetLook.HasTargetsInRange)
             {
-                attackDirection = EntityUtil.GetDirectionToEntity(transform, closestTarget);
+                attackDirection = EntityUtil.GetDirectionToEntity(ref transform, ref closestTarget);
                 if (attackDirection != Vector3.zero) attackDirection.Normalize();
             }
 

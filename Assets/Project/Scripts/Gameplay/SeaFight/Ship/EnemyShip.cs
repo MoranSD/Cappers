@@ -88,7 +88,7 @@ namespace Gameplay.SeaFight.Ship
 
             foreach(var zone in targetsZones)
             {
-                var attackTask = shipFight.ApplyCannonDamageInZone(zone, 3, cancellationTokenSource.Token);
+                var attackTask = shipFight.ApplyCannonDamageInZone(zone, 0, cancellationTokenSource.Token);
                 attackTasks.Add(attackTask);
             }
 
@@ -100,7 +100,7 @@ namespace Gameplay.SeaFight.Ship
         }
         private async UniTask BoardingAttackProcess()
         {
-            var targetPivots = GenerateIds(shipFight.BoardingPivotsCount, 3);
+            var targetPivots = GenerateIds(shipFight.BoardingPivotsCount, 1);
             var enemiesIds = new List<int>(targetPivots.Length);
 
             foreach(var pivotId in targetPivots)

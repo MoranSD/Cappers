@@ -27,7 +27,7 @@ namespace Gameplay.Game.ECS.Features
             var target = (EcsEntity)request.ExtensionData[AttackRequest.TARGET_EXTENSION_DATA_KEY];
             ref var attackDistance = ref weaponEntity.Get<WeaponAttackDistanceData>().AttackDistance;
 
-            if (EntityUtil.GetDistance(weaponOwner, target) > attackDistance)
+            if (EntityUtil.GetDistance(ref weaponOwner, ref target) > attackDistance)
                 return;
 
             if (weaponEntity.Has<AttackCoolDownComponent>())
