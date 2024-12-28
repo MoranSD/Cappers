@@ -44,6 +44,11 @@ namespace Gameplay.Game.ECS.Features
             ref var controlled = ref controlTarget.Get<FollowControlledComponent>();
             controlled.Owner = request.Sender;
             controlled.OwnerTransform = ownerTf;
+
+            EventBus.Invoke<AddedFollowControlEvent>(new()
+            {
+                Target = controlTarget,
+            });
         }
     }
 }

@@ -4,9 +4,54 @@ using Utils;
 
 namespace Gameplay.Game.ECS.Features
 {
-    public class UnitInteractJobSystem : IEcsRunSystem
+    public class UnitInteractJobSystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroySystem
     {
         private readonly EcsFilter<TagUnit, TranslationComponent, UnitInteractJobComponent>.Exclude<BlockUnitInteractJob> filter = null;
+
+        public void Destroy()
+        {
+            EventBus.Unsubscribe<UnitInteractJobRequest>(OnJob);
+            EventBus.Unsubscribe<UnitCancelInteractJobRequest>(OnCancelJob);
+        }
+
+        public void Init()
+        {
+            EventBus.Subscribe<UnitInteractJobRequest>(OnJob);
+            EventBus.Subscribe<UnitCancelInteractJobRequest>(OnCancelJob);
+        }
+
+        private void OnJob(UnitInteractJobRequest request)
+        {
+            if (request.Target.Has<TagUnit>() == false) return;
+            if (request.Target.Has<BlockUnitInteractJob>())
+            {
+                Debug.Log("Cant add job to uncontrollable target");
+                return;
+            }
+
+            ref var follow = ref request.Target.Get<FollowComponent>();
+            follow.Target = request.Interactable.Pivot;
+
+            ref var job = ref request.Target.Get<UnitInteractJobComponent>();
+            job.Interactable = request.Interactable;
+        }
+
+        private void OnCancelJob(UnitCancelInteractJobRequest request)
+        {
+            if (request.Target.Has<TagUnit>() == false) return;
+            if (request.Target.Has<BlockUnitInteractJob>())
+            {
+                Debug.Log("Cant remove job on uncontrollable target");
+                return;
+            }
+
+            request.Target.Del<UnitInteractJobComponent>();
+            request.Target.Del<FollowComponent>();
+            EventBus.Invoke<UnitCanceledInteractJobEvent>(new()
+            {
+                UnitId = request.Target.Get<TagUnit>().Controller.Id,
+            });
+        }
 
         public void Run()
         {

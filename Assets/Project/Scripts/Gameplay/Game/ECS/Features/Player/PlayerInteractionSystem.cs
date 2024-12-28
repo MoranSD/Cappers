@@ -31,7 +31,7 @@ namespace Gameplay.Game.ECS.Features
                 {
                     if (followControlComponent.EntitiesInControl.Count > 0 && interactor is IUnitInteractable unitInteractable)
                     {
-                        var unitInteract = followControlComponent.EntitiesInControl.First();
+                        var unitInteract = EntityUtil.GetClosestEntity(ref transform, ref followControlComponent.EntitiesInControl);
 
                         EventBus.Invoke(new RemoveFollowControlRequest()
                         {

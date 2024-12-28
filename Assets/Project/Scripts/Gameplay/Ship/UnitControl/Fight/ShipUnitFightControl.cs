@@ -1,4 +1,5 @@
 ﻿using Gameplay.EnemySystem;
+using Gameplay.Game.ECS.Features;
 using Gameplay.SeaFight;
 using Gameplay.Ship.Fight;
 using Gameplay.Ship.Fight.Cannon;
@@ -45,6 +46,7 @@ namespace Gameplay.Ship.UnitControl.Fight
             fightSystem.EnemyShip.OnBoard += OnEnemyBoard;
 
             EventBus.Subscribe<UnitDieEvent>(OnUnitDie);
+            EventBus.Subscribe<UnitCanceledInteractJobEvent>(OnCancelledJob);
         }
 
         public void Dispose()
@@ -53,6 +55,7 @@ namespace Gameplay.Ship.UnitControl.Fight
             fightSystem.EnemyShip.OnBoard -= OnEnemyBoard;
 
             EventBus.Unsubscribe<UnitDieEvent>(OnUnitDie);
+            EventBus.Unsubscribe<UnitCanceledInteractJobEvent>(OnCancelledJob);
 
             foreach (var job in jobList)
                 if (job is IDisposableJob disposable)
@@ -94,17 +97,15 @@ namespace Gameplay.Ship.UnitControl.Fight
         private void OnGotHole(ShipHole hole) => OnNewJob(new UnitRepairJob(hole));
         private void OnEnemyBoard(IEnemyController enemy) => OnNewJob(new UnitAttackJob(enemy));
 
-        private bool HasFreeUnits()
+        private bool HasFreeUnits() => GetFreeUnits().Count() > 0;
+        private IUnitController GetFreeUnit() => GetFreeUnits().First();
+        private IEnumerable<IUnitController> GetFreeUnits()
         {
             return unitExistenceControl.ActiveUnits
             .Except(processJobs.Select(x => x.Executor))
-            .Count() > 0;
-        }
-        private IUnitController GetFreeUnit()
-        {
-            return unitExistenceControl.ActiveUnits
-            .Except(processJobs.Select(x => x.Executor))
-            .First();
+            .Where(x => x.IsFollowingPlayer == false)
+            .Where(x => x.HasJob == false)
+            .Where(x => x.IsInteracting == false);
         }
         private void OnNewJob(IUnitJob job)
         {
@@ -165,6 +166,14 @@ namespace Gameplay.Ship.UnitControl.Fight
 
             if (job.IsDone() == false && HasFreeUnits()) BeginExecuteJob(job);
             else jobList.Add(job);
+        }
+        private void OnCancelledJob(UnitCanceledInteractJobEvent cancelledEvent)
+        {
+            if (processJobs.Any(x => x.Executor.Id == cancelledEvent.UnitId) == false) return;
+
+            var job = processJobs.First(x => x.Executor.Id == cancelledEvent.UnitId);
+            processJobs.Remove(job);
+            OnNewJob(job);
         }
 
         private class UnitUseCannonJob : IUnitJob, IDisposableJob, ICannonJob

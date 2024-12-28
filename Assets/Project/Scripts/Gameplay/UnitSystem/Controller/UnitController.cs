@@ -3,7 +3,6 @@ using Gameplay.Game.ECS;
 using Gameplay.Game.ECS.Features;
 using Gameplay.Ship.Fight.Cannon;
 using Gameplay.Ship.Fight.Hole;
-using Gameplay.UnitSystem.Data;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,9 +14,11 @@ namespace Gameplay.UnitSystem.Controller
     public class UnitController : MonoBehaviour, IUnitController, IEcsEntityHolder
     {
         public bool IsInteracting { get; private set; }
+        public bool HasJob => EcsEntity.Has<UnitInteractJobComponent>();
         public EcsWorld EcsWorld { get; private set; }
         public EcsEntity EcsEntity { get; private set; }
         public int Id { get; private set; }
+        public bool IsFollowingPlayer => EcsEntity.Has<TagUnderFollowControl>();
 
         [field: SerializeField] public NavMeshAgent NavMeshAgent { get; private set; }
 

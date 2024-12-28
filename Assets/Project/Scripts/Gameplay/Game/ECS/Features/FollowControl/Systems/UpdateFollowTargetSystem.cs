@@ -10,9 +10,9 @@ namespace Gameplay.Game.ECS.Features
             foreach (var i in filter)
             {
                 ref var follow = ref filter.GetEntity(i).Get<FollowComponent>();
-                ref var tag = ref filter.Get2(i);
+                ref var fContr = ref filter.Get2(i);
 
-                follow.Target = tag.OwnerTransform;
+                follow.Target = fContr.OwnerTransform;
             }
         }
     }

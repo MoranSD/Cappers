@@ -9,6 +9,9 @@ namespace Gameplay.UnitSystem.Controller
     public interface IUnitController
     {
         int Id { get; }
+        bool IsInteracting { get; }
+        bool HasJob { get; }
+        bool IsFollowingPlayer { get; }
 
         void Use(Cannon cannon);
         void Attack(IEnemyController enemy);

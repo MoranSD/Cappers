@@ -1,7 +1,9 @@
 ﻿using Gameplay.Ship.UnitControl;
 using Gameplay.UnitSystem;
 using Leopotam.Ecs;
+using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Utils;
 
 namespace Gameplay.Game.ECS.Features
@@ -14,10 +16,10 @@ namespace Gameplay.Game.ECS.Features
         {
             EventBus.Unsubscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Unsubscribe<UnitEndInteractEvent>(OnEndInteract);
-            EventBus.Unsubscribe<UnitInteractJobRequest>(OnJob);
             EventBus.Unsubscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
             EventBus.Unsubscribe<ApplyDamageEvent>(OnApplyDamage);
             EventBus.Unsubscribe<RemovedFollowControlEvent>(OnRemoveFollow);
+            EventBus.Unsubscribe<AddedFollowControlEvent>(OnAddFollow);
             EventBus.Unsubscribe<EndAgroEvent>(OnEndAgro);
             EventBus.Unsubscribe<BeginAgroEvent>(OnBeginAgro);
         }
@@ -26,10 +28,10 @@ namespace Gameplay.Game.ECS.Features
         {
             EventBus.Subscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Subscribe<UnitEndInteractEvent>(OnEndInteract);
-            EventBus.Subscribe<UnitInteractJobRequest>(OnJob);
             EventBus.Subscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
             EventBus.Subscribe<ApplyDamageEvent>(OnApplyDamage);
             EventBus.Subscribe<RemovedFollowControlEvent>(OnRemoveFollow);
+            EventBus.Subscribe<AddedFollowControlEvent>(OnAddFollow);
             EventBus.Subscribe<EndAgroEvent>(OnEndAgro, 1);
             EventBus.Subscribe<BeginAgroEvent>(OnBeginAgro);
         }
@@ -54,13 +56,29 @@ namespace Gameplay.Game.ECS.Features
             entity.Del<BlockFollowControl>();
             entity.Del<BlockUnitInteractJob>();
 
-            if (entity.Has<TagUnderFollowControl>())
+            if (entity.Has<TagUnderFollowControl>() || entity.Has<UnitInteractJobComponent>())
                 return;
 
             ref var unitTag = ref entity.Get<TagUnit>();
             unitTag.Controller.GoToIdlePosition();
         }
 
+
+        private void OnAddFollow(AddedFollowControlEvent addEvent)
+        {
+            ref var entity = ref addEvent.Target;
+
+            if (entity.Has<TagUnit>() == false)
+                return;
+
+            if (entity.Has<UnitInteractJobComponent>() == false)
+                return;
+
+            EventBus.Invoke<UnitCancelInteractJobRequest>(new()
+            {
+                Target = entity,
+            });
+        }
         private void OnRemoveFollow(RemovedFollowControlEvent removeEvent)
         {
             ref var entity = ref removeEvent.Target;
@@ -97,24 +115,14 @@ namespace Gameplay.Game.ECS.Features
             }
         }
 
-        private void OnJob(UnitInteractJobRequest request)
-        {
-            if (request.Target.Has<TagUnit>() == false) return;
-
-            ref var unit = ref request.Target.Get<TagUnit>().Controller;
-
-            ref var follow = ref request.Target.Get<FollowComponent>();
-            follow.Target = request.Interactable.Pivot;
-
-            ref var job = ref request.Target.Get<UnitInteractJobComponent>();
-            job.Interactable = request.Interactable;
-        }
+        
         private void OnEndInteractJob(UnitEndInteractJobEvent interactEvent)
         {
             ref var entity = ref interactEvent.Entity;
             ref var unit = ref entity.Get<TagUnit>();
 
             if (unit.Controller.IsInteracting) return;
+            if (entity.Has<TagUnderFollowControl>()) return;
 
             unit.Controller.GoToIdlePosition();
         }
@@ -135,6 +143,8 @@ namespace Gameplay.Game.ECS.Features
             entity.Del<BlockFollowControl>();
             entity.Del<BlockFreezed>();
             entity.Del<BlockUnitInteractJob>();
+
+            if (entity.Has<TagUnderFollowControl>()) return;
 
             ref var unit = ref entity.Get<TagUnit>();
             unit.Controller.GoToIdlePosition();
