@@ -1,19 +1,22 @@
 ﻿using Gameplay.Ship.UnitControl;
 using Gameplay.UnitSystem;
+using Gameplay.UnitSystem.Upgrade;
 using Leopotam.Ecs;
 using System;
-using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using Utils;
+using Voody.UniLeo;
 
 namespace Gameplay.Game.ECS.Features
 {
     public class UnitSystem : IEcsInitSystem, IEcsDestroySystem
     {
+        private readonly GameState gameState = null;
         private readonly ShipUnitExistenceControl existenceControl = null;
 
         public void Destroy()
         {
+            EventBus.Unsubscribe<UnitHealedEvent>(OnHeal);
+            EventBus.Unsubscribe<UnitUpgradedEvent>(OnUgrade);
             EventBus.Unsubscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Unsubscribe<UnitEndInteractEvent>(OnEndInteract);
             EventBus.Unsubscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
@@ -26,6 +29,8 @@ namespace Gameplay.Game.ECS.Features
 
         public void Init()
         {
+            EventBus.Subscribe<UnitHealedEvent>(OnHeal);
+            EventBus.Subscribe<UnitUpgradedEvent>(OnUgrade);
             EventBus.Subscribe<UnitBeginInteractEvent>(OnBeginInteract);
             EventBus.Subscribe<UnitEndInteractEvent>(OnEndInteract);
             EventBus.Subscribe<UnitEndInteractJobEvent>(OnEndInteractJob);
@@ -34,6 +39,49 @@ namespace Gameplay.Game.ECS.Features
             EventBus.Subscribe<AddedFollowControlEvent>(OnAddFollow);
             EventBus.Subscribe<EndAgroEvent>(OnEndAgro, 1);
             EventBus.Subscribe<BeginAgroEvent>(OnBeginAgro);
+        }
+
+        private void OnHeal(UnitHealedEvent healEvent)
+        {
+            var unitData = gameState.GetUnitDataById(healEvent.UnitId);
+            var filter = WorldHandler.GetWorld().GetFilter(typeof(EcsFilter<TagUnit>));
+
+            foreach (var i in filter)
+            {
+                ref var entity = ref filter.GetEntity(i);
+                ref var tag = ref entity.Get<TagUnit>();
+
+                if (tag.Controller.Id != healEvent.UnitId) continue;
+
+                ref var health = ref entity.Get<HealthComponent>();
+                health.Health = unitData.MaxHealth;
+
+                break;
+            }
+        }
+        private void OnUgrade(UnitUpgradedEvent upgradeEvent)
+        {
+            var unitData = gameState.GetUnitDataById(upgradeEvent.UnitId);
+            var filter = WorldHandler.GetWorld().GetFilter(typeof(EcsFilter<TagUnit>));
+
+            foreach (var i in filter)
+            {
+                ref var entity = ref filter.GetEntity(i);
+                ref var tag = ref entity.Get<TagUnit>();
+
+                if (tag.Controller.Id != unitData.Id) continue;
+
+                ref var health = ref entity.Get<HealthComponent>();
+                health.Health = unitData.MaxHealth;
+
+                tag.Controller.NavMeshAgent.speed = unitData.Speed;
+
+                ref var weaponLink = ref entity.Get<WeaponLink>();
+                ref var damage = ref weaponLink.Weapon.Get<WeaponDamageData>();
+                damage.Damage = unitData.Damage;
+
+                break;
+            }
         }
 
         private void OnBeginAgro(BeginAgroEvent beginsAgroEvent)
@@ -98,6 +146,15 @@ namespace Gameplay.Game.ECS.Features
             ref var unit = ref damageEvent.Target.Get<TagUnit>();
             ref var health = ref damageEvent.Target.Get<HealthComponent>();
 
+            int unitId = unit.Controller.Id;
+            float currentHealth = health.Health;
+
+            gameState.ChangeUnitData(unitId, (d) =>
+            {
+                d.CurrentHealth = MathF.Min(0, currentHealth);
+                return d;
+            });
+
             if (health.Health <= 0)
             {
                 EventBus.Invoke<UnitDieEvent>(new()
@@ -105,7 +162,6 @@ namespace Gameplay.Game.ECS.Features
                     UnitId = unit.Controller.Id
                 });
 
-                int unitId = unit.Controller.Id;
                 existenceControl.RemoveUnit(unitId);
 
                 unit.Controller.Destroy();
@@ -115,7 +171,6 @@ namespace Gameplay.Game.ECS.Features
             }
         }
 
-        
         private void OnEndInteractJob(UnitEndInteractJobEvent interactEvent)
         {
             ref var entity = ref interactEvent.Entity;

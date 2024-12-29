@@ -16,8 +16,10 @@ namespace Gameplay.UnitSystem.Buy.Data
             return new()
             {
                 Id = unitId,
+                UpgradeLevel = 0,
                 BodyType = BodyType,
-                Health = Health,
+                CurrentHealth = Health,
+                MaxHealth = Health,
                 Speed = Speed,
                 Damage = Damage,
             };

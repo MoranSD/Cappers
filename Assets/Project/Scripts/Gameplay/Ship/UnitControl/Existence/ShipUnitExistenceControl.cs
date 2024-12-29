@@ -55,7 +55,7 @@ namespace Gameplay.Ship.UnitControl
 
             for (int i = 0; i < config.MaxUnitsCount; i++)
             {
-                if (gameState.Units.Any(x => x.Id == i)) continue;
+                if (gameState.HasUnit(i)) continue;
 
                 return true;
             }
@@ -83,10 +83,10 @@ namespace Gameplay.Ship.UnitControl
 
         public void RemoveUnit(int unitId)
         {
-            if (gameState.Units.Any(x => x.Id == unitId) == false)
+            if (gameState.HasUnit(unitId) == false)
                 throw new System.Exception(unitId.ToString());
 
-            gameState.Units.Remove(gameState.Units.First(x => x.Id == unitId));
+            gameState.Units.RemoveAt(gameState.GetUnitListIndex(unitId));
             units.Remove(units.First(x => x.Id == unitId));
         }
 
@@ -97,7 +97,7 @@ namespace Gameplay.Ship.UnitControl
 
             for (int i = 0; i < config.MaxUnitsCount; i++)
             {
-                if (gameState.Units.Any(x => x.Id == i)) continue;
+                if (gameState.HasUnit(i)) continue;
 
                 return i;
             }

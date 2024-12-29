@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Gameplay.QuestSystem.Quests;
 using Gameplay.Ship.Fight.Cannon.Data;
 using Gameplay.UnitSystem.Data;
@@ -40,5 +42,12 @@ namespace Gameplay.Game
 
             OpenedLocations.Add(locationId);
         }
+
+        public bool HasUnit(int unitId) => Units.Any(x => x.Id == unitId);
+        public UnitData GetUnitDataById(int unitId) => Units.First(x => x.Id == unitId);
+        public void ReplaceUnitDataByIndex(int index, UnitData unitData) => Units[index] = unitData;
+        public void ReplaceUnitDataById(int unitId, UnitData unitData) => Units[GetUnitListIndex(unitId)] = unitData;
+        public int GetUnitListIndex(int unitId) => Units.IndexOf(Units.First(x => x.Id == unitId));
+        public void ChangeUnitData(int unitId, Func<UnitData, UnitData> func) => ReplaceUnitDataById(unitId, func.Invoke(GetUnitDataById(unitId)));
     }
 }

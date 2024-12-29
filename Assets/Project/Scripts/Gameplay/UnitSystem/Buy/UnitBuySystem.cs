@@ -48,6 +48,8 @@ namespace Gameplay.UnitSystem.BuyMenu
             if(unitExistenceControl.HasPlaceForUnit() == false)
                 return false;
 
+            //todo:
+
             //проверить, есть ли деньги в кошельке
 
             var unitToBuyData = unitsInStock.First(x => x.Id == unitId);

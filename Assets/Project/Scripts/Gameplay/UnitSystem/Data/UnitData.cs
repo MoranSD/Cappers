@@ -6,14 +6,16 @@ namespace Gameplay.UnitSystem.Data
     public struct UnitData
     {
         public int Id;
+        public int UpgradeLevel;
         public UnitBodyType BodyType;
-        public float Health;
+        public float CurrentHealth;
+        public float MaxHealth;
         public float Speed;
         public float Damage;
 
         public override string ToString()
         {
-            return $"{Id} \n {BodyType} \n {Health} \n {Speed} \n {Damage}";
+            return $"{Id} \n {BodyType} \n {CurrentHealth} \n {Speed} \n {Damage}";
         }
     }
 }

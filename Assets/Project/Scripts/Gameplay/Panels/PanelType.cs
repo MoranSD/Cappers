@@ -7,5 +7,6 @@
         shipMap,
         questMenu,
         unitBuy,
+        unitUpgrade,
     }
 }

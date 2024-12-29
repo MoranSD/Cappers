@@ -46,7 +46,7 @@ namespace Gameplay.UnitSystem.Factory
             ref var agro = ref unitEntity.Get<TargetAgroComponent>();
 
             ref var health = ref unitEntity.Get<HealthComponent>();
-            health.Health = unitData.Health;
+            health.Health = unitData.CurrentHealth;
 
             var rangeWeapon = ecsWorld.NewEntity()
                 .Replace(new RangeWeaponTag())
